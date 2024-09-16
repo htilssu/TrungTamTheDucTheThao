@@ -28,6 +28,7 @@ jobs:
         working-directory: ./Client
         run: pnpm install
       - name: Test
+        working-directory: ./Client
         run: npx jest --coverage
   build:
     needs: test
