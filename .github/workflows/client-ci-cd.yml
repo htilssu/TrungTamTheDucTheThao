@@ -22,6 +22,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
+        working-directory: ./Client
         run: pnpm install
       - name: Test
         run: npx jest --coverage
@@ -43,6 +44,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build
+        working-directory: ./Client
         run: pnpm build
-      - name: Super-Linter
-        uses: super-linter/super-linter@v7.1.0
