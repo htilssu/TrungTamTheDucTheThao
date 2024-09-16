@@ -14,9 +14,9 @@
 | JAVASCRIPT_STANDARD | Fail ❌           |
 | JSCPD               | Fail ❌           |
 | JSON                | Pass ✅           |
-| JSON_PRETTIER       | Pass ✅           |
+| JSON_PRETTIER       | Fail ❌           |
 | JSX                 | Pass ✅           |
-| JSX_PRETTIER        | Fail ❌           |
+| JSX_PRETTIER        | Pass ✅           |
 | MARKDOWN            | Pass ✅           |
 | MARKDOWN_PRETTIER   | Pass ✅           |
 | NATURAL_LANGUAGE    | Pass ✅           |

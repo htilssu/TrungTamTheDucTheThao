@@ -30,6 +30,10 @@ jobs:
       - name: Test
         working-directory: ./Client
         run: npx jest --coverage
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
   build:
     needs: test
     runs-on: ubuntu-latest
