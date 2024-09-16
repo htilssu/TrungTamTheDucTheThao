@@ -22,6 +22,7 @@ jobs:
           DISABLE_ERRORS: 'true'
           FIX_JAVASCRIPT_PRETTIER: 'true'
           FIX_JSX: 'true'
+          FIX_JSX_PRETTIER: 'true'
       - name: Commit and push linting fixes
         # Run only on:
         # - Pull requests
