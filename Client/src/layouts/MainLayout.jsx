@@ -1,7 +1,7 @@
 
 import { Outlet } from "react-router-dom";
 import {ToastContainer} from "react-toastify";
-import Footer from "../components/footer/Footer.jsx";
+import Footer from "../modules/core/components/Footer.jsx";
 
 export function MainLayout() {
     return (
