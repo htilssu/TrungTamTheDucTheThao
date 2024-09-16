@@ -1,0 +1,8 @@
+on:
+  - push
+  - pull_request
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+      - name: Super-Linter
+        uses: super-linter/super-linter@v7.1.0
