@@ -44,3 +44,5 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm build
+      - name: Super-Linter
+        uses: super-linter/super-linter@v7.1.0
