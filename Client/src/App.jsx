@@ -1,11 +1,10 @@
 import {RouterProvider} from 'react-router-dom';
 import {router} from './routes/routeConfig.jsx';
 
-function App({children}) {
+function App() {
 
   return (
-      <RouterProvider router={router}>
-      </RouterProvider>
+      <RouterProvider router={router}/>
   );
 }
 

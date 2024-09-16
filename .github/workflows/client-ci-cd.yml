@@ -1,3 +1,4 @@
+name: Client CI/CD
 on:
   pull_request:
     branches:
@@ -14,6 +15,30 @@ jobs:
         name: Install pnpm
         with:
           run_install: false
+          package_json_file: './Client/package.json'
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: "**/*.yaml"
+
+      - name: Install dependencies
+        working-directory: ./Client
+        run: pnpm install
+      - name: Test
+        run: npx jest --coverage
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+          package_json_file: './Client/package.json'
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -23,25 +48,6 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./Client
-        run: pnpm install
-      - name: Test
-        run: npx jest --coverage
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      - name: Install dependencies
         run: pnpm install
       - name: Build
         working-directory: ./Client
