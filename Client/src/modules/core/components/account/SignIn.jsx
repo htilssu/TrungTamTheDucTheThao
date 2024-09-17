@@ -30,7 +30,7 @@ const SignIn = () => {
     <div
       className="flex md:justify-end justify-center items-center"
       style={{
-        background: `linear-gradient(90deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0) 35%), url('/public/thumbnail1.png')`,
+        background: `linear-gradient(90deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0) 35%), url('/thumbnail1.png')`,
         backgroundSize: '100% 100%', 
         backgroundRepeat: 'no-repeat', 
         backgroundPosition: 'left', 
