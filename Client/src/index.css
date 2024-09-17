@@ -8,3 +8,10 @@ body {
   box-sizing: border-box;
   background-color: #f5f5f5;
 }
+
+@font-face {
+  font-family: 'Air America';
+  src: url('public/font/AirAmericanaDEMO-BoldItalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
