@@ -34,6 +34,7 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          codecov_yml_path: ./codecov.yml
   build:
     needs: test
     runs-on: ubuntu-latest
