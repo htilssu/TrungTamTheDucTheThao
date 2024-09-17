@@ -1,0 +1,40 @@
+name: Lint
+on:
+  push:
+    branches:
+      - main
+
+env:
+  GIT_DISCOVERY_ACROSS_FILESYSTEM: 1
+permissions:
+  contents: write
+  statuses: write
+  packages: read
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Super-Linter
+        uses: super-linter/super-linter@v7.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISABLE_ERRORS: 'true'
+          FIX_JAVASCRIPT_PRETTIER: 'true'
+          FIX_JSX: 'true'
+          FIX_JSX_PRETTIER: 'true'
+      - name: Commit and push linting fixes
+        # Run only on:
+        # - Pull requests
+        # - Not on the default branch
+        if: >
+          github.event_name == 'pull_request' &&
+          github.ref_name != github.event.repository.default_branch
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "chore: fix linting issues"
+          commit_user_name: htilssu
+          commit_user_email: tolashuu@gmail.com
