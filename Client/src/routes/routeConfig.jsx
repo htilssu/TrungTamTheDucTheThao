@@ -7,21 +7,18 @@ import SignIn from '../pages/sign-in/SignIn.jsx';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: '',
+    element: <MainLayout/>,
     children: [
       {
-        element: <MainLayout/>,
-        children: [
-          {
-            element: <Home/>,
-          }
-        ],
+        index: true,
+        element: <Home/>,
       },
     ],
     errorElement: <PageNotFound/>,
   },
   {
-    path: '/sign-in',
+    path: 'sign-in',
     element: <SignIn/>,
-  }
+  },
 ]);
