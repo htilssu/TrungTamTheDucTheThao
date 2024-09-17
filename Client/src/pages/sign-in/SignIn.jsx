@@ -23,7 +23,7 @@ const SignIn = () => {
     }
 
     setError('');
-    if (progress.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       console.log('Signing in with email:', email);
     }
     setEmail('');
