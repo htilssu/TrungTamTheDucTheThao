@@ -1,11 +1,12 @@
 import {RouterProvider} from 'react-router-dom';
 import {router} from './routes/routeConfig.jsx';
+import {MantineProvider} from '@mantine/core';
 
-function App({children}) {
-
+function App() {
   return (
-      <RouterProvider router={router}>
-      </RouterProvider>
+    <MantineProvider>
+      <RouterProvider router={router}/>
+    </MantineProvider>
   );
 }
 

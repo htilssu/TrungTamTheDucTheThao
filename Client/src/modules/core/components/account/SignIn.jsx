@@ -55,11 +55,11 @@ const SignIn = () => {
             transition={{ duration: 1.4, ease: 'easeInOut' }}>
 
             <h1 className="text-white shadow-lg"
-              style={{ fontFamily: 'Air America', fontStyle: 'italic', fontSize: '170px', margin: '0', lineHeight: '1.1', }}>
+              style={{ fontFamily: 'Air Americana', fontStyle: 'italic', fontSize: '170px', margin: '0', lineHeight: '1.1', }}>
               SPORT
             </h1>
             <h1 className="text-white shadow-lg"
-              style={{ fontFamily: 'Air America', fontStyle: 'italic', fontSize: '140px', margin: '0', lineHeight: '1.1', }}>
+              style={{ fontFamily: 'Air Americana', fontStyle: 'italic', fontSize: '140px', margin: '0', lineHeight: '1.1', }}>
               CENTER
             </h1>
           </motion.div>
