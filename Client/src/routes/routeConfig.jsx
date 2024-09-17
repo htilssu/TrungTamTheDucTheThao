@@ -1,10 +1,9 @@
 import {createBrowserRouter} from 'react-router-dom';
 
-import Home from "../pages/HomePage.jsx";
-import {MainLayout} from "../layouts/MainLayout.jsx";
-import {PageNotFound} from "../pages/PageNotFound.jsx";
-import SignIn from '../modules/core/components/account/SignIn.jsx';
-
+import Home from '../pages/HomePage.jsx';
+import {MainLayout} from '../layouts/MainLayout.jsx';
+import {PageNotFound} from '../pages/PageNotFound.jsx';
+import SignIn from '../pages/sign-in/SignIn.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -15,14 +14,14 @@ export const router = createBrowserRouter([
         children: [
           {
             element: <Home/>,
-          },
-          {
-            path: 'sign-in', element: <SignIn/>,
-          },
-          
+          }
         ],
       },
     ],
     errorElement: <PageNotFound/>,
   },
+  {
+    path: '/sign-in',
+    element: <SignIn/>,
+  }
 ]);
