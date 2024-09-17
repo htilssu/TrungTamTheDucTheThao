@@ -290,7 +290,7 @@ const SignIn = () => {
               >
                 {/* Google */}
                 <div className="w-10 h-10">
-                  <FcGoogle className="w-full h-full" alt="Google Icon"/>
+                  <FcGoogle className="w-full h-full" />
                 </div>
                 {/* Facebook */}
                 <div className="w-10 h-10 mt-1">
