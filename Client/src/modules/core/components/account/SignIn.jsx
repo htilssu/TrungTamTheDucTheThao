@@ -62,7 +62,7 @@ const SignIn = () => {
 
           {/* Image */}
           <motion.img alt="Moving Image"
-            src="/public/pngegg.png"
+            src="/pngegg.png"
             className="absolute bottom-0 left-1/3 transform -translate-x-1/2 " 
             style={{ width: '300px'}}
             initial={{ x: '0%', y: '160%', rotate: 0 }} 
