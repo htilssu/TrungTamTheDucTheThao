@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion'; // Import framer-motion
+import { motion, progress } from 'framer-motion'; 
+import { FcGoogle } from "react-icons/fc"; //google icon
+import { BsFacebook } from 'react-icons/bs'; //facebook icon
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -9,7 +11,7 @@ const SignIn = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       setError('Email không hợp lệ.');
       return;
@@ -21,7 +23,9 @@ const SignIn = () => {
     }
   
     setError('');
-    console.log('Signing in with email:', email);
+    if (progress.env.NODE_ENV === 'development') {
+      console.log('Signing in with email:', email);
+    }
     setEmail('');
     setPassword('');
   };
@@ -30,7 +34,7 @@ const SignIn = () => {
     <div
       className="flex md:justify-end justify-center items-center"
       style={{
-        background: `linear-gradient(90deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0) 35%), url('/public/thumbnail1.png')`,
+        background: `linear-gradient(90deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0) 35%), url('/thumbnail1.png')`,
         backgroundSize: '100% 100%', 
         backgroundRepeat: 'no-repeat', 
         backgroundPosition: 'left', 
@@ -40,11 +44,11 @@ const SignIn = () => {
       <div className="bg-white shadow-lg rounded-lg w-full md:max-w-md max-w-sm py-10 md:px-8 px-6 md:mr-9 md:mx-0 mx-4">
         <div className="flex flex-col">
           {/* Logo */}
-          <motion.img src="https://via.placeholder.com/50x50" alt="Logo" className="md:w-16 md:h-16 w-14 h-14 md:mb-4 mb-3" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} />
+          <motion.img src="/logo.png" alt="Logo" className="md:w-16 md:h-16 w-14 h-14 md:mb-4 mb-3" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} />
 
           {/* Sport Center */}
           <motion.div
-            className="absolute top-28 left-0 transform -translate-y-1/2 px-4"
+            className="absolute top-28 left-0 transform -translate-y-1/2 px-4 lg:block hidden"
             style={{ width: '30%' }}
             initial={{ x: '-50%' }}
             animate={{ x: '35%' }}
@@ -62,8 +66,8 @@ const SignIn = () => {
 
           {/* Image */}
           <motion.img alt="Moving Image"
-            src="/public/pngegg.png"
-            className="absolute bottom-0 left-1/3 transform -translate-x-1/2 " 
+            src="/pngegg.png"
+            className="absolute bottom-0 left-1/3 transform -translate-x-1/2 lg:block hidden" 
             style={{ width: '300px'}}
             initial={{ x: '0%', y: '160%', rotate: 0 }} 
             animate={{ x: '-10%', y: '95%', rotate: 45 }}
@@ -152,8 +156,8 @@ const SignIn = () => {
                   Nhớ mật khẩu
                 </label>
               </div>
-              <a href="#"
-                className="inline-block align-baseline md:font-bold font-medium md:text-sm text-yellow-500 hover:text-yellow-400 transition duration-200">
+              <a href="/forgot-password"
+                className="inline-block align-baseline md:font-bold font-medium md:text-sm text-teal-500 hover:text-teal-400 transition duration-200">
                 Quên mật khẩu?
               </a>
             </motion.div>
@@ -161,7 +165,7 @@ const SignIn = () => {
             {/* Sign In Button */}
             <motion.div className="md:mb-4 mb-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }} >
               <button type="submit"
-                className="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200">
+                className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200">
                 Đăng nhập
               </button>
             </motion.div>
@@ -170,7 +174,7 @@ const SignIn = () => {
             <motion.div className="flex md:mb-6 mb-5 items-center justify-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.3 }} >
               <p className="text-gray-500 text-sm">
                 Nếu chưa có tài khoản?{' '}
-                <a href="#" className="text-blue-500 hover:text-blue-400">
+                <a href="/register" className="text-blue-500 hover:text-blue-400">
                   Đăng ký
                 </a>
               </p>
@@ -190,23 +194,21 @@ const SignIn = () => {
               transition={{ duration: 1.5 }}
             >
               {/* Google */}
-              <img
-                src="https://via.placeholder.com/40x40"
-                alt="Icon 1"
-                className="w-10 h-10"
-              />
+              <div className="w-10 h-10">
+                <FcGoogle className="w-full h-full" alt="Google Icon" />
+              </div>
               {/* Facebook */}
-              <img
-                src="https://via.placeholder.com/40x40"
-                alt="Icon 2"
-                className="w-10 h-10"
-              />
+              <div className="w-10 h-10 mt-1">
+                <BsFacebook style={{ color: '#1877F2', fontSize: '35px' }} />
+              </div>
               {/* Instagram */}
-              <img
-                src="https://via.placeholder.com/40x40"
-                alt="Icon 3"
-                className="w-10 h-10"
-              />
+              <div className="w-11 h-11">
+                <img
+                  src='/instagram.png'
+                  alt="Instagram Icon"
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </motion.div>
           </form>
         </div>
