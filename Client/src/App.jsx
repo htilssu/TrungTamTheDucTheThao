@@ -3,6 +3,7 @@ import {router} from './routes/routeConfig.jsx';
 import {MantineProvider} from '@mantine/core';
 
 function App() {
+
   return (
     <MantineProvider>
       <RouterProvider router={router}/>
