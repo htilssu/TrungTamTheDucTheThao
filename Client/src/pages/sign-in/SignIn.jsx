@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {motion, progress} from 'framer-motion';
+import {motion} from 'framer-motion';
 import {FcGoogle} from 'react-icons/fc'; //google icon
 import {BsFacebook} from 'react-icons/bs'; //facebook icon
 
