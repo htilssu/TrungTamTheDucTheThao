@@ -2,6 +2,36 @@ import {FaFacebook, FaInstagram, FaLinkedin, FaTwitter} from 'react-icons/fa';
 import {IoIosArrowForward} from 'react-icons/io';
 import {Link} from 'react-router-dom';
 
+const termsLinks = [
+  {
+    text: 'Thỏa thuận người dùng',
+    path: '/user-agreement',
+  },
+  {
+    text: 'Quyền riêng tư',
+    path: '/privacy-policy',
+  },
+  {
+    text: 'Quy định - chính sách',
+    path: '/rules-policies',
+  },
+];
+
+const introductionLinks = [
+  {
+    text: 'Về chúng tôi',
+    path: '/about-us',
+  },
+  {
+    text: 'Tin tức',
+    path: '/news',
+  },
+  {
+    text: 'Liên hệ',
+    path: '/contact',
+  },
+];
+
 const Footer = () => {
   return (
       <footer className="bg-gray-800 py-6">
@@ -28,60 +58,34 @@ const Footer = () => {
             </div>
             <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
               <h3 className="text-lg font-semibold mb-2">Điều khoản</h3>
-              <div>
-                <Link to={'#'} className="flex items-start">
-                  <IoIosArrowForward size={20}/>
-                  <p className="ml-2">Thỏa thuận người dùng</p>
-                </Link>
-              </div>
-              <div>
-                <Link to={'#'} className="flex items-start">
-                  <IoIosArrowForward size={20}/>
-                  <p className="ml-2"> Quyền riêng tư</p>
-                </Link>
-              </div>
-              <div>
-                <Link to={'#'} className="flex items-start">
-                  <IoIosArrowForward size={20}/>
-                  <p className="ml-2">Quy định - chính sách</p>
-                </Link>
-              </div>
+              {termsLinks.map((link, index) => (
+                  <Link to={link.path} key={index} className="flex items-center">
+                    <IoIosArrowForward size={20}/>
+                    <p className="ml-2">{link.text}</p>
+                  </Link>))}
             </div>
 
             <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
               <h3 className="text-lg font-semibold mb-2">Hotline</h3>
               <p>Email: contact@example.com</p>
               <p>Điện thoại: +84 123 456 789</p>
-              <p>Địa chỉ: Số 123 Đường ABC, Quận XYZ, TP HCM</p>
             </div>
             <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2 ">
               <h3 className="text-lg font-semibold mb-2">Địa chỉ</h3>
-              <p>Email: contact@example.com</p>
-              <p>Điện thoại: +84 123 456 789</p>
               <p>Địa chỉ: Số 123 Đường ABC, Quận XYZ, TP HCM</p>
             </div>
           </div>
 
           <div className="text-white flex flex-col w-full gap-2 md:flex-col mt-4">
             <h3 className="text-lg font-semibold mb-2">Giới thiệu</h3>
-            <div>
-              <Link to={'#'} className="flex items-center">
-                <IoIosArrowForward size={20}/>
-                <p className="ml-2">Về chúng tôi</p>
-              </Link>
-            </div>
-            <div>
-              <Link to={'#'} className="flex items-center">
-                <IoIosArrowForward size={20}/>
-                <p className="ml-2">Tin tức</p>
-              </Link>
-            </div>
-            <div>
-              <Link to={'#'} className="flex items-center">
-                <IoIosArrowForward size={20}/>
-                <p className="ml-2">Liên hệ</p>
-              </Link>
-            </div>
+            {introductionLinks.map((link, index) => (
+                <div key={index}>
+                  <Link to={link.path} className="flex items-center">
+                    <IoIosArrowForward size={20}/>
+                    <p className="ml-2">{link.text}</p>
+                  </Link>
+                </div>
+            ))}
           </div>
 
           <div className="mt-6 text-center text-white">
