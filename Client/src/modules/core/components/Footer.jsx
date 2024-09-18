@@ -91,18 +91,18 @@ const Footer = () => {
           <div className="mt-6 text-center text-white">
             <h3 className="text-lg font-semibold mb-2">Theo dõi chúng tôi</h3>
             <div className="flex justify-center space-x-4">
-              <Link to={'#'} className="text-gray-400 hover:text-white mx-2">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white mx-2">
                 <FaFacebook size={24}/>
-              </Link>
-              <Link to={'#'} className="text-gray-400 hover:text-white mx-2">
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white mx-2">
                 <FaTwitter size={24}/>
-              </Link>
-              <Link to={'#'} className="text-gray-400 hover:text-white mx-2">
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white mx-2">
                 <FaLinkedin size={24}/>
-              </Link>
-              <Link to={'#'} className="text-gray-400 hover:text-white mx-2">
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white mx-2">
                 <FaInstagram size={24}/>
-              </Link>
+              </a>
             </div>
           </div>
           <div className="mt-6 text-center">
