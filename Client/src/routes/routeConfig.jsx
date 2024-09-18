@@ -5,8 +5,8 @@ import {MainLayout} from "../layouts/MainLayout.jsx";
 import {PageNotFound} from "../pages/PageNotFound.jsx";
 import SignIn from '../modules/core/components/account/SignIn.jsx';
 import Test from '../modules/core/components/account/test.jsx';
-import SignUp from "../modules/core/components/account/SignUp.jsx";
-import ForgotPassword from "../modules/core/components/account/ForgotPassword.jsx";
+import SignUp from './../pages/sign-up/SignUp';
+import ForgotPassword from './../pages/forgot-password/ForgotPassword';
 
 
 

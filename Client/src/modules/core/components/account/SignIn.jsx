@@ -1,103 +1,105 @@
-import { useState} from 'react';
-import { motion, progress } from 'framer-motion'; 
-import { BsFacebook } from 'react-icons/bs'; //facebook sign in
-import { GoogleLogin } from '@react-oauth/google'; //google sign in
-import { useNavigate } from 'react-router-dom';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { BsFacebook } from "react-icons/bs"; //facebook sign in
+import { GoogleLogin } from "@react-oauth/google"; //google sign in
+import { useNavigate } from "react-router-dom";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 // import axios from 'axios';
-import {FaGithub} from "react-icons/fa"; //facebook icon
+import { FaGithub } from "react-icons/fa"; //facebook icon
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const a = import.meta.env.VITE_FB_APP_ID;
+  if (import.meta.env.DEV) {
+    console.log(a)
+  }
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-    /////GOOGLE API 
-    // const [user, setUser] = useState(null); 
-    // const [profile, setProfile] = useState(null); 
+  /////GOOGLE API
+  // const [user, setUser] = useState(null);
+  // const [profile, setProfile] = useState(null);
 
-    // const login = useGoogleLogin({
-    //     onSuccess: (codeResponse) => setUser(codeResponse),
-    //     onError: (error) => console.log('Login Failed:', error),
-    // });
+  // const login = useGoogleLogin({
+  //     onSuccess: (codeResponse) => setUser(codeResponse),
+  //     onError: (error) => console.log('Login Failed:', error),
+  // });
 
-    // useEffect(() => {
-    //     if (user) {
-    //         axios
-    //             .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-    //                 headers: {
-    //                     Authorization: `Bearer ${user.access_token}`,
-    //                     Accept: 'application/json',
-    //                 },
-    //             })
-    //             .then((res) => {
-    //                 setProfile(res.data);
-    //             })
-    //             .catch((err) => console.log(err));
-    //     }
-    // }, [user]);
+  // useEffect(() => {
+  //     if (user) {
+  //         axios
+  //             .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+  //                 headers: {
+  //                     Authorization: `Bearer ${user.access_token}`,
+  //                     Accept: 'application/json',
+  //                 },
+  //             })
+  //             .then((res) => {
+  //                 setProfile(res.data);
+  //             })
+  //             .catch((err) => console.log(err));
+  //     }
+  // }, [user]);
 
-    // const logOut = () => {
-    //     googleLogout();
-    //     setProfile(null);
-    //     setUser(null); 
-    // };
+  // const logOut = () => {
+  //     googleLogout();
+  //     setProfile(null);
+  //     setUser(null);
+  // };
 
-    /////FACEBOOK API
-    // {
-    //   "name": "Vũ Ngọc Lâm",
-    //   "email": "thanhphohochiminh8@gmail.com",
-    //   "picture": {
-    //       "data": {
-    //           "height": 50,
-    //           "is_silhouette": false,
-    //           "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1373569184049418&height=50&width=50&ext=1729230933&hash=Aba5k7ApQywWffX31Q-MXwNS",
-    //           "width": 50
-    //       }
-    //   },
-    //   "id": "1373569184049418",
-    //   "userID": "1373569184049418",
-    //   "expiresIn": 3868,
-    //   "accessToken": "EAAGAvxQPWHMBOy64EblKNFicgjpZAObHy06j5QmAyTaCi9DGZC4H7M5ZChmUOgHCJl0MIpVDayriBlJari1vYvs7RPBvVyUPofBdPeZAG05TEzYhh7YuNzgu3McMJaq9mTbGLaSBb7jNDZBeBv4o74955MqWCX4KIf55VEy0JEm7QU7zcjCZAcj2N6gyXVxrJsO2HpUyA08PFq5KG4JryuztN8FuH5YvqCWwZDZD",
-    //   "signedRequest": "j097LNW7Mb1gfCxwVed09ubQwMcTMLnTgkL7XrFKJAE.eyJ1c2VyX2lkIjoiMTM3MzU2OTE4NDA0OTQxOCIsImNvZGUiOiJBUUJJbTQxbjc0ZUloVlVDVXltZVhPb3A1LWZ1cnpDLUhOMGdRWm9STEhmVF90UG1DNG1WSWpPRHhXUE9YOEpkNmkyd1J5YzJxdFBfSDhuOXk5dTJ6YVlkR215NTFtSVJNUk5MMm1LenBQS3A0ZVdnYXRHY2lZS1BrY0UtUElHNUZMZG84T3FyMXJwdVJCT0haN24zNXJKX0lBR0oyTHdydV9kdmRfME9HNERZMTdSV1pqeFJHaHlHQkd2WVJ6UTBIX0xkWTFuMkJQdmowclluWENONFJTU3ZMdERJU3JyNS1ZRnN4U05WaWdMRjF3cE4wN3p5dDJSV3FyRkk1SWt0dVZiT1l3S01DRHM0enFYNWxzNkNiN1VZelpiQ3lnNDAtRzU3d0hENExTekNtOWdFVG05RHZjc0J6OWJlMXNFVkkycFVfZURsd3BvSVFRUmhYNkdSTE1pSnVmTkV4ZHpjRVc0THU5RWhxZ2x2WGciLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTcyNjYzODkzMn0",
-    //   "graphDomain": "facebook",
-    //   "data_access_expiration_time": 1734414931
-    // }
-
-    
+  /////FACEBOOK API
+  // {
+  //   "name": "Vũ Ngọc Lâm",
+  //   "email": "thanhphohochiminh8@gmail.com",
+  //   "picture": {
+  //       "data": {
+  //           "height": 50,
+  //           "is_silhouette": false,
+  //           "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1373569184049418&height=50&width=50&ext=1729230933&hash=Aba5k7ApQywWffX31Q-MXwNS",
+  //           "width": 50
+  //       }
+  //   },
+  //   "id": "",
+  //   "userID": "",
+  //   "expiresIn": ,
+  //   "accessToken": "",
+  //   "signedRequest": ".eyJ1c2VyX2lkIjoiMTM3MzU2OTE4NDA0OTQxOCIsImNvZGUiOiJBUUJJbTQxbjc0ZUloVlVDVXltZVhPb3A1LWZ1cnpDLUhOMGdRWm9STEhmVF90UG1DNG1WSWpPRHhXUE9YOEpkNmkyd1J5YzJxdFBfSDhuOXk5dTJ6YVlkR215NTFtSVJNUk5MMm1LenBQS3A0ZVdnYXRHY2lZS1BrY0UtUElHNUZMZG84T3FyMXJwdVJCT0haN24zNXJKX0lBR0oyTHdydV9kdmRfME9HNERZMTdSV1pqeFJHaHlHQkd2WVJ6UTBIX0xkWTFuMkJQdmowclluWENONFJTU3ZMdERJU3JyNS1ZRnN4U05WaWdMRjF3cE4wN3p5dDJSV3FyRkk1SWt0dVZiT1l3S01DRHM0enFYNWxzNkNiN1VZelpiQ3lnNDAtRzU3d0hENExTekNtOWdFVG05RHZjc0J6OWJlMXNFVkkycFVfZURsd3BvSVFRUmhYNkdSTE1pSnVmTkV4ZHpjRVc0THU5RWhxZ2x2WGciLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTcyNjYzODkzMn0",
+  //   "graphDomain": "facebook",
+  //   "data_access_expiration_time": 
+  // }
 
   // Login Google Success
   const responseMessage = (response) => {
     console.log(response);
-    navigate('/test');
+    navigate("/test");
   };
   // Login Google Fail
   const errorMessage = (error) => {
-      console.log(error);
+    console.log(error);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
-      setError('Email không hợp lệ.');
+      setError("Email không hợp lệ.");
       return;
     }
-  
+
     if (password.length < 6) {
-      setError('Mật khẩu phải có ít nhất 6 ký tự.');
+      setError("Mật khẩu phải có ít nhất 6 ký tự.");
       return;
     }
-  
-    setError('');
-    if (progress.env.NODE_ENV === 'development') {
-      console.log('Signing in with email:', email);
+
+    setError("");
+    if (import.meta.env.DEV) {
+      console.log("Signing in with email:", email);
     }
-    setEmail('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -105,42 +107,67 @@ const SignIn = () => {
       className="flex md:justify-end justify-center items-center"
       style={{
         background: `linear-gradient(90deg, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0) 35%), url('/thumbnail1.png')`,
-        backgroundSize: '100% 100%', 
-        backgroundRepeat: 'no-repeat', 
-        backgroundPosition: 'left', 
-        height: '120vh', }}>
-
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "left",
+        height: "120vh",
+      }}
+    >
       <div className="bg-white shadow-lg rounded-lg w-full md:max-w-md max-w-sm py-10 md:px-8 px-6 md:mr-9 md:mx-0 mx-4">
         <div className="flex flex-col">
           {/* Logo */}
-          <motion.img src="/logo.png" alt="Logo" className="md:w-16 md:h-16 w-14 h-14 md:mb-4 mb-3" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} />
+          <motion.img
+            src="/logo.png"
+            alt="Logo"
+            className="md:w-16 md:h-16 w-14 h-14 md:mb-4 mb-3"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          />
 
           {/* Sport Center */}
           <motion.div
             className="absolute top-28 left-0 transform -translate-y-1/2 px-4 lg:block hidden"
-            style={{ width: '30%' }}
-            initial={{ x: '-50%' }}
-            animate={{ x: '35%' }}
-            transition={{ duration: 1.4, ease: 'easeInOut' }}>
-
-            <h1 className="text-white shadow-lg"
-              style={{ fontFamily: 'Air Americana', fontStyle: 'italic', fontSize: '170px', margin: '0', lineHeight: '1.1', }}>
+            style={{ width: "30%" }}
+            initial={{ x: "-50%" }}
+            animate={{ x: "35%" }}
+            transition={{ duration: 1.4, ease: "easeInOut" }}
+          >
+            <h1
+              className="text-white shadow-lg"
+              style={{
+                fontFamily: "Air Americana",
+                fontStyle: "italic",
+                fontSize: "170px",
+                margin: "0",
+                lineHeight: "1.1",
+              }}
+            >
               SPORT
             </h1>
-            <h1 className="text-white shadow-lg"
-              style={{ fontFamily: 'Air Americana', fontStyle: 'italic', fontSize: '140px', margin: '0', lineHeight: '1.1', }}>
+            <h1
+              className="text-white shadow-lg"
+              style={{
+                fontFamily: "Air Americana",
+                fontStyle: "italic",
+                fontSize: "140px",
+                margin: "0",
+                lineHeight: "1.1",
+              }}
+            >
               CENTER
             </h1>
           </motion.div>
 
           {/* Image */}
-          <motion.img alt="Moving Image"
+          <motion.img
+            alt="Moving Image"
             src="/pngegg.png"
-            className="absolute bottom-0 left-1/3 transform -translate-x-1/2 lg:block hidden" 
-            style={{ width: '300px'}}
-            initial={{ x: '0%', y: '160%', rotate: 0 }} 
-            animate={{ x: '-10%', y: '95%', rotate: 45 }}
-            transition={{ duration: 1.4, ease: 'easeInOut' }}
+            className="absolute bottom-0 left-1/3 transform -translate-x-1/2 lg:block hidden"
+            style={{ width: "300px" }}
+            initial={{ x: "0%", y: "160%", rotate: 0 }}
+            animate={{ x: "-10%", y: "95%", rotate: 45 }}
+            transition={{ duration: 1.4, ease: "easeInOut" }}
           />
 
           {/* Title */}
@@ -183,18 +210,27 @@ const SignIn = () => {
             </motion.p>
           )}
 
-{/* Form */}
+          {/* Form */}
           <form onSubmit={handleSubmit} className="w-full">
-
             {/* Email */}
             <motion.div
-              className="md:mb-4 mb-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
+              className="md:mb-4 mb-3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9 }}
+            >
               {/* Email Label */}
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="email"
+              >
                 Email
               </label>
               {/* Email Input */}
-              <input type="email" id="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
+              <input
+                type="email"
+                id="email"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
                 placeholder="Nhập email của bạn"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -203,64 +239,106 @@ const SignIn = () => {
             </motion.div>
 
             {/* Password */}
-            <motion.div className="md:mb-6 mb-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+            <motion.div
+              className="md:mb-6 mb-5"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+            >
               {/* Password Laybel */}
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="password"
+              >
                 Mật khẩu
               </label>
               {/* Password Input */}
-              <input type="password" id="password" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
+              <input
+                type="password"
+                id="password"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
                 placeholder="Nhập mật khẩu"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </motion.div>
-            
+
             {/* Checkbox Remember and Forgot Password*/}
-            <motion.div className="flex items-center justify-between md:mb-4 mb-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1 }}>
+            <motion.div
+              className="flex items-center justify-between md:mb-4 mb-3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1 }}
+            >
               <div className="flex items-center">
-                <input type="checkbox" id="remember-me" className="mr-2 leading-tight"/>
+                <input
+                  type="checkbox"
+                  id="remember-me"
+                  className="mr-2 leading-tight"
+                />
                 <label htmlFor="remember-me" className="text-gray-700 text-sm">
                   Nhớ mật khẩu
                 </label>
               </div>
-              <a href="/src/pages/forgot-password/ForgotPassword"
-                className="inline-block align-baseline md:font-bold font-medium md:text-sm text-teal-500 hover:text-teal-400 transition duration-200">
+              <a
+                href="/src/pages/forgot-password/ForgotPassword"
+                className="inline-block align-baseline md:font-bold font-medium md:text-sm text-teal-500 hover:text-teal-400 transition duration-200"
+              >
                 Quên mật khẩu?
               </a>
             </motion.div>
 
             {/* Sign In Button */}
-            <motion.div className="md:mb-4 mb-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }} >
-              <button type="submit"
-                className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200">
+            <motion.div
+              className="md:mb-4 mb-3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2 }}
+            >
+              <button
+                type="submit"
+                className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200"
+              >
                 Đăng nhập
               </button>
             </motion.div>
 
             {/* No Account */}
-            <motion.div className="flex md:mb-6 mb-5 items-center justify-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.3 }} >
+            <motion.div
+              className="flex md:mb-6 mb-5 items-center justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.3 }}
+            >
               <p className="text-gray-500 text-sm">
-                Nếu chưa có tài khoản?{' '}
-                <a href="/register" className="text-blue-500 hover:text-blue-400">
+                Nếu chưa có tài khoản?{" "}
+                <a
+                  href="/register"
+                  className="text-blue-500 hover:text-blue-400"
+                >
                   Đăng ký
                 </a>
               </p>
             </motion.div>
 
             {/* Option Login */}
-            <motion.div className="flex items-center mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.4 }}>
+            <motion.div
+              className="flex items-center mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.4 }}
+            >
               <div className="border-t border-gray-300 w-full"></div>
               <p className="text-gray-500 px-4">or</p>
               <div className="border-t border-gray-300 w-full"></div>
             </motion.div>
 
             <motion.div
-                className="flex items-center justify-center space-x-4"
-                initial={{opacity: 0, y: 20}}
-                animate={{opacity: 1, y: 0}}
-                transition={{duration: 1.5}}
+              className="flex items-center justify-center space-x-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.5 }}
             >
               {/* Google */}
               <div className="w-11 h-11 mt-2">
@@ -269,18 +347,14 @@ const SignIn = () => {
                   onError={errorMessage}
                   type="icon"
                   render={({ onClick }) => (
-                    <button
-                      onClick={onClick}
-                    >
-                      {/* */}
-                    </button>
+                    <button onClick={onClick}>{/* */}</button>
                   )}
                 />
               </div>
               {/* Facebook */}
               <div className="w-9 h-9">
-              <FacebookLogin
-                  appId="423033140369523"
+                <FacebookLogin
+                  appId="{}"
                   fields="name,email,picture"
                   callback={responseMessage}
                   render={({ onClick }) => (
@@ -295,12 +369,12 @@ const SignIn = () => {
               </div>
               {/* GitHub */}
               <a
-                  href="https://github.com/login"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-4xl text-gray-800"
+                href="https://github.com/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-4xl text-gray-800"
               >
-                <FaGithub/>
+                <FaGithub />
               </a>
             </motion.div>
           </form>
