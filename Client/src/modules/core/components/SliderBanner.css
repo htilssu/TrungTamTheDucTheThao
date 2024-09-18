@@ -23,7 +23,6 @@
   margin: 0;
   list-style: none;
   text-align: center;
-  display: block;
 }
 
 .slick-dots li button:before {
