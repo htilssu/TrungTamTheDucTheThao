@@ -1,7 +1,7 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
-import './components/SliderBanner.css';
+import './SliderBanner.css';
 import {useState} from 'react';
 
 const SliderBanner = () => {
@@ -27,7 +27,7 @@ const SliderBanner = () => {
   };
 
   return (
-      <div className="slider-container w-[100%] max-w-7xl m-auto  ">
+      <div className="slider-container w-[100%] max-w-7xl m-auto px-4 mb-10 ">
         <Slider {...settings}>
           <div className="slide-item">
             <img src="https://aobongda.net/pic/Images/Module/News/images/t35.jpg" alt="Slide 1"/>
