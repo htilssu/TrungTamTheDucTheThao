@@ -4,8 +4,8 @@ import Home from "../pages/HomePage.jsx";
 import {MainLayout} from "../layouts/MainLayout.jsx";
 import {PageNotFound} from "../pages/PageNotFound.jsx";
 import SignIn from '../modules/core/components/account/SignIn.jsx';
-import Forgotpassword from "../modules/core/components/account/ForgotPassword.jsx";
 import SignUp from "../modules/core/components/account/SignUp.jsx";
+import ForgotPassword from "../modules/core/components/account/ForgotPassword.jsx";
 
 
 export const router = createBrowserRouter([
@@ -28,6 +28,6 @@ export const router = createBrowserRouter([
         path: 'signup', element: <SignUp/>,
     },
     {
-        path: 'forgot-password', element: <Forgotpassword/>,
+        path: 'forgot-password', element: <ForgotPassword/>,
     },
 ]);

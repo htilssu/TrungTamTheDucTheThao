@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaCircleArrowRight } from "react-icons/fa6";
 import {useNavigate} from "react-router-dom";
 
-const Forgotpassword = () => {
+const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
@@ -142,4 +142,4 @@ const Forgotpassword = () => {
     );
 };
 
-export default Forgotpassword;
+export default ForgotPassword;
