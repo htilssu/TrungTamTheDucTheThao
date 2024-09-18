@@ -1,0 +1,61 @@
+{
+  "hash": "5886aa4a",
+  "configHash": "492ed5aa",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "1b34c3af",
+  "optimized": {
+    "react": {
+      "src": "../../Client/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "b401f19d",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../Client/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "01dce82d",
+      "needsInterop": true
+    },
+    "react-icons/fa": {
+      "src": "../../Client/node_modules/react-icons/fa/index.mjs",
+      "file": "react-icons_fa.js",
+      "fileHash": "6b1080a7",
+      "needsInterop": false
+    },
+    "react-icons/io": {
+      "src": "../../Client/node_modules/react-icons/io/index.mjs",
+      "file": "react-icons_io.js",
+      "fileHash": "6a1cc5bd",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../Client/node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "cc109c9a",
+      "needsInterop": false
+    },
+    "react-slick": {
+      "src": "../../Client/node_modules/react-slick/lib/index.js",
+      "file": "react-slick.js",
+      "fileHash": "626b7125",
+      "needsInterop": true
+    },
+    "react-toastify": {
+      "src": "../../Client/node_modules/react-toastify/dist/react-toastify.esm.mjs",
+      "file": "react-toastify.js",
+      "fileHash": "1428c3ef",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-66EOHOPJ": {
+      "file": "chunk-66EOHOPJ.js"
+    },
+    "chunk-BQNXSHGM": {
+      "file": "chunk-BQNXSHGM.js"
+    },
+    "chunk-YC6IYSEB": {
+      "file": "chunk-YC6IYSEB.js"
+    }
+  }
+}

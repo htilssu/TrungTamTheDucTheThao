@@ -3,7 +3,7 @@ import { IoIosArrowForward } from "react-icons/io";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 py-6">
+    <footer className="bg-gray-800 py-6 mt-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap flex-col md:flex-row justify-between items-start w-full">
           <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Footer from "../modules/core/components/Footer.jsx";
+import SliderBanner from "../modules/core/components/SliderBanner.jsx";
 
 export function MainLayout() {
   return (
@@ -11,6 +12,7 @@ export function MainLayout() {
         <div className={"w-full"}></div>
         <Outlet />
       </div>
+      <SliderBanner />
       <ToastContainer />
       <Footer />
     </div>
