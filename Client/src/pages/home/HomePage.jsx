@@ -1,5 +1,5 @@
-import FeatureCategory from "../modules/core/components/home/FeatureCategory.jsx";
-import ScrollableCardList from "../modules/core/components/home/ScrollableCardList.jsx";
+import ScrollableCardList from "../../modules/core/components/home/ScrollableCardList.jsx";
+import FeatureCategory from "../../modules/core/components/home/FeatureCategory.jsx";
 
 const Home = () => {
   return (
