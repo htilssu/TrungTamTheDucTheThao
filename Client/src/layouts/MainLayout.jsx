@@ -2,8 +2,8 @@
 import { Outlet } from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import Footer from "../modules/core/components/Footer.jsx";
-import Navbar from "../modules/core/system-component/Navbar.jsx";
-import SliderBanner from "../modules/core/components/SliderBanner.jsx";
+import Navbar from "../modules/core/components/Navbar.jsx";
+import SliderBanner from "../pages/home/SliderBanner.jsx";
 
 export function MainLayout() {
     return (
