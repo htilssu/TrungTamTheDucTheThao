@@ -11,7 +11,7 @@ body {
 
 @font-face {
   font-family: 'Air Americana';
-  src: url('/public/font/AirAmericaFont.ttf') format('truetype');
+  src: url('/font/AirAmericaFont.ttf') format('truetype');
   font-weight: bold;
   font-style: italic;
 }
