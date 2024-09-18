@@ -18,7 +18,7 @@ const ForgotPassword = () => {
         if (!email) {
             setEmailError('Email không được để trống.');
             hasError = true;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        } else if (! /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
             setEmailError('Email không hợp lệ.');
             hasError = true;
         }
