@@ -1,12 +1,81 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import { motion, progress } from 'framer-motion'; 
-import { FcGoogle } from "react-icons/fc"; //google icon
-import { BsFacebook } from 'react-icons/bs'; //facebook icon
+import { BsFacebook } from 'react-icons/bs'; //facebook sign in
+import { GoogleLogin } from '@react-oauth/google'; //google sign in
+import { useNavigate } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+
+// import axios from 'axios';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+    /////GOOGLE API 
+    // const [user, setUser] = useState(null); 
+    // const [profile, setProfile] = useState(null); 
+
+    // const login = useGoogleLogin({
+    //     onSuccess: (codeResponse) => setUser(codeResponse),
+    //     onError: (error) => console.log('Login Failed:', error),
+    // });
+
+    // useEffect(() => {
+    //     if (user) {
+    //         axios
+    //             .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${user.access_token}`,
+    //                     Accept: 'application/json',
+    //                 },
+    //             })
+    //             .then((res) => {
+    //                 setProfile(res.data);
+    //             })
+    //             .catch((err) => console.log(err));
+    //     }
+    // }, [user]);
+
+    // const logOut = () => {
+    //     googleLogout();
+    //     setProfile(null);
+    //     setUser(null); 
+    // };
+
+    /////FACEBOOK API
+    // {
+    //   "name": "Vũ Ngọc Lâm",
+    //   "email": "thanhphohochiminh8@gmail.com",
+    //   "picture": {
+    //       "data": {
+    //           "height": 50,
+    //           "is_silhouette": false,
+    //           "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1373569184049418&height=50&width=50&ext=1729230933&hash=Aba5k7ApQywWffX31Q-MXwNS",
+    //           "width": 50
+    //       }
+    //   },
+    //   "id": "1373569184049418",
+    //   "userID": "1373569184049418",
+    //   "expiresIn": 3868,
+    //   "accessToken": "EAAGAvxQPWHMBOy64EblKNFicgjpZAObHy06j5QmAyTaCi9DGZC4H7M5ZChmUOgHCJl0MIpVDayriBlJari1vYvs7RPBvVyUPofBdPeZAG05TEzYhh7YuNzgu3McMJaq9mTbGLaSBb7jNDZBeBv4o74955MqWCX4KIf55VEy0JEm7QU7zcjCZAcj2N6gyXVxrJsO2HpUyA08PFq5KG4JryuztN8FuH5YvqCWwZDZD",
+    //   "signedRequest": "j097LNW7Mb1gfCxwVed09ubQwMcTMLnTgkL7XrFKJAE.eyJ1c2VyX2lkIjoiMTM3MzU2OTE4NDA0OTQxOCIsImNvZGUiOiJBUUJJbTQxbjc0ZUloVlVDVXltZVhPb3A1LWZ1cnpDLUhOMGdRWm9STEhmVF90UG1DNG1WSWpPRHhXUE9YOEpkNmkyd1J5YzJxdFBfSDhuOXk5dTJ6YVlkR215NTFtSVJNUk5MMm1LenBQS3A0ZVdnYXRHY2lZS1BrY0UtUElHNUZMZG84T3FyMXJwdVJCT0haN24zNXJKX0lBR0oyTHdydV9kdmRfME9HNERZMTdSV1pqeFJHaHlHQkd2WVJ6UTBIX0xkWTFuMkJQdmowclluWENONFJTU3ZMdERJU3JyNS1ZRnN4U05WaWdMRjF3cE4wN3p5dDJSV3FyRkk1SWt0dVZiT1l3S01DRHM0enFYNWxzNkNiN1VZelpiQ3lnNDAtRzU3d0hENExTekNtOWdFVG05RHZjc0J6OWJlMXNFVkkycFVfZURsd3BvSVFRUmhYNkdSTE1pSnVmTkV4ZHpjRVc0THU5RWhxZ2x2WGciLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTcyNjYzODkzMn0",
+    //   "graphDomain": "facebook",
+    //   "data_access_expiration_time": 1734414931
+    // }
+
+    
+
+  // Login Google Success
+  const responseMessage = (response) => {
+    console.log(response);
+    navigate('/test');
+  };
+  // Login Google Fail
+  const errorMessage = (error) => {
+      console.log(error);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,8 +107,7 @@ const SignIn = () => {
         backgroundSize: '100% 100%', 
         backgroundRepeat: 'no-repeat', 
         backgroundPosition: 'left', 
-        height: '120vh',
-}}>
+        height: '120vh', }}>
 
       <div className="bg-white shadow-lg rounded-lg w-full md:max-w-md max-w-sm py-10 md:px-8 px-6 md:mr-9 md:mx-0 mx-4">
         <div className="flex flex-col">
@@ -194,12 +262,35 @@ const SignIn = () => {
               transition={{ duration: 1.5 }}
             >
               {/* Google */}
-              <div className="w-10 h-10">
-                <FcGoogle className="w-full h-full" alt="Google Icon" />
+              <div className="w-11 h-11 mt-2">
+                <GoogleLogin
+                  onSuccess={responseMessage}
+                  onError={errorMessage}
+                  type="icon"
+                  render={({ onClick }) => (
+                    <button
+                      onClick={onClick}
+                    >
+                      {/* */}
+                    </button>
+                  )}
+                />
               </div>
               {/* Facebook */}
-              <div className="w-10 h-10 mt-1">
-                <BsFacebook style={{ color: '#1877F2', fontSize: '35px' }} />
+              <div className="w-9 h-9">
+              <FacebookLogin
+                  appId="423033140369523"
+                  fields="name,email,picture"
+                  callback={responseMessage}
+                  render={({ onClick }) => (
+                    <div
+                      onClick={onClick}
+                      className="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full cursor-pointer shadow-lg transition duration-200 ease-in-out"
+                    >
+                      <BsFacebook className="text-2xl" />
+                    </div>
+                  )}
+                />
               </div>
               {/* Instagram */}
               <div className="w-11 h-11">
