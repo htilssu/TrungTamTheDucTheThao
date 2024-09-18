@@ -1,6 +1,9 @@
+import SliderBanner from './components/SliderBanner.jsx';
+
 const Home = () => {
   return (
     <div className="p-8 text-center bg-gray-100 ">
+      <SliderBanner />
       <h1 className="text-4xl font-bold text-blue-600 mb-4">
         Welcome to the Home Page
       </h1>

@@ -10,16 +10,6 @@
   transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1s ease-in-out;
 }
 
-.slick-dots {
-  position: absolute;
-  bottom: -25px;
-  display: block;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  text-align: center;
-}
 
 .slick-dots li button:before {
   color: #000000; 
