@@ -58,8 +58,8 @@ const Footer = () => {
             </div>
             <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
               <h3 className="text-lg font-semibold mb-2">Điều khoản</h3>
-              {termsLinks.map((link, index) => (
-                  <Link to={link.path} key={index} className="flex items-center">
+              {termsLinks.map((link) => (
+                  <Link to={link.path} key={link.path} className="flex items-center">
                     <IoIosArrowForward size={20}/>
                     <p className="ml-2">{link.text}</p>
                   </Link>))}
@@ -78,8 +78,8 @@ const Footer = () => {
 
           <div className="text-white flex flex-col w-full gap-2 md:flex-col mt-4">
             <h3 className="text-lg font-semibold mb-2">Giới thiệu</h3>
-            {introductionLinks.map((link, index) => (
-                <div key={index}>
+            {introductionLinks.map((link) => (
+                <div key={link.path}>
                   <Link to={link.path} className="flex items-center">
                     <IoIosArrowForward size={20}/>
                     <p className="ml-2">{link.text}</p>
