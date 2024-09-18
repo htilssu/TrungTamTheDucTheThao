@@ -26,13 +26,14 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./Client
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Test
         working-directory: ./Client
         run: npx jest --coverage
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v4
         with:
+          directory: "./Client"
           token: ${{ secrets.CODECOV_TOKEN }}
   build:
     needs: test
@@ -54,7 +55,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./Client
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Build
         working-directory: ./Client
         run: pnpm build

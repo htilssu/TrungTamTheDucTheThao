@@ -5,11 +5,11 @@ import {PageNotFound} from '../pages/PageNotFound.jsx';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: '',
     element: <MainLayout/>,
     children: [
       {
-        path: 'home',
+        index: true,
         element: <Home/>,
       },
     ],
