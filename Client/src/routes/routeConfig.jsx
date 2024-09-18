@@ -1,5 +1,5 @@
 import {createBrowserRouter} from 'react-router-dom';
-import Home from '../pages/HomePage.jsx';
+import Home from '../pages/home/HomePage.jsx';
 import {MainLayout} from '../layouts/MainLayout.jsx';
 import {PageNotFound} from '../pages/PageNotFound.jsx';
 
