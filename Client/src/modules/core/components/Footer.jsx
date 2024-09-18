@@ -13,8 +13,7 @@ const Footer = () => {
                         </div>
                         <p>Công ty Thể Dục Thể Thao và Sự Kiện SportNgoKhong</p>
                         <p>
-                            Giấy Phép cung ứng dịch vụ Trung gian Thanh toán số 22/GP-NHNN của
-                            Ngân hàng Nhà nước Việt Nam
+                            Đặt sân 247 cung cấp các tiện ích thông minh giúp cho bạn tìm sân bãi và đặt sân một cách hiệu quả nhất.
                         </p>
                         <div className="flex items-center">
                             <a href="#" className="block mr-4">
