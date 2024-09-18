@@ -33,37 +33,49 @@ const introductionLinks = [
 ];
 
 const Footer = () => {
-  return (
-      <footer className="bg-gray-800 py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap flex-col md:flex-row justify-between items-start w-full">
-            <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
-              <div className="flex items-center mb-2">
-                <img src="#" alt="Liên hệ" className="w-6 h-6 mr-2"/>
-                <span className="text-lg font-semibold">SportNgoKhong.vn</span>
-              </div>
-              <p>Công ty Thể Dục Thể Thao và Sự Kiện SportNgoKhong</p>
-              <p>
-                Giấy Phép cung ứng dịch vụ Trung gian Thanh toán số 22/GP-NHNN của
-                Ngân hàng Nhà nước Việt Nam
-              </p>
-              <div className="flex items-center">
-                <Link to={'#'} className="block mr-4">
-                  <img src="#" alt="" className="w-20 h-10"/>
-                </Link>
-                <Link to={'#'} className="block">
-                  <img src="#" alt="" className="w-20 h-10"/>
-                </Link>
-              </div>
-            </div>
-            <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
-              <h3 className="text-lg font-semibold mb-2">Điều khoản</h3>
-              {termsLinks.map((link) => (
-                  <Link to={link.path} key={link.path} className="flex items-center">
-                    <IoIosArrowForward size={20}/>
-                    <p className="ml-2">{link.text}</p>
-                  </Link>))}
-            </div>
+    return (
+        <footer className="bg-gray-800 py-6">
+            <div className="container mx-auto px-4">
+                <div className="flex flex-wrap flex-col md:flex-row justify-between items-start w-full">
+                    <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
+                        <div className="flex items-center mb-2">
+                            <img src="#" alt="Liên hệ" className="w-6 h-6 mr-2" />
+                            <span className="text-lg font-semibold">SportNgoKhong.vn</span>
+                        </div>
+                        <p>Công ty Thể Dục Thể Thao và Sự Kiện SportNgoKhong</p>
+                        <p>
+                            Đặt sân 247 cung cấp các tiện ích thông minh giúp cho bạn tìm sân bãi và đặt sân một cách hiệu quả nhất.
+                        </p>
+                        <div className="flex items-center">
+                            <a href="#" className="block mr-4">
+                                <img src="#" alt="" className="w-20 h-10" />
+                            </a>
+                            <a href="#" className="block">
+                                <img src="#" alt="" className="w-20 h-10" />
+                            </a>
+                        </div>
+                    </div>
+                    <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
+                        <h3 className="text-lg font-semibold mb-2">Điều khoản</h3>
+                        <div>
+                            <a href="#" className="flex items-start">
+                                <IoIosArrowForward size={20} />
+                                <p className="ml-2">Thỏa thuận người dùng</p>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#" className="flex items-start">
+                                <IoIosArrowForward size={20} />
+                                <p className="ml-2"> Quyền riêng tư</p>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#" className="flex items-start">
+                                <IoIosArrowForward size={20} />
+                                <p className="ml-2">Quy định - chính sách</p>
+                            </a>
+                        </div>
+                    </div>
 
             <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
               <h3 className="text-lg font-semibold mb-2">Hotline</h3>
