@@ -9,6 +9,7 @@ import SignUp from "../modules/core/components/account/SignUp.jsx";
 import ForgotPassword from "../modules/core/components/account/ForgotPassword.jsx";
 
 
+
 export const router = createBrowserRouter([
     {
         path: '',

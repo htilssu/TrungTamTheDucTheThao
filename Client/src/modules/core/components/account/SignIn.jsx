@@ -225,7 +225,7 @@ const SignIn = () => {
                   Nhớ mật khẩu
                 </label>
               </div>
-              <a href="/forgotpassword"
+              <a href="/src/pages/forgot-password/ForgotPassword"
                 className="inline-block align-baseline md:font-bold font-medium md:text-sm text-teal-500 hover:text-teal-400 transition duration-200">
                 Quên mật khẩu?
               </a>
