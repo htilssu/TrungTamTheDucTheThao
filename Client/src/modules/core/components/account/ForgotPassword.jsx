@@ -23,7 +23,6 @@ const ForgotPassword = () => {
             hasError = true;
         }
         if (!hasError) {
-            console.log('forgotpassword with:', { email });
             setEmail('');
             setShowChangePasswordForm(true); // Hiển thị form đổi mật khẩu sau khi xử lý email thành công
         }
@@ -89,12 +88,12 @@ const ForgotPassword = () => {
                                 />
                                 {emailError && <p className="text-red-500 text-sm mt-2">{emailError}</p>}
                             </motion.div>
-                            <div
-                                className="text-3xl mt-4 flex justify-center text-teal-400 cursor-pointer"
+                            <button
+                                className="text-3xl w-full mt-4 flex justify-center text-teal-400 cursor-pointer"
                                 onClick={handleSubmit} // Nhấn vào icon sẽ submit form
                             >
-                                <FaCircleArrowRight />
-                            </div>
+                                <FaCircleArrowRight/>
+                            </button>
                         </form>
                     )}
 
@@ -106,7 +105,6 @@ const ForgotPassword = () => {
                             transition={{ duration: 0.9 }}
                             className="mt-5"
                         >
-                            <h2 className="text-xl font-bold text-gray-700 mb-4">Đổi mật khẩu</h2>
                             <form className="w-full" onSubmit={handlePasswordChange}>
                                 <div className="mb-4">
                                     <input
