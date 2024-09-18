@@ -1,18 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import {FaFacebook, FaGithub} from "react-icons/fa";
-import {FcGoogle} from "react-icons/fc";
 import {Link} from "react-router-dom";
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
-    const [phonenumber, setPhonenumber] = useState('');
     const [password, setPassword] = useState('');
     const [repassword, setRepassword] = useState('');
 
     // State cho từng lỗi
     const [emailError, setEmailError] = useState('');
-    const [phoneError, setPhoneError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [repasswordError, setRepasswordError] = useState('');
 
@@ -23,7 +19,6 @@ const SignUp = () => {
 
         // Reset lỗi
         setEmailError('');
-        setPhoneError('');
         setPasswordError('');
         setRepasswordError('');
 
@@ -33,14 +28,6 @@ const SignUp = () => {
             hasError = true;
         } else if (! /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
             setEmailError('Email không hợp lệ.');
-            hasError = true;
-        }
-
-        if (!phonenumber) {
-            setPhoneError('Số điện thoại không được để trống.');
-            hasError = true;
-        } else if (!/^\d{10}$/.test(phonenumber)) {
-            setPhoneError('Số điện thoại không hợp lệ.');
             hasError = true;
         }
 
@@ -60,7 +47,6 @@ const SignUp = () => {
         // Nếu không có lỗi, tiến hành đăng ký
         if (!hasError) {
             setEmail('');
-            setPhonenumber('');
             setPassword('');
             setRepassword('');
         }
