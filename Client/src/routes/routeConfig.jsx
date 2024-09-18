@@ -5,13 +5,13 @@ import {MainLayout} from "../layouts/MainLayout.jsx";
 import {PageNotFound} from "../pages/PageNotFound.jsx";
 import SignIn from '../modules/core/components/account/SignIn.jsx';
 import Test from '../modules/core/components/account/test.jsx';
+import SignUp from "../modules/core/components/account/SignUp.jsx";
+import ForgotPassword from "../modules/core/components/account/ForgotPassword.jsx";
 
 
 export const router = createBrowserRouter([
-  {
-    path: '/',
-    children: [
-      {
+    {
+        path: '',
         element: <MainLayout/>,
         children: [
           {
@@ -24,8 +24,12 @@ export const router = createBrowserRouter([
             path: 'test', element: <Test/>,
           },
         ],
-      },
-    ],
-    errorElement: <PageNotFound/>,
-  },
+        errorElement: <PageNotFound/>,
+    },
+    {
+        path: 'sign-up', element: <SignUp/>,
+    },
+    {
+        path: 'forgot-password', element: <ForgotPassword/>,
+    },
 ]);

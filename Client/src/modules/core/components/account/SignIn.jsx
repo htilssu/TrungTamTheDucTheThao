@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
 // import axios from 'axios';
+import {FaGithub} from "react-icons/fa"; //facebook icon
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -224,7 +225,7 @@ const SignIn = () => {
                   Nhớ mật khẩu
                 </label>
               </div>
-              <a href="/forgot-password"
+              <a href="/forgotpassword"
                 className="inline-block align-baseline md:font-bold font-medium md:text-sm text-teal-500 hover:text-teal-400 transition duration-200">
                 Quên mật khẩu?
               </a>
@@ -256,10 +257,10 @@ const SignIn = () => {
             </motion.div>
 
             <motion.div
-              className="flex items-center justify-center space-x-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.5 }}
+                className="flex items-center justify-center space-x-4"
+                initial={{opacity: 0, y: 20}}
+                animate={{opacity: 1, y: 0}}
+                transition={{duration: 1.5}}
             >
               {/* Google */}
               <div className="w-11 h-11 mt-2">
@@ -292,14 +293,15 @@ const SignIn = () => {
                   )}
                 />
               </div>
-              {/* Instagram */}
-              <div className="w-11 h-11">
-                <img
-                  src='/instagram.png'
-                  alt="Instagram Icon"
-                  className="w-full h-full object-contain"
-                />
-              </div>
+              {/* GitHub */}
+              <a
+                  href="https://github.com/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-4xl text-gray-800"
+              >
+                <FaGithub/>
+              </a>
             </motion.div>
           </form>
         </div>
