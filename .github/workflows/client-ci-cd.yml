@@ -1,0 +1,61 @@
+name: Client CI/CD
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+          package_json_file: './Client/package.json'
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: "**/*.yaml"
+
+      - name: Install dependencies
+        working-directory: ./Client
+        run: pnpm install --no-frozen-lockfile
+      - name: Test
+        working-directory: ./Client
+        run: npx jest --coverage
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          directory: "./Client"
+          token: ${{ secrets.CODECOV_TOKEN }}
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+          package_json_file: './Client/package.json'
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache-dependency-path: "**/*.yaml"
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        working-directory: ./Client
+        run: pnpm install --no-frozen-lockfile
+      - name: Build
+        working-directory: ./Client
+        run: pnpm build

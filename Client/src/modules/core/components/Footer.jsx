@@ -46,68 +46,68 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
-                        <h3 className="text-lg font-semibold mb-2">Hotline</h3>
-                        <p>Email: contact@example.com</p>
-                        <p>Điện thoại: +84 123 456 789</p>
-                        <p>Địa chỉ: Số 123 Đường ABC, Quận XYZ, TP HCM</p>
-                    </div>
-                    <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2 ">
-                        <h3 className="text-lg font-semibold mb-2">Địa chỉ</h3>
-                        <p>Email: contact@example.com</p>
-                        <p>Điện thoại: +84 123 456 789</p>
-                        <p>Địa chỉ: Số 123 Đường ABC, Quận XYZ, TP HCM</p>
-                    </div>
-                </div>
+          <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
+            <h3 className="text-lg font-semibold mb-2">Hotline</h3>
+            <p>Email: contact@example.com</p>
+            <p>Điện thoại: +84 123 456 789</p>
+            <p>Địa chỉ: Số 123 Đường ABC, Quận XYZ, TP HCM</p>
+          </div>
+          <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2 ">
+            <h3 className="text-lg font-semibold mb-2">Địa chỉ</h3>
+            <p>Email: contact@example.com</p>
+            <p>Điện thoại: +84 123 456 789</p>
+            <p>Địa chỉ: Số 123 Đường ABC, Quận XYZ, TP HCM</p>
+          </div>
+        </div>
 
-                <div className="text-white flex flex-col w-full gap-2 md:flex-col mt-4">
-                    <h3 className="text-lg font-semibold mb-2">Giới thiệu</h3>
-                    <div>
-                        <a href="#" className="flex items-center">
-                            <IoIosArrowForward size={20} />
-                            <p className="ml-2">Về chúng tôi</p>
-                        </a>
-                    </div>
-                    <div>
-                        <a href="#" className="flex items-center">
-                            <IoIosArrowForward size={20} />
-                            <p className="ml-2">Tin tức</p>
-                        </a>
-                    </div>
-                    <div>
-                        <a href="#" className="flex items-center">
-                            <IoIosArrowForward size={20} />
-                            <p className="ml-2">Liên hệ</p>
-                        </a>
-                    </div>
-                </div>
+        <div className="text-white flex flex-col w-full gap-2 md:flex-col mt-4">
+          <h3 className="text-lg font-semibold mb-2">Giới thiệu</h3>
+          <div>
+            <a href="#" className="flex items-center">
+              <IoIosArrowForward size={20} />
+              <p className="ml-2">Về chúng tôi</p>
+            </a>
+          </div>
+          <div>
+            <a href="#" className="flex items-center">
+              <IoIosArrowForward size={20} />
+              <p className="ml-2">Tin tức</p>
+            </a>
+          </div>
+          <div>
+            <a href="#" className="flex items-center">
+              <IoIosArrowForward size={20} />
+              <p className="ml-2">Liên hệ</p>
+            </a>
+          </div>
+        </div>
 
-                <div className="mt-6 text-center text-white">
-                    <h3 className="text-lg font-semibold mb-2">Theo dõi chúng tôi</h3>
-                    <div className="flex justify-center space-x-4">
-                        <a href="#" className="text-gray-400 hover:text-white mx-2">
-                            <FaFacebook size={24} />
-                        </a>
-                        <a href="#" className="text-gray-400 hover:text-white mx-2">
-                            <FaTwitter size={24} />
-                        </a>
-                        <a href="#" className="text-gray-400 hover:text-white mx-2">
-                            <FaLinkedin size={24} />
-                        </a>
-                        <a href="#" className="text-gray-400 hover:text-white mx-2">
-                            <FaInstagram size={24} />
-                        </a>
-                    </div>
-                </div>
-                <div className="mt-6 text-center">
-                    <p className="text-gray-400 text-sm">
-                        Bản quyền © 2024-2025 SportNgoKhong.vn. Trung tâm thể dục thể thao hàng đầu Việt Nam.
-                    </p>
-                </div>
-            </div>
-        </footer>
-    );
+        <div className="mt-6 text-center text-white">
+          <h3 className="text-lg font-semibold mb-2">Theo dõi chúng tôi</h3>
+          <div className="flex justify-center space-x-4">
+            <a href="#" className="text-gray-400 hover:text-white mx-2">
+              <FaFacebook size={24} />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white mx-2">
+              <FaTwitter size={24} />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white mx-2">
+              <FaLinkedin size={24} />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white mx-2">
+              <FaInstagram size={24} />
+            </a>
+          </div>
+        </div>
+        <div className="mt-6 text-center">
+          <p className="text-gray-400 text-sm">
+            Bản quyền © 2024-2025 SportNgoKhong.vn. Trung tâm thể dục thể thao
+            hàng đầu Việt Nam.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
 };
-
 
 export default Footer;
