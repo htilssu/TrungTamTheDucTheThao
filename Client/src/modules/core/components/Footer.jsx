@@ -81,7 +81,7 @@ const Footer = () => {
               <p className="ml-2">Liên hệ</p>
             </a>
           </div>
-        </div>
+        </div
 
         <div className="mt-6 text-center text-white">
           <h3 className="text-lg font-semibold mb-2">Theo dõi chúng tôi</h3>
