@@ -3,9 +3,9 @@ import {createBrowserRouter} from 'react-router-dom';
 import Home from "../pages/HomePage.jsx";
 import {MainLayout} from "../layouts/MainLayout.jsx";
 import {PageNotFound} from "../pages/PageNotFound.jsx";
-import SignIn from '../modules/core/components/account/SignIn.jsx';
-import SignUp from "../modules/core/components/account/SignUp.jsx";
-import ForgotPassword from "../modules/core/components/account/ForgotPassword.jsx";
+import SignUp from "../pages/sign-up/SignUp.jsx";
+import ForgotPassword from "../pages/forgot-password/ForgotPassword.jsx";
+import SignIn from "../pages/sign-in/SignIn.jsx";
 
 
 export const router = createBrowserRouter([

@@ -257,7 +257,7 @@ const SignIn = () => {
               }} transition={{duration: 1.3}}>
                 <p className="text-gray-500 text-sm">
                   Nếu chưa có tài khoản?{' '}
-                  <a href="/register" className="text-blue-500 hover:text-blue-400">
+                  <a href="/sign-up" className="text-blue-500 hover:text-blue-400">
                     Đăng ký
                   </a>
                 </p>

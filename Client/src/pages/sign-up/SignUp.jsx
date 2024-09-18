@@ -59,7 +59,6 @@ const SignUp = () => {
 
         // Nếu không có lỗi, tiến hành đăng ký
         if (!hasError) {
-            console.log('Signing up with:', { email, phonenumber, password });
             setEmail('');
             setPhonenumber('');
             setPassword('');
@@ -76,10 +75,10 @@ const SignUp = () => {
                 backgroundSize: '100% 100%',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'left',
-                height: '120vh',
+                height: '100vh',
             }}>
             <div
-                className="bg-white shadow-lg rounded-lg w-full md:max-w-md max-w-sm py-10 md:px-8 px-6 md:mr-9 md:mx-0 mx-4">
+                className="bg-white shadow-lg rounded-lg w-full md:max-w-md max-w-sm py-5 md:px-8 px-6 md:mr-9 md:mx-0 mx-4">
                 <div className="flex flex-col">
                     {/* Logo */}
                     <motion.img src="/logo.png" alt="Logo" className="md:w-16 md:h-16 w-14 h-14 md:mb-4 mb-3"
@@ -154,30 +153,8 @@ const SignUp = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                {emailError && <p className="text-red-500 text-sm mt-2">{emailError}</p>}
+                                {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
                             </motion.div>
-
-                            {/* Số điện thoại */}
-                            <motion.div
-                                className="md:mb-4 mb-3"
-                                initial={{opacity: 0, y: 20}}
-                                animate={{opacity: 1, y: 0}}
-                                transition={{duration: 1}}
-                            >
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phonenumber">
-                                    Số điện thoại
-                                </label>
-                                <input
-                                    type="text"
-                                    id="phonenumber"
-                                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out ${phoneError ? 'border-red-500' : ''}`}
-                                    placeholder="Nhập số điện thoại"
-                                    value={phonenumber}
-                                    onChange={(e) => setPhonenumber(e.target.value)}
-                                />
-                                {phoneError && <p className="text-red-500 text-sm mt-2">{phoneError}</p>}
-                            </motion.div>
-
                             {/* Mật khẩu */}
                             <motion.div
                                 className="md:mb-4 mb-3"
@@ -191,12 +168,12 @@ const SignUp = () => {
                                 <input
                                     type="password"
                                     id="password"
-                                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out ${passwordError ? 'border-red-500' : ''}`}
+                                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out ${passwordError ? 'border-red-500' : ''}`}
                                     placeholder="Nhập mật khẩu"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                {passwordError && <p className="text-red-500 text-sm mt-2">{passwordError}</p>}
+                                {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
                             </motion.div>
 
                             {/* Nhập lại mật khẩu */}
@@ -217,7 +194,7 @@ const SignUp = () => {
                                     value={repassword}
                                     onChange={(e) => setRepassword(e.target.value)}
                                 />
-                                {repasswordError && <p className="text-red-500 text-sm mt-2">{repasswordError}</p>}
+                                {repasswordError && <p className="text-red-500 text-sm mt-1">{repasswordError}</p>}
                             </motion.div>
 
                             <motion.div
@@ -246,50 +223,6 @@ const SignUp = () => {
                                             Đăng nhập
                                         </Link>
                                     </label>
-                                </div>
-                            </motion.div>
-                            <motion.div className="flex items-center mb-6" initial={{opacity: 0, y: 20}}
-                                        animate={{opacity: 1, y: 0}} transition={{duration: 1.4}}>
-                                <div className="border-t border-gray-300 w-full"></div>
-                                <p className="text-gray-500 px-4">or</p>
-                                <div className="border-t border-gray-300 w-full"></div>
-                            </motion.div>
-                            <motion.div
-                                className="md:mb-4 mb-3"
-                                initial={{opacity: 0, y: 20}}
-                                animate={{opacity: 1, y: 0}}
-                                transition={{duration: 1.3}}
-                            >
-                                <div className="flex justify-center space-x-5 mt-4">
-                                    {/* Liên kết đến Google */}
-                                    <a
-                                        href="https://accounts.google.com/signin"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-4xl text-red-600"
-                                    >
-                                        <FcGoogle/>
-                                    </a>
-
-                                    {/* Liên kết đến Facebook */}
-                                    <a
-                                        href="https://www.facebook.com/login"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-4xl text-blue-600"
-                                    >
-                                        <FaFacebook/>
-                                    </a>
-
-                                    {/* Liên kết đến GitHub */}
-                                    <a
-                                        href="https://github.com/login"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-4xl text-gray-800"
-                                    >
-                                        <FaGithub/>
-                                    </a>
                                 </div>
                             </motion.div>
 
