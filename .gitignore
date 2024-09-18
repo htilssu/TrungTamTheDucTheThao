@@ -303,3 +303,4 @@ healthchecksdb
 MigrationBackup/
 .ionide/
 /.idea
+.vite

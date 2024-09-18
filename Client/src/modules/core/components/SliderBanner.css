@@ -10,10 +10,6 @@
   transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1s ease-in-out;
 }
 
-/*.slide-caption {*/
-/*  */
-/*}*/
-
 .slick-dots {
   position: absolute;
   bottom: -25px;
