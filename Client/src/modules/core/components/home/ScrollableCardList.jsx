@@ -18,11 +18,11 @@ const items = [
 
 const ScrollableCardList = () => {
     return (
-        <div className="bg-gray-100 py-4 px-2 sm:px-4 sm:py-8">
+        <div className="py-4 px-2 sm:px-4 sm:py-8">
             <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 mb-2 sm:mb-4">
                 DEAL Hot Dành Cho Bạn
             </h2>
-            <div className="px-3 relative overflow-hidden bg-white shadow-lg rounded-lg">
+            <div className="px-3 relative overflow-hidden rounded-lg">
                 <Swiper
                     spaceBetween={10}
                     slidesPerView={4}
