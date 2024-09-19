@@ -141,7 +141,7 @@ const Navbar = () => {
                 >
                     <span className="sr-only">Open main menu</span>
                     <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
                     </svg>
                 </button>
 
@@ -224,55 +224,47 @@ const Navbar = () => {
                         </li>
                     </ul>
                 </div>
-
-                {/* Menu di động */}
-                {isMobileMenuOpen && (
-                    <div id="navbar-menu" className="md:hidden">
-                        <ul className="flex flex-col p-4 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Trang
-                                    Chủ</a>
-                            </li>
-                            <li>
-                                <div className="flex space-x-4 py-2 px-3">
-                                    <button
-                                        onClick={toggleMegaMenu}
-                                        className={`flex items-center text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 ${isMegaMenuOpen ? 'text-blue-600' : ''}`}
-                                    >
-                                        Dịch Vụ
-                                        {/* Mũi tên biểu tượng thay đổi */}
-                                        <svg
-                                            className={`ml-2 w-4 h-4 transition-transform duration-300 ${isMegaMenuOpen ? 'rotate-180' : 'rotate-0'}`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                                  d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Lớp
-                                    Học</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Đặt
-                                    Lịch</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Liên Hệ</a>
-                            </li>
-                        </ul>
-                    </div>
-                )}
             </div>
+            {/* Menu di động */}
+            {isMobileMenuOpen && (
+                <div id="navbar-menu" className="md:hidden">
+                    <ul className="flex flex-col p-4 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Trang Chủ</a>
+                        </li>
+                        <li>
+                            {/* Nút Dịch Vụ */}
+                            <div className="py-2 px-3">
+                                <button
+                                    onClick={toggleMegaMenu}
+                                    className={`flex items-center text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 ${isMegaMenuOpen ? 'text-blue-600' : ''}`}
+                                >
+                                    Dịch Vụ
+                                    {/* Mũi tên biểu tượng thay đổi */}
+                                    <svg
+                                        className={`ml-2 w-4 h-4 transition-transform duration-300 ${isMegaMenuOpen ? 'rotate-180' : 'rotate-0'}`}
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Lớp Học</a>
+                        </li>
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Đặt Lịch</a>
+                        </li>
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Liên Hệ</a>
+                        </li>
+                    </ul>
+                </div>
+            )}
 
             {/* Mega menu xuất hiện khi isMegaMenuOpen là true */}
             {isMegaMenuOpen && (
