@@ -8,7 +8,7 @@ export function MainLayout() {
     return (
         <div className={"w-full"}>
 
-            <div className="fixed top-0 left-0 w-full z-50">
+            <div className="fixed top-0 left-0 w-full z-10">
                 <Navbar/>
             </div>
 
