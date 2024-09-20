@@ -9,7 +9,7 @@ const ForgotPassword = () => {
     const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [RepasswordError, setRepasswordError] = useState('');
+    const [repasswordError, setRepasswordError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
     const handleSubmit = (e) => {
@@ -31,7 +31,7 @@ const ForgotPassword = () => {
     const handlePasswordChange = (e) => {
         e.preventDefault();
         setPasswordError('');
-        setRepasswordError()
+        setRepasswordError('')
         if (newPassword !== confirmPassword) {
             setRepasswordError('Mật khẩu không khớp.');
         }else if(!newPassword){
@@ -129,7 +129,7 @@ const ForgotPassword = () => {
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
                                 </div>
-                                    {RepasswordError && <p className="text-red-500 text-sm mb-4">{RepasswordError}</p>}
+                                    {repasswordError && <p className="text-red-500 text-sm mb-4">{repasswordError}</p>}
                                 <button
                                     type="submit"
                                     className="bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
