@@ -52,22 +52,21 @@ const SignIn = () => {
 
   /////FACEBOOK API
   // {
-  //   "name": "Vũ Ngọc Lâm",
-  //   "email": "thanhphohochiminh8@gmail.com",
+  //   "name": "",
+  //   "email": "",
   //   "picture": {
   //       "data": {
-  //           "height": 50,
-  //           "is_silhouette": false,
-  //           "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1373569184049418&height=50&width=50&ext=1729230933&hash=Aba5k7ApQywWffX31Q-MXwNS",
-  //           "width": 50
+  //           "height": ,
+  //           "is_silhouette": ,
+  //           "url": """
   //       }
   //   },
   //   "id": "",
   //   "userID": "",
   //   "expiresIn": ,
   //   "accessToken": "",
-  //   "signedRequest": ".eyJ1c2VyX2lkIjoiMTM3MzU2OTE4NDA0OTQxOCIsImNvZGUiOiJBUUJJbTQxbjc0ZUloVlVDVXltZVhPb3A1LWZ1cnpDLUhOMGdRWm9STEhmVF90UG1DNG1WSWpPRHhXUE9YOEpkNmkyd1J5YzJxdFBfSDhuOXk5dTJ6YVlkR215NTFtSVJNUk5MMm1LenBQS3A0ZVdnYXRHY2lZS1BrY0UtUElHNUZMZG84T3FyMXJwdVJCT0haN24zNXJKX0lBR0oyTHdydV9kdmRfME9HNERZMTdSV1pqeFJHaHlHQkd2WVJ6UTBIX0xkWTFuMkJQdmowclluWENONFJTU3ZMdERJU3JyNS1ZRnN4U05WaWdMRjF3cE4wN3p5dDJSV3FyRkk1SWt0dVZiT1l3S01DRHM0enFYNWxzNkNiN1VZelpiQ3lnNDAtRzU3d0hENExTekNtOWdFVG05RHZjc0J6OWJlMXNFVkkycFVfZURsd3BvSVFRUmhYNkdSTE1pSnVmTkV4ZHpjRVc0THU5RWhxZ2x2WGciLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTcyNjYzODkzMn0",
-  //   "graphDomain": "facebook",
+  //   "signedRequest": ".",
+  //   "graphDomain": "",
   //   "data_access_expiration_time": 
   // }
 
