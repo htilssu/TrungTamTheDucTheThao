@@ -2,7 +2,7 @@
 import { Outlet } from "react-router-dom";
 import {ToastContainer} from "react-toastify";
 import Footer from "../modules/core/components/Footer.jsx";
-import Navbar from "../modules/core/system-component/Navbar.jsx";
+import Navbar from "../modules/core/components/Navbar.jsx";
 
 export function MainLayout() {
     return (

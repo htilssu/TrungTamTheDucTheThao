@@ -15,22 +15,28 @@ const MegaItem = ({ title, description, link }) => {
 const MegaMenu = () => {
     const menuItems = [
         {
-            title: "Online Stores",
+            title: "CLB GYM",
             description: "Connect with third-party tools that you are already using.",
             link: "/online-stores"
         },
         {
-            title: "Segmentation",
+            title: "SÂN BÓNG",
             description: "Segment your audience for targeted marketing.",
             link: "/segmentation"
         },
         {
-            title: "Marketing CRM",
+            title: "SÂN BÓNG RỔ",
             description: "Manage your customer relationships effectively.",
             link: "/marketing-crm"
         },
         {
-            title: "Analytics",
+            title: "SÂN TENNIS",
+            description: "Analyze data to make informed decisions.",
+            link: "/analytics"
+        }
+        ,
+        {
+            title: "TUẤN MÈO",
             description: "Analyze data to make informed decisions.",
             link: "/analytics"
         }
@@ -71,40 +77,46 @@ const Navbar = () => {
     const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const menuRef = useRef(null); // Ref cho MegaMenu
-    const buttonRef = useRef(null); // Ref cho nút "Dịch Vụ"
-
-    const UsermenuRef = useRef(null); // Ref cho UserMenu
-    const UserbuttonRef = useRef(null); // Ref cho nút UserMenu
-
-    // Toggle Mega Menu
-    const toggleMegaMenu = () => {
-        setIsMegaMenuOpen(!isMegaMenuOpen);
-    };
-
     // Toggle User Menu
     const toggleUserMenu = () => {
         setIsUserMenuOpen(!isUserMenuOpen);
     };
+    const UsermenuRef = useRef(null); // Ref cho UserMenu
+    const UserbuttonRef = useRef(null); // Ref cho nút UserMenu
 
-    // Đóng các menu khi nhấn bên ngoài
+    // Đóng menu user khi nhấn bên ngoài
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // Kiểm tra nếu nhấn ngoài MegaMenu và nút "Dịch Vụ"
-            if (menuRef.current && !menuRef.current.contains(event.target) && buttonRef.current && !buttonRef.current.contains(event.target)) {
-                setIsMegaMenuOpen(false);
+            if (UsermenuRef.current && !UsermenuRef.current.contains(event.target) && UserbuttonRef.current && !UserbuttonRef.current.contains(event.target)) {
+                setIsUserMenuOpen(false);
             }
         };
-
         // Gán sự kiện mousedown cho document
         document.addEventListener('mousedown', handleClickOutside);
-
         // Xóa sự kiện khi component bị hủy
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
+    const menuRef = useRef(null); // Ref cho MegaMenu
+    const buttonRef = useRef(null); // Ref cho nút "Dịch Vụ"
+    // Hàm xử lý sự kiện khi chuột rời khỏi khu vực menu hoặc nút "Dịch Vụ"
+    const handleMouseLeave = (event) => {
+        if (
+            menuRef.current &&
+            !menuRef.current.contains(event.relatedTarget) &&  // Kiểm tra nếu chuột không đi vào trong menu
+            buttonRef.current &&
+            !buttonRef.current.contains(event.relatedTarget)   // Kiểm tra nếu chuột không đi vào trong nút "Dịch Vụ"
+        ) {
+            setIsMegaMenuOpen(false);  // Đóng menu
+        }
+    };
+
+    // Toggle Mega Menu
+    const toggleMegaMenu = () => {
+        setIsMegaMenuOpen(!isMegaMenuOpen);
+    };
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
@@ -129,7 +141,7 @@ const Navbar = () => {
                 >
                     <span className="sr-only">Open main menu</span>
                     <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
                     </svg>
                 </button>
 
@@ -178,7 +190,7 @@ const Navbar = () => {
                             <div className="flex space-x-4">
                                 <button
                                     ref={buttonRef}
-                                    onClick={toggleMegaMenu}
+                                    onMouseEnter={() => setIsMegaMenuOpen(true)}
                                     className={`flex items-center text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 ${isMegaMenuOpen ? 'text-blue-600' : ''}`}
                                 >
                                     Dịch Vụ
@@ -212,53 +224,56 @@ const Navbar = () => {
                         </li>
                     </ul>
                 </div>
-
-                {/* Menu di động */}
-                {isMobileMenuOpen && (
-                    <div id="navbar-menu" className="md:hidden">
-                        <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                            <li>
-                                <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Home</a>
-                            </li>
-                            <li>
-                                <div className="flex space-x-4">
-                                    <button
-                                        ref={buttonRef}
-                                        onClick={toggleMegaMenu}
-                                        className={`flex items-center text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 ${isMegaMenuOpen ? 'text-blue-600' : ''}`}
-                                    >
-                                        Dịch Vụ
-                                        {/* Mũi tên biểu tượng thay đổi */}
-                                        <svg
-                                            className={`ml-2 w-4 h-4 transition-transform duration-300 ${isMegaMenuOpen ? 'rotate-180' : 'rotate-0'}`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                                  d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Services</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                )}
             </div>
+            {/* Menu di động */}
+            {isMobileMenuOpen && (
+                <div id="navbar-menu" className="md:hidden">
+                    <ul className="flex flex-col p-4 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Trang Chủ</a>
+                        </li>
+                        <li>
+                            {/* Nút Dịch Vụ */}
+                            <div className="py-2 px-3">
+                                <button
+                                    onClick={toggleMegaMenu}
+                                    className={`flex items-center text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 ${isMegaMenuOpen ? 'text-blue-600' : ''}`}
+                                >
+                                    Dịch Vụ
+                                    {/* Mũi tên biểu tượng thay đổi */}
+                                    <svg
+                                        className={`ml-2 w-4 h-4 transition-transform duration-300 ${isMegaMenuOpen ? 'rotate-180' : 'rotate-0'}`}
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Lớp Học</a>
+                        </li>
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Đặt Lịch</a>
+                        </li>
+                        <li>
+                            <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Liên Hệ</a>
+                        </li>
+                    </ul>
+                </div>
+            )}
 
             {/* Mega menu xuất hiện khi isMegaMenuOpen là true */}
             {isMegaMenuOpen && (
-                <div ref={menuRef}>
-                    <MegaMenu/>
+                <div
+                    ref={menuRef}
+                    onMouseLeave={handleMouseLeave} // Gọi hàm xử lý khi rời khỏi menu
+                    onMouseEnter={() => setIsMegaMenuOpen(true)} // Giữ menu mở khi chuột vào bên trong MegaMenu
+                >
+                    <MegaMenu />
                 </div>
             )}
         </nav>
