@@ -1,5 +1,5 @@
-import ScrollableCardList from '../../modules/core/components/home/ScrollableCardList.jsx';
-import FeatureCategory from '../../modules/core/components/home/FeatureCategory.jsx';
+import ScrollableCardList from './components/ScrollableCardList.jsx';
+import FeatureCategory from './components/FeatureCategory.jsx';
 import SliderBanner from './components/SliderBanner.jsx';
 
 const Home = () => {
