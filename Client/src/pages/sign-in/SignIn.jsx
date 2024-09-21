@@ -5,16 +5,13 @@ import { GoogleLogin } from "@react-oauth/google"; //google sign in
 import { useNavigate } from "react-router-dom";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { SiGithub } from "react-icons/si";
-
+import { FcGoogle } from 'react-icons/fc';
 // import axios from 'axios';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const fbAppId  = import.meta.env.VITE_FB_APP_ID;
   const gitAppId = import.meta.env.VITE_GIT_APP_ID;
-  if (import.meta.env.DEV) {
-    console.log(fbAppId)
-  }
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -352,7 +349,9 @@ const SignIn = () => {
                   onError={errorMessage}
                   type="icon"
                   render={({ onClick }) => (
-                    <button onClick={onClick}>{/* */}</button>
+                      <button onClick={onClick} className="w-full h-full">
+                        <FcGoogle className="w-full h-full" />
+                      </button>
                   )}
                 />
               </div>
