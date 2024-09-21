@@ -46,9 +46,27 @@ const SignUp = () => {
 
         // Nếu không có lỗi, tiến hành đăng ký
         if (!hasError) {
-            setEmail('');
-            setPassword('');
-            setRepassword('');
+            // Send registration data to server
+            fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    setEmail('');
+                    setPassword('');
+                    setRepassword('');
+                    // Optionally, navigate to a welcome page or inform the user of success
+                } else {
+                    // Handle registration failure
+                    setEmailError('Registration failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                setEmailError('An error occurred.');
+            });
         }
     };
 
