@@ -6,7 +6,9 @@ import './index.css';
 import App from './App.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-createRoot(document.getElementById('root')).render(
+export const root = createRoot(document.getElementById('root'));
+
+root.render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <StrictMode>
       <Suspense fallback={'Loading'}>
@@ -18,3 +20,5 @@ createRoot(document.getElementById('root')).render(
     </StrictMode>,
   </GoogleOAuthProvider>
 );
+
+

@@ -9,6 +9,7 @@ const ForgotPassword = () => {
     const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [repasswordError, setRepasswordError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
     const handleSubmit = (e) => {
@@ -30,28 +31,17 @@ const ForgotPassword = () => {
     const handlePasswordChange = (e) => {
         e.preventDefault();
         setPasswordError('');
+        setRepasswordError('')
         if (newPassword !== confirmPassword) {
-            setPasswordError('Mật khẩu không khớp.');
+            setRepasswordError('Mật khẩu không khớp.');
+        }else if(!newPassword){
+            setPasswordError('Vui lòng nhập mật khẩu mới')
         } else {
-            // Send new password to server to update
-            fetch('/api/reset-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password: newPassword })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    setNewPassword('');
-                    setConfirmPassword('');
-                    navigate('/sign-in'); // Navigate to sign-in page after successful password change
-                } else {
-                    setPasswordError('Failed to reset password.');
-                }
-            })
-            .catch(error => {
-                setPasswordError('An error occurred.');
-            });
+            setNewPassword('');
+            setConfirmPassword('');
+            setRepasswordError('');
+            // Chuyển hướng về trang đăng nhập sau khi đổi mật khẩu thành công
+            navigate('/sign-in');
         }
     };
 
@@ -119,8 +109,8 @@ const ForgotPassword = () => {
                             transition={{ duration: 0.9 }}
                             className="mt-5"
                         >
-                            <form className="w-full" onSubmit={handlePasswordChange}>
-                                <div className="mb-4">
+                            <form className="w-full md:max-w-md max-w-sm" onSubmit={handlePasswordChange}>
+                                <div className="mb-3">
                                     <input
                                         type="password"
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
@@ -129,6 +119,7 @@ const ForgotPassword = () => {
                                         onChange={(e) => setNewPassword(e.target.value)}
                                     />
                                 </div>
+                                {passwordError &&  <p className="text-red-500 text-sm mb-2">{passwordError}</p>}
                                 <div className="mb-4">
                                     <input
                                         type="password"
@@ -138,15 +129,15 @@ const ForgotPassword = () => {
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
                                 </div>
-                                {passwordError && <p className="text-red-500 text-sm mb-4">{passwordError}</p>}
+                                    {repasswordError && <p className="text-red-500 text-sm mb-4">{repasswordError}</p>}
                                 <button
                                     type="submit"
                                     className="bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                                 >
                                     Đổi mật khẩu
                                 </button>
-                            </form>
-                        </motion.div>
+                                    </form>
+                                    </motion.div>
                     )}
                 </div>
             </div>
