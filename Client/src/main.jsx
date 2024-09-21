@@ -5,7 +5,9 @@ import {createRoot} from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 
-createRoot(document.getElementById('root')).render(
+export const root = createRoot(document.getElementById('root'));
+
+root.render(
     <StrictMode>
       <Suspense fallback={'Loading'}>
         <DevSupport ComponentPreviews={ComponentPreviews}
@@ -15,3 +17,5 @@ createRoot(document.getElementById('root')).render(
       </Suspense>
     </StrictMode>,
 );
+
+
