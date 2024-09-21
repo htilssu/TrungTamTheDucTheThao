@@ -4,7 +4,6 @@ import { FaFacebookF } from "react-icons/fa"; // Import icon Facebook
 import { GoogleLogin } from "@react-oauth/google"; //google sign in
 import { useNavigate } from "react-router-dom";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import GitHubLogin from 'react-github-login';
 import { SiGithub } from "react-icons/si";
 
 // import axios from 'axios';
@@ -20,7 +19,7 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const loginGitHub = () => {
-    window.location.assign("http://github.com/login/oauth/authorize?client_id=" + gitAppId);
+    window.location.assign("https://github.com/login/oauth/authorize?client_id=" + gitAppId);
   }
 
   /////GOOGLE API
