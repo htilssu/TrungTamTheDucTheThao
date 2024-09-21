@@ -1,22 +1,23 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { BsFacebook } from "react-icons/bs"; //facebook sign in
+import { FaFacebookF } from "react-icons/fa"; // Import icon Facebook
 import { GoogleLogin } from "@react-oauth/google"; //google sign in
 import { useNavigate } from "react-router-dom";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { SiGithub } from "react-icons/si";
+import { FcGoogle } from 'react-icons/fc';
 // import axios from 'axios';
-import { FaGithub } from "react-icons/fa"; //facebook icon
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
-  const a = import.meta.env.VITE_FB_APP_ID;
-  if (import.meta.env.DEV) {
-    console.log(a)
-  }
+  const fbAppId  = import.meta.env.VITE_FB_APP_ID;
+  const gitAppId = import.meta.env.VITE_GIT_APP_ID;
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const loginGitHub = () => {
+    window.location.assign("https://github.com/login/oauth/authorize?client_id=" + gitAppId);
+  }
 
   /////GOOGLE API
   // const [user, setUser] = useState(null);
@@ -51,30 +52,30 @@ const SignIn = () => {
 
   /////FACEBOOK API
   // {
-  //   "name": "Vũ Ngọc Lâm",
-  //   "email": "thanhphohochiminh8@gmail.com",
+  //   "name": "",
+  //   "email": "",
   //   "picture": {
   //       "data": {
-  //           "height": 50,
-  //           "is_silhouette": false,
-  //           "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1373569184049418&height=50&width=50&ext=1729230933&hash=Aba5k7ApQywWffX31Q-MXwNS",
-  //           "width": 50
+  //           "height": ,
+  //           "is_silhouette": ,
+  //           "url": """
   //       }
   //   },
   //   "id": "",
   //   "userID": "",
   //   "expiresIn": ,
   //   "accessToken": "",
-  //   "signedRequest": ".eyJ1c2VyX2lkIjoiMTM3MzU2OTE4NDA0OTQxOCIsImNvZGUiOiJBUUJJbTQxbjc0ZUloVlVDVXltZVhPb3A1LWZ1cnpDLUhOMGdRWm9STEhmVF90UG1DNG1WSWpPRHhXUE9YOEpkNmkyd1J5YzJxdFBfSDhuOXk5dTJ6YVlkR215NTFtSVJNUk5MMm1LenBQS3A0ZVdnYXRHY2lZS1BrY0UtUElHNUZMZG84T3FyMXJwdVJCT0haN24zNXJKX0lBR0oyTHdydV9kdmRfME9HNERZMTdSV1pqeFJHaHlHQkd2WVJ6UTBIX0xkWTFuMkJQdmowclluWENONFJTU3ZMdERJU3JyNS1ZRnN4U05WaWdMRjF3cE4wN3p5dDJSV3FyRkk1SWt0dVZiT1l3S01DRHM0enFYNWxzNkNiN1VZelpiQ3lnNDAtRzU3d0hENExTekNtOWdFVG05RHZjc0J6OWJlMXNFVkkycFVfZURsd3BvSVFRUmhYNkdSTE1pSnVmTkV4ZHpjRVc0THU5RWhxZ2x2WGciLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTcyNjYzODkzMn0",
-  //   "graphDomain": "facebook",
+  //   "signedRequest": ".",
+  //   "graphDomain": "",
   //   "data_access_expiration_time": 
   // }
 
   // Login Google Success
   const responseMessage = (response) => {
     console.log(response);
-    navigate("/test");
+    navigate("/sign-up");
   };
+
   // Login Google Fail
   const errorMessage = (error) => {
     console.log(error);
@@ -113,7 +114,7 @@ const SignIn = () => {
         height: "120vh",
       }}
     >
-      <div className="bg-white shadow-lg rounded-lg w-full md:max-w-md max-w-sm py-10 md:px-8 px-6 md:mr-9 md:mx-0 mx-4">
+      <div className="bg-white shadow-xl border-2 border-r-gray-700 w-full md:max-w-md max-w-sm py-10 md:px-8 px-6 md:mr-9 md:mx-0 mx-4">
         <div className="flex flex-col">
           {/* Logo */}
           <motion.img
@@ -230,7 +231,7 @@ const SignIn = () => {
               <input
                 type="email"
                 id="email"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
+                className="shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
                 placeholder="Nhập email của bạn"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -256,7 +257,7 @@ const SignIn = () => {
               <input
                 type="password"
                 id="password"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
+                className="shadow appearance-none border w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline transition duration-200 ease-in-out"
                 placeholder="Nhập mật khẩu"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -282,7 +283,7 @@ const SignIn = () => {
                 </label>
               </div>
               <a
-                href="/src/pages/forgot-password/ForgotPassword"
+                href="/forgot-password"
                 className="inline-block align-baseline md:font-bold font-medium md:text-sm text-teal-500 hover:text-teal-400 transition duration-200"
               >
                 Quên mật khẩu?
@@ -298,7 +299,7 @@ const SignIn = () => {
             >
               <button
                 type="submit"
-                className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200"
+                className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline transition duration-200"
               >
                 Đăng nhập
               </button>
@@ -314,7 +315,7 @@ const SignIn = () => {
               <p className="text-gray-500 text-sm">
                 Nếu chưa có tài khoản?{" "}
                 <a
-                  href="/register"
+                  href="/sign-up"
                   className="text-blue-500 hover:text-blue-400"
                 >
                   Đăng ký
@@ -347,35 +348,35 @@ const SignIn = () => {
                   onError={errorMessage}
                   type="icon"
                   render={({ onClick }) => (
-                    <button onClick={onClick}>{/* */}</button>
+                      <button onClick={onClick} className="w-full h-full">
+                        <FcGoogle className="w-full h-full" />
+                      </button>
                   )}
                 />
               </div>
               {/* Facebook */}
-              <div className="w-9 h-9">
-                <FacebookLogin
-                  appId="{}"
-                  fields="name,email,picture"
-                  callback={responseMessage}
-                  render={({ onClick }) => (
-                    <div
-                      onClick={onClick}
-                      className="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full cursor-pointer shadow-lg transition duration-200 ease-in-out"
-                    >
-                      <BsFacebook className="text-2xl" />
-                    </div>
-                  )}
-                />
+              <div className="w-10 h-10 mt-1">
+              <FacebookLogin
+                appId={fbAppId}
+                fields="name,email,picture"
+                callback={responseMessage}
+                render={({ onClick }) => (
+                  <button
+                    onClick={onClick}
+                    className="flex items-center justify-center w-full h-full rounded-full bg-blue-500 text-white shadow-lg"
+                  >
+                    <FaFacebookF className="text-white" size={24} />
+                  </button>
+                )}
+              />
               </div>
               {/* GitHub */}
-              <a
-                href="https://github.com/login"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-4xl text-gray-800"
+              <button 
+                onClick={loginGitHub} 
+                className="bg-black rounded-full p-2 flex items-center justify-center mt-1"
               >
-                <FaGithub />
-              </a>
+                <SiGithub className="text-white w-6 h-6" />
+              </button>
             </motion.div>
           </form>
         </div>

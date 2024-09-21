@@ -33,11 +33,25 @@ const ForgotPassword = () => {
         if (newPassword !== confirmPassword) {
             setPasswordError('Mật khẩu không khớp.');
         } else {
-            console.log('Password changed successfully');
-            setNewPassword('');
-            setConfirmPassword('');
-            // Chuyển hướng về trang đăng nhập sau khi đổi mật khẩu thành công
-            navigate('/sign-in');
+            // Send new password to server to update
+            fetch('/api/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: newPassword })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    setNewPassword('');
+                    setConfirmPassword('');
+                    navigate('/sign-in'); // Navigate to sign-in page after successful password change
+                } else {
+                    setPasswordError('Failed to reset password.');
+                }
+            })
+            .catch(error => {
+                setPasswordError('An error occurred.');
+            });
         }
     };
 
