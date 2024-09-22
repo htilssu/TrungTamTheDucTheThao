@@ -14,9 +14,9 @@ const SignIn = () => {
     const fbAppId  = import.meta.env.VITE_FB_APP_ID;
     const gitAppId = import.meta.env.VITE_GIT_APP_ID;
     const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const loginGitHub = () => {
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const loginGitHub = () => {
     window.location.assign("https://github.com/login/oauth/authorize?client_id=" + gitAppId);
   }
   /////GOOGLE API
@@ -66,6 +66,7 @@ const SignIn = () => {
   //   "graphDomain": "",
   //   "data_access_expiration_time": 
   // }
+
   // Login Google Success
   const responseMessage = (response) => {
     console.log(response);
@@ -309,42 +310,42 @@ const SignIn = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.5 }}
             >
-              {/* Google */}
-              <div className="w-11 h-11 mt-2">
-                <GoogleLogin
-                  onSuccess={responseMessage}
-                  onError={errorMessage}
-                  type="icon"
-                  render={({ onClick }) => (
-                      <button onClick={onClick} className="w-full h-full">
-                        <FcGoogle className="w-full h-full" />
-                      </button>
-                  )}
-                />
-              </div>
-              {/* Facebook */}
-              <div className="w-10 h-10 mt-1">
-              <FacebookLogin
-                appId={fbAppId}
-                fields="name,email,picture"
-                callback={responseMessage}
-                render={({ onClick }) => (
-                  <button
-                    onClick={onClick}
-                    className="flex items-center justify-center w-full h-full rounded-full bg-blue-500 text-white shadow-lg"
-                  >
-                    <FaFacebookF className="text-white" size={24} />
-                  </button>
+                {/* Google */}
+                <div className="w-11 h-11 mt-2">
+                    <GoogleLogin
+                    onSuccess={responseMessage}
+                    onError={errorMessage}
+                    type="icon"
+                    render={({ onClick }) => (
+                        <button onClick={onClick} className="w-full h-full">
+                            <FcGoogle className="w-full h-full" />
+                        </button>
+                    )}
+                    />
+                </div>
+                 {/* Facebook */}
+                <div className="w-9 h-9 mt-1">
+                <FacebookLogin
+                    appId={fbAppId}
+                    fields="name,email,picture"
+                    callback={responseMessage}
+                    render={({ onClick }) => (
+                    <button
+                        onClick={onClick}
+                        className="flex items-center justify-center w-full h-full rounded-full bg-blue-500 text-white shadow-lg"
+                    >
+                        <FaFacebookF className="text-white" size={24} />
+                    </button>
                 )}
-              />
-              </div>
-              {/* GitHub */}
-              <button 
-                onClick={loginGitHub} 
-                className="bg-black rounded-full p-2 flex items-center justify-center mt-1"
-              >
-                <SiGithub className="text-white w-6 h-6" />
-              </button>
+                />
+                </div>
+                {/* GitHub */}
+                <div className="rounded-full cursor-pointer hover:bg-gray-100 transition">
+                    <SiGithub
+                        className="w-9 h-9 mt-1"
+                        onClick={loginGitHub}
+                        />
+               </div>
             </motion.div>
           </form>
         </div>
