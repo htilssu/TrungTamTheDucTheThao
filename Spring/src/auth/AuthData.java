@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class AuthData {
     private String username; 
+    private String email;
     private String password; 
 }

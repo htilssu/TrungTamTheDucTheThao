@@ -1,7 +1,6 @@
 package com.htilssu.sport;
 
 import com.htilssu.sport.dto.ResponseMessage;
-import com.htilssu.sport.dto.SignUpData;
 import com.htilssu.sport.entity.User;
 import com.htilssu.sport.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -28,19 +27,26 @@ public class SignUpController {
                     .body(new ResponseMessage("Tên tài khoản đăng kí đã tồn tại!"));
         }
 
+        // Check email exists
+        if (userRepository.existsByEmail(authData.getEmail())) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseMessage("Email đã được liên kết với tài khoản khác!"));
+        }
+
         // input pass => coding pass
         String codingPassword = passwordEncoder.encode(authData.getPassword());
 
         // New user
         User newUser = new User();
         newUser.setUserName(authData.getUsername());
+        newUser.setEmail(authData.getEmail());
         newUser.setPassword(codingPassword);
         ///==<<
 
         // Save on database
         userRepository.save(newUser);
 
-        //
+        // Success
         return ResponseEntity.ok()
                 .body(new ResponseMessage("Đăng kí thành công!"));
     }

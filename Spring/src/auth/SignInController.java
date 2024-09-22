@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api") 
+@RequestMapping("/api")
 public class SignInController {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder; 
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/sign-in")
-    public ResponseEntity<?> login(@RequestBody AuthData authData) {
+    public ResponseEntity<?> signin(@RequestBody AuthData authData) {
         // Check null input
         if (authData.getUsername() == null || authData.getPassword() == null) {
             return ResponseEntity.badRequest()
@@ -32,7 +32,7 @@ public class SignInController {
         // Find user
         User user = userRepository.findByUserName(authData.getUsername());
 
-        // Check id user
+        // Check user exists
         if (user == null) {
             return ResponseEntity.status(401)
                     .body(new ResponseMessage("Tài khoản không tồn tại. Vui lòng nhập lại!"));
@@ -40,8 +40,8 @@ public class SignInController {
 
         // Check password
         if (passwordEncoder.matches(authData.getPassword(), user.getPassword())) {  //input pass == coding pass(database)
-            //token
-            String token = JwtUtil.generateToken(user);
+            // token
+            String token = JwtUtil.generateToken(user); 
             return ResponseEntity.ok()
                     .header("Authorization", "Bearer " + token) //token => client
                     .body(new ResponseMessage("Đăng nhập tài khoản thành công!"));
@@ -49,5 +49,10 @@ public class SignInController {
             return ResponseEntity.status(401)
                     .body(new ResponseMessage("Mật khẩu nhập không đúng"));
         }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Đăng xuất thành công!");
     }
 }
