@@ -4,6 +4,7 @@ import {PageNotFound} from "../pages/PageNotFound.jsx";
 import SignUp from "../pages/sign-up/SignUp.jsx";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword.jsx";
 import Home from "../pages/home/HomePage.jsx";
+import SignIn from '../pages/sign-in/SignIn.jsx';
 
 export const router = createBrowserRouter([
     {
@@ -19,6 +20,9 @@ export const router = createBrowserRouter([
     },
     {
         path: 'sign-up', element: <SignUp/>,
+    },
+    {
+        path: 'sign-in', element: <SignIn/>,
     },
     {
         path: 'forgot-password', element: <ForgotPassword/>,

@@ -117,7 +117,7 @@ const SignIn = () => {
           />
           {/* Sport Center */}
           <motion.div
-            className="absolute top-28 left-0 transform -translate-y-1/2 px-4 lg:block hidden"
+            className="absolute top-3 left-0 transform -translate-y-1/2 px-4 lg:block hidden"
             style={{ width: "30%" }}
             initial={{ x: "-50%" }}
             animate={{ x: "35%" }}
@@ -148,16 +148,6 @@ const SignIn = () => {
               CENTER
             </h1>
           </motion.div>
-          {/* Image */}
-          <motion.img
-            alt="Moving Image"
-            src="/pngegg.png"
-            className="absolute bottom-0 left-1/3 transform -translate-x-1/2 lg:block hidden"
-            style={{ width: "300px" }}
-            initial={{ x: "0%", y: "160%", rotate: 0 }}
-            animate={{ x: "-10%", y: "95%", rotate: 45 }}
-            transition={{ duration: 1.4, ease: "easeInOut" }}
-          />
           {/* Title */}
           <motion.h1
             className="md:text-3xl text-2xl font-bold text-gray-700 mb-2"
