@@ -46,7 +46,7 @@ public class ForgotPasswordController {
         long currentTime = System.currentTimeMillis();
         // Delay send to new code
         if (verificationTimestamps.containsKey(authData.getEmail())) {
-            long lastRequestTime = verificationTtimestamps.get(authData.getEmail());
+            long lastRequestTime = verificationTimestamps.get(authData.getEmail());
             if ((currentTime - lastRequestTime) < 60000) {
                 return ResponseEntity.badRequest()
                         .body(new ResponseMessage("Bạn phải chờ ít nhất 1 phút trước khi yêu cầu mã mới!"));
