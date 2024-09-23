@@ -4,8 +4,8 @@ import {PageNotFound} from "../pages/PageNotFound.jsx";
 import SignUp from "../pages/sign-up/SignUp.jsx";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword.jsx";
 import Home from "../pages/home/HomePage.jsx";
-import SoocerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoocerFieldInfo.jsx";
 import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx";
+import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -34,11 +34,11 @@ export const router = createBrowserRouter([
         element: <Home/>,
       },
         {
-            path: '/soocer',
-            element: <SoocerFieldInfo />,
+            path: '/soccer',
+            element: <SoccerFieldInfo />,
         },
         {
-            path: '/soocer/rent-yard',
+            path: '/soccer/rent-yard',
             element: <RentYardPage />
         }
         ,

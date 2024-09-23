@@ -22,7 +22,7 @@ const MegaMenu = () => {
         {
             title: "SÂN BÓNG",
             description: "Segment your audience for targeted marketing.",
-            link: "/soocer"
+            link: "/soccer"
         },
         {
             title: "SÂN BÓNG RỔ",

@@ -1,6 +1,6 @@
 
-import PricingTable from "./PricingTableSoocer.jsx";
 import {ScrollRestoration, useNavigate} from "react-router-dom";
+import PricingTable from "./PricingTableSoccer.jsx";
 
 // Các ảnh mẫu về sân bóng
 const soccerFieldImages = [
@@ -12,12 +12,12 @@ const soccerFieldImages = [
     '/sanbong3.png',
 ];
 
-const SoocerFieldInfo = () => {
+const SoccerFieldInfo = () => {
     const navigate = useNavigate();
 
     const handleRentYard = () => {
         // Điều hướng đến trang thuê sân bóng
-        navigate('/soocer/rent-yard');
+        navigate('/soccer/rent-yard');
     };
 
     return (
@@ -107,4 +107,4 @@ const SoocerFieldInfo = () => {
     );
 };
 
-export default SoocerFieldInfo;
+export default SoccerFieldInfo;
