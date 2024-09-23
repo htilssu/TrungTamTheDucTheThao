@@ -6,7 +6,7 @@ services:
       - 'MONGO_INITDB_ROOT_PASSWORD=admin'
       - 'MONGO_INITDB_ROOT_USERNAME=admin'
     ports:
-      - '27017'
+      - '27017:27017'
     volumes:
       - 'mongodb:/data/db'
   postgres:
@@ -16,7 +16,7 @@ services:
       - 'POSTGRES_PASSWORD=admin'
       - 'POSTGRES_USER=admin'
     ports:
-      - '5432'
+      - '5432:5432'
     volumes:
       - 'postgres:/var/lib/postgresql/data'
 volumes:

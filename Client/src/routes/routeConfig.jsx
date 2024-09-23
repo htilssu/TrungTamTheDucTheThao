@@ -6,6 +6,7 @@ import ForgotPassword from "../pages/forgot-password/ForgotPassword.jsx";
 import Home from "../pages/home/HomePage.jsx";
 import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx";
 import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
+import SignIn from '../pages/sign-in/SignIn.jsx';
 
 export const router = createBrowserRouter([
     {
@@ -21,6 +22,9 @@ export const router = createBrowserRouter([
     },
     {
         path: 'sign-up', element: <SignUp/>,
+    },
+    {
+        path: 'sign-in', element: <SignIn/>,
     },
     {
         path: 'forgot-password', element: <ForgotPassword/>,
