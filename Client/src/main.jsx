@@ -4,15 +4,20 @@ import {StrictMode, Suspense} from 'react';
 import {createRoot} from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export const root = createRoot(document.getElementById('root'));
 
 root.render(
+  
     <StrictMode>
+
       <Suspense fallback={'Loading'}>
         <DevSupport ComponentPreviews={ComponentPreviews}
                     useInitialHook={useInitial}>
-          <App/>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <App />
+          </GoogleOAuthProvider>
         </DevSupport>
       </Suspense>
     </StrictMode>,
