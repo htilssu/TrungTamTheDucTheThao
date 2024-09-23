@@ -1,3 +1,23 @@
+CREATE TABLE room_type
+(
+    id   BIGINT       NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    CONSTRAINT room_type_pkey PRIMARY KEY (id)
+);
+
+
+CREATE TABLE room
+(
+    id           BIGINT       NOT NULL,
+    capacity     INTEGER      NOT NULL,
+    name         VARCHAR(255) NOT NULL,
+    floor        INTEGER,
+    building     VARCHAR(255),
+    id_room_type BIGINT       NOT NULL,
+    CONSTRAINT room_pkey PRIMARY KEY (id)
+);
+
+
 CREATE TABLE account
 (
     id       BIGINT       NOT NULL,
@@ -30,11 +50,11 @@ CREATE TABLE course
     description TEXT             NOT NULL,
     price       DOUBLE PRECISION NOT NULL,
     time        time WITHOUT TIME ZONE NOT NULL,
-    start_date  date                   NOT NULL,
-    end_date    date                   NOT NULL,
-    slot        SMALLINT               NOT NULL,
-    id_coach    BIGINT                 NOT NULL,
-    id_room     BIGINT                 NOT NULL,
+    start_date  date             NOT NULL,
+    end_date    date             NOT NULL,
+    slot        SMALLINT         NOT NULL,
+    id_coach    BIGINT           NOT NULL,
+    id_room     BIGINT           NOT NULL,
     CONSTRAINT course_pkey PRIMARY KEY (id),
     CONSTRAINT course_id_coach_foreign FOREIGN KEY (id_coach) REFERENCES coach (id) ON DELETE NO ACTION,
     CONSTRAINT course_id_room_foreign FOREIGN KEY (id_room) REFERENCES room (id) ON DELETE NO ACTION
@@ -78,23 +98,7 @@ CREATE TABLE role_claim
     CONSTRAINT role_claim_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE room
-(
-    id           BIGINT       NOT NULL,
-    capacity     INTEGER      NOT NULL,
-    name         VARCHAR(255) NOT NULL,
-    floor        INTEGER,
-    building     VARCHAR(255),
-    id_room_type BIGINT       NOT NULL,
-    CONSTRAINT room_pkey PRIMARY KEY (id)
-);
 
-CREATE TABLE room_type
-(
-    id   BIGINT       NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    CONSTRAINT room_type_pkey PRIMARY KEY (id)
-);
 
 CREATE TABLE "user"
 (
