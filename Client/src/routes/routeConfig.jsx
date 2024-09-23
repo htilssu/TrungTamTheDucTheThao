@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
             element: <SoocerFieldInfo />,
         },
         {
-            path: '/soocer/rent-yard',
+            path: '/soccer/rent-yard',
             element: <RentYardPage />
         }
         ,
