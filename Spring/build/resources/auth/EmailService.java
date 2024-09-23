@@ -13,11 +13,11 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendVerificationCode(String email, String code) {
+    public void sendResetLink(String email, String resetLink) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setSubject("Mã xác thực đặt lại mật khẩu của bạn");
-        message.setText("Mã xác thực của bạn là: " + code);
+        message.setSubject("Đặt lại mật khẩu");
+        message.setText("Nhấn vào link dưới đây để đặt lại mật khẩu của bạn: \n" + resetLink);
         mailSender.send(message);
     }
 }
