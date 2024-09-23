@@ -30,10 +30,14 @@ CREATE TABLE course
     description TEXT             NOT NULL,
     price       DOUBLE PRECISION NOT NULL,
     time        time WITHOUT TIME ZONE NOT NULL,
-    start_date  date             NOT NULL,
-    end_date    date             NOT NULL,
-    slot        SMALLINT         NOT NULL,
-    CONSTRAINT course_pkey PRIMARY KEY (id)
+    start_date  date                   NOT NULL,
+    end_date    date                   NOT NULL,
+    slot        SMALLINT               NOT NULL,
+    id_coach    BIGINT                 NOT NULL,
+    id_room     BIGINT                 NOT NULL,
+    CONSTRAINT course_pkey PRIMARY KEY (id),
+    CONSTRAINT course_id_coach_foreign FOREIGN KEY (id_coach) REFERENCES coach (id) ON DELETE NO ACTION,
+    CONSTRAINT course_id_room_foreign FOREIGN KEY (id_room) REFERENCES room (id) ON DELETE NO ACTION
 );
 
 CREATE TABLE course_member
