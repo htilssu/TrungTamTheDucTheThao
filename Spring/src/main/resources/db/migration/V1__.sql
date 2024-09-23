@@ -8,9 +8,12 @@ CREATE TABLE account
 
 CREATE TABLE booking
 (
-    id      BIGINT NOT NULL,
-    id_user BIGINT NOT NULL,
-    id_room BIGINT NOT NULL,
+    id           BIGINT NOT NULL,
+    id_user      BIGINT NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
+    booking_from TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    booking_to   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    id_room      BIGINT NOT NULL,
     CONSTRAINT booking_pkey PRIMARY KEY (id)
 );
 
@@ -22,14 +25,14 @@ CREATE TABLE coach
 
 CREATE TABLE course
 (
-    id          BIGINT                 NOT NULL,
-    name        VARCHAR(255)           NOT NULL,
-    description TEXT                   NOT NULL,
-    price       DOUBLE PRECISION       NOT NULL,
+    id          BIGINT           NOT NULL,
+    name        VARCHAR(255)     NOT NULL,
+    description TEXT             NOT NULL,
+    price       DOUBLE PRECISION NOT NULL,
     time        time WITHOUT TIME ZONE NOT NULL,
-    start_date  date                   NOT NULL,
-    end_date    date                   NOT NULL,
-    slot        SMALLINT               NOT NULL,
+    start_date  date             NOT NULL,
+    end_date    date             NOT NULL,
+    slot        SMALLINT         NOT NULL,
     CONSTRAINT course_pkey PRIMARY KEY (id)
 );
 
@@ -73,8 +76,12 @@ CREATE TABLE role_claim
 
 CREATE TABLE room
 (
-    id           BIGINT NOT NULL,
-    id_room_type BIGINT NOT NULL,
+    id           BIGINT       NOT NULL,
+    capacity     INTEGER      NOT NULL,
+    name         VARCHAR(255) NOT NULL,
+    floor        INTEGER,
+    building     VARCHAR(255),
+    id_room_type BIGINT       NOT NULL,
     CONSTRAINT room_pkey PRIMARY KEY (id)
 );
 
@@ -100,10 +107,13 @@ ALTER TABLE account
     ADD CONSTRAINT account_email_unique UNIQUE (email);
 
 ALTER TABLE course_member
-    ADD CONSTRAINT course_member_id_course_unique UNIQUE (id_course);
+    ADD CONSTRAINT course_member_user_course_unique UNIQUE (id_user, id_course);
 
-ALTER TABLE course_member
-    ADD CONSTRAINT course_member_id_user_unique UNIQUE (id_user);
+ALTER TABLE role_claim
+    ADD CONSTRAINT role_claim_role_user_unique UNIQUE (id_role, id_user);
+
+ALTER TABLE room
+    ADD CONSTRAINT room_name_unique UNIQUE (name);
 
 ALTER TABLE account
     ADD CONSTRAINT account_id_foreign FOREIGN KEY (id) REFERENCES "user" (id) ON DELETE NO ACTION;
