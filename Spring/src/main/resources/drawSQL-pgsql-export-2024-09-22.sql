@@ -38,6 +38,8 @@ CREATE TABLE "role_claim"
 ALTER TABLE
     "role_claim"
     ADD PRIMARY KEY ("id");
+ALTER TABLE role_claim
+    ADD CONSTRAINT role_claim_role_user_unique UNIQUE (id_role, id_user);
 CREATE TABLE "user"
 (
     "id"           BIGINT       NOT NULL,
@@ -67,12 +69,8 @@ CREATE TABLE "course_member"
 ALTER TABLE
     "course_member"
     ADD PRIMARY KEY ("id");
-ALTER TABLE
-    "course_member"
-    ADD CONSTRAINT "course_member_id_user_unique" UNIQUE ("id_user");
-ALTER TABLE
-    "course_member"
-    ADD CONSTRAINT "course_member_id_course_unique" UNIQUE ("id_course");
+ALTER TABLE course_member
+    ADD CONSTRAINT course_member_user_course_unique UNIQUE (id_user, id_course);
 CREATE TABLE "room_type"
 (
     "id"   BIGINT       NOT NULL,
@@ -90,21 +88,30 @@ ALTER TABLE
     ADD PRIMARY KEY ("id");
 CREATE TABLE "booking"
 (
-    "id"      BIGINT NOT NULL,
-    "id_user" BIGINT NOT NULL,
-    "id_room" BIGINT NOT NULL
+    "id"         BIGINT                   NOT NULL,
+    "id_user"    BIGINT                   NOT NULL,
+    created_at   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    booking_from TIMESTAMP WITH TIME ZONE NOT NULL,
+    booking_to   TIMESTAMP WITH TIME ZONE NOT NULL,
+    "id_room"    BIGINT                   NOT NULL
 );
 ALTER TABLE
     "booking"
     ADD PRIMARY KEY ("id");
 CREATE TABLE "room"
 (
-    "id"           BIGINT NOT NULL,
-    "id_room_type" BIGINT NOT NULL
+    "id"           BIGINT       NOT NULL,
+    capacity       INTEGER      NOT NULL,
+    name           VARCHAR(255) NOT NULL,
+    floor          INTEGER,
+    building       VARCHAR(255),
+    "id_room_type" BIGINT       NOT NULL
 );
 ALTER TABLE
     "room"
     ADD PRIMARY KEY ("id");
+ALTER TABLE room
+    ADD CONSTRAINT room_name_unique UNIQUE (name);
 CREATE TABLE "account"
 (
     "id"       BIGINT       NOT NULL,
