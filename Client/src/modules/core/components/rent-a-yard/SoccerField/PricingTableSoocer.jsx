@@ -1,7 +1,7 @@
 
 const PricingTable = () => {
     return (
-        <section className="bg-gray-100 p-8">
+        <section className="bg-gray-100 px-8 py-4">
             <div className="container mx-auto">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6">Bảng giá thuê sân</h2>
                 <table className="w-full text-left table-auto border-collapse border border-gray-200">
