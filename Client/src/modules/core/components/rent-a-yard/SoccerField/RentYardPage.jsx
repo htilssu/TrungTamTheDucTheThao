@@ -19,6 +19,13 @@ const RentYardPage = () => {
     const [deposit, setDeposit] = useState(''); // Số tiền đặt cọc
     const [loading, setLoading] = useState(false);
 
+    const [fieldTypeError, setFieldTypeError] = useState('');
+    const [selectedFieldError, setSelectedFieldError] = useState('');
+    const [selectedDateError, setSelectedDateError] = useState('');
+    const [selectedTimeError, setSelectedTimeError] = useState('');
+    const [nameError, setNameError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+
     // Danh sách sân 5 người, sân 7 người và sân 11 người
     const fields = {
         '5': [
@@ -78,17 +85,49 @@ const RentYardPage = () => {
 
     // Xử lý việc đặt sân
     const handleSubmit = () => {
-        if (fieldType && selectedField && selectedDate && selectedTime && name && phone && deposit) {
+        let isValid = true;
+
+        // Reset all errors
+        setFieldTypeError('');
+        setSelectedFieldError('');
+        setSelectedDateError('');
+        setSelectedTimeError('');
+        setNameError('');
+        setPhoneError('');
+
+        // Validate each field
+        if (!fieldType) {
+            setFieldTypeError('Vui lòng chọn loại sân.');
+            isValid = false;
+        }
+        if (!selectedField) {
+            setSelectedFieldError('Vui lòng chọn sân cụ thể.');
+            isValid = false;
+        }
+        if (!selectedDate) {
+            setSelectedDateError('Vui lòng chọn ngày đặt.');
+            isValid = false;
+        }
+        if (!selectedTime) {
+            setSelectedTimeError('Vui lòng chọn khung giờ.');
+            isValid = false;
+        }
+        if (!name) {
+            setNameError('Vui lòng nhập tên.');
+            isValid = false;
+        }
+        if (!phone || phone.length < 10) {
+            setPhoneError('Vui lòng nhập số điện thoại hợp lệ.');
+            isValid = false;
+        }
+
+        if (isValid) {
             setLoading(true);
-            // Giả lập thời gian tải
             setTimeout(() => {
                 setLoading(false);
-                // Xử lý logic đặt sân ở đây
                 toast.success('Đặt sân thành công!');
                 navigate('/');
-            }, 4000); // Thay đổi thời gian ở đây nếu cần
-        } else {
-            toast.error('Vui lòng điền đầy đủ thông tin!');
+            }, 4000);
         }
     };
 
@@ -121,6 +160,7 @@ const RentYardPage = () => {
                             Sân 11 người
                         </button>
                     </div>
+                    {fieldTypeError && <p className="text-red-500 text-sm mt-2">{fieldTypeError}</p>}
                 </div>
 
                 {/* Chọn sân cụ thể */}
@@ -140,6 +180,7 @@ const RentYardPage = () => {
                                 </div>
                             ))}
                         </div>
+                        {selectedFieldError && <p className="text-red-500 text-sm mt-2">{selectedFieldError}</p>}
                     </div>
                 )}
 
@@ -153,6 +194,7 @@ const RentYardPage = () => {
                         placeholder="Chọn ngày"
                         showToday={false}
                     />
+                    {selectedDateError && <p className="text-red-500 text-sm mt-2">{selectedDateError}</p>}
                 </div>
 
                 {/* Hiển thị khung giờ chỉ khi đã chọn ngày */}
@@ -193,27 +235,40 @@ const RentYardPage = () => {
                                 </button>
                             ))}
                         </div>
+                        {selectedTimeError && <p className="text-red-500 text-sm mt-2">{selectedTimeError}</p>}
                     </div>
                 )}
 
                 {/* Thông tin người đặt */}
                 <div className="mb-6">
                     <h3 className="text-2xl font-semibold mb-4">Thông tin người đặt</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Tên người đặt"
-                            className="p-2 border border-gray-300 rounded-lg w-full"
-                        />
-                        <input
-                            type="number"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            placeholder="Số điện thoại"
-                            className="p-2 border border-gray-300 rounded-lg w-full"
-                        />
+                    <div className="flex flex-col gap-4">
+                        <div>
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="Tên người đặt"
+                                className="p-2 border border-gray-300 rounded-lg w-full"
+                            />
+                            {nameError && <p className="text-red-500 text-sm mt-2">{nameError}</p>}
+                        </div>
+                        <div>
+                            <input
+                                type="tel"
+                                value={phone}
+                                onChange={(e) => {
+                                    // Chỉ cho phép nhập số
+                                    const phoneNumber = e.target.value.replace(/\D/, '');
+                                    setPhone(phoneNumber);
+                                }}
+                                placeholder="Số điện thoại"
+                                className="p-2 border border-gray-300 rounded-lg w-full"
+                                pattern="[0-9]{10,11}"  // Ràng buộc số điện thoại từ 10-11 chữ số
+                                maxLength={11}          // Giới hạn số ký tự là 11
+                            />
+                            {phoneError && <p className="text-red-500 text-sm mt-2">{phoneError}</p>}
+                        </div>
                     </div>
                 </div>
 
