@@ -83,8 +83,7 @@ const RentYardPage = () => {
         }
     };
 
-    // Xử lý việc đặt sân
-    const handleSubmit = () => {
+    const validateForm = () => {
         let isValid = true;
 
         // Reset all errors
@@ -121,13 +120,52 @@ const RentYardPage = () => {
             isValid = false;
         }
 
+        return isValid;
+    };
+
+    // Xử lý việc đặt sân
+    const handleSubmit = async () => {
+        let isValid = validateForm();
+
         if (isValid) {
             setLoading(true);
-            setTimeout(() => {
+
+            // Tạo object chứa dữ liệu cần gửi
+            const bookingData = {
+                fieldType,      // Loại sân (5, 7, 11)
+                fieldId: selectedField,   // Sân cụ thể
+                date: selectedDate.format('YYYY-MM-DD'), // Ngày đặt (định dạng lại date)
+                timeSlot: selectedTime,    // Khung giờ
+                customerName: name,  // Tên người đặt
+                phoneNumber: phone,  // Số điện thoại
+                deposit: deposit     // Số tiền đặt cọc
+            };
+
+            try {
+                // Gửi yêu cầu POST tới API backend
+                const response = await fetch('http://localhost:8080/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bookingData),  // Chuyển object thành JSON
+                });
+
+                if (response.ok) {
+                    // Xử lý khi đặt sân thành công
+                    setLoading(false);
+                    toast.success('Đặt sân thành công!');
+                    navigate('/');
+                } else {
+                    // Xử lý khi có lỗi
+                    setLoading(false);
+                    toast.error('Có lỗi xảy ra khi đặt sân!');
+                }
+            } catch (error) {
+                // Xử lý lỗi kết nối
                 setLoading(false);
-                toast.success('Đặt sân thành công!');
-                navigate('/');
-            }, 4000);
+                toast.error('Không thể kết nối đến server!');
+            }
         }
     };
 
