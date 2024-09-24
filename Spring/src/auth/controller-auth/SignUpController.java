@@ -41,6 +41,7 @@ public class SignUpController {
         User newUser = new User();
         newUser.setUserName(authData.getUsername());
         newUser.setPassword(codingPassword);
+        newUser.setEmail(authData.getEmail());
 
         try {
             // Save user to database
