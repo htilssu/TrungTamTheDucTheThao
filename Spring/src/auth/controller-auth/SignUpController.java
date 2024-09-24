@@ -5,6 +5,10 @@ import com.htilssu.sport.dto.SignUpData;
 import com.htilssu.sport.entity.User;
 import com.htilssu.sport.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +22,7 @@ public class SignUpController {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
     public SignUpController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -26,35 +31,40 @@ public class SignUpController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signup(@RequestBody SignUpData authData) {
-        // Check username exists
+        // Check if username exists
         if (userRepository.existsByUserName(authData.getUsername())) {
             return ResponseEntity.badRequest()
                     .body(new ResponseMessage("Tên tài khoản đã tồn tại!"));
         }
 
-        // Check email exists
+        // Check if email exists
         if (userRepository.existsEmail(authData.getEmail())) {
             return ResponseEntity.badRequest()
                     .body(new ResponseMessage("Email đã được đăng ký!"));
         }
 
-        // input pass => coding pass
-        String codingPassword = passwordEncoder.encode(authData.getPassword());
+        // Encode password
+        String encodedPassword = passwordEncoder.encode(authData.getPassword());
 
-        // Create new user
+        // Create a new user
         User newUser = new User();
         newUser.setUserName(authData.getUsername());
-        newUser.setPassword(codingPassword);
+        newUser.setPassword(encodedPassword);
         newUser.setEmail(authData.getEmail());
 
         try {
             // Save user to database
             userRepository.save(newUser);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponseMessage("Lỗi: Không thể tạo tài khoản do xung đột dữ liệu."));
         } catch (Exception e) {
-            return ResponseEntity.status(500)
-                    .body(new ResponseMessage("Đăng ký không thành công!"));
+            logger.error("Đã xảy ra lỗi khi lưu tài khoản mới", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseMessage("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."));
         }
-        //Success
+
+        // Success
         return ResponseEntity.ok()
                 .body(new ResponseMessage("Đăng ký thành công!"));
     }
