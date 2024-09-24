@@ -1,6 +1,7 @@
 package com.htilssu.sport;
 
 import com.htilssu.sport.dto.AuthData;
+import com.htilssu.sport.dto.AuthResponse; 
 import com.htilssu.sport.dto.ResponseMessage;
 import com.htilssu.sport.entity.User;
 import com.htilssu.sport.repository.UserRepository;
@@ -21,33 +22,37 @@ public class SignInController {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder; 
 
+    public SignInController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @PostMapping("/sign-in")
     public ResponseEntity<?> login(@RequestBody AuthData authData) {
-        // Check null input
+        // Check input null
         if (authData.getUsername() == null || authData.getPassword() == null) {
             return ResponseEntity.badRequest()
-                    .body(new ResponseMessage("Tài khoản mật khẩu không được để trống!"));
+                    .body(new ResponseMessage("Tài khoản hoặc mật khẩu không được để trống!"));
         }
 
         // Find user
         User user = userRepository.findByUserName(authData.getUsername());
 
-        // Check id user
-        if (user == null) {
+        // Check user and password
+        if (user == null || !passwordEncoder.matches(authData.getPassword(), user.getPassword())) {
             return ResponseEntity.status(401)
-                    .body(new ResponseMessage("Tài khoản không tồn tại. Vui lòng nhập lại!"));
+                    .body(new ResponseMessage("Tài khoản hoặc mật khẩu không chính xác"));
         }
 
-        // Check password
-        if (passwordEncoder.matches(authData.getPassword(), user.getPassword())) {  //input pass == coding pass(database)
-            //token
-            String token = JwtUtil.generateToken(user);
-            return ResponseEntity.ok()
-                    .header("Authorization", "Bearer " + token) //token => client
-                    .body(new ResponseMessage("Đăng nhập tài khoản thành công!"));
-        } else {
-            return ResponseEntity.status(401)
-                    .body(new ResponseMessage("Mật khẩu nhập không đúng"));
-        }
+        // Clear password into memories
+        authData.clearPassword();
+
+        // Create token
+        String token = JwtUtil.generateToken(user);
+        long expirationTimeMillis = JwtUtil.getExpirationTimeMillis(token); // Lấy thời gian hết hạn token
+
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + token) // token => client
+                .body(new AuthResponse("Đăng nhập tài khoản thành công!", expirationTimeMillis)); // Trả về AuthResponse
     }
 }
