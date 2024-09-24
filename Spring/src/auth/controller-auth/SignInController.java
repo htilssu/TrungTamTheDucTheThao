@@ -49,10 +49,10 @@ public class SignInController {
 
         // Create token
         String token = JwtUtil.generateToken(user);
-        long expirationTimeMillis = JwtUtil.getExpirationTimeMillis(token); // Lấy thời gian hết hạn token
+        long expirationTimeMillis = JwtUtil.getExpirationTimeMillis(token); // Take exp time token
 
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + token) // token => client
-                .body(new AuthResponse("Đăng nhập tài khoản thành công!", expirationTimeMillis)); // Trả về AuthResponse
+                .body(new AuthResponse("Đăng nhập tài khoản thành công!", expirationTimeMillis));
     }
 }
