@@ -1,16 +1,17 @@
 package com.htilssu.sport.services;
 
-import com.htilssu.sport.models.Booking;
+import com.htilssu.sport.data.models.Booking;
 import com.htilssu.sport.repositories.BookingRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BookingService {
 
-    @Autowired
     private BookingRepository bookingRepository;
 
     // Lưu thông tin đặt sân

@@ -1,6 +1,6 @@
 package com.htilssu.sport.controllers;
 
-import com.htilssu.sport.models.Booking;
+import com.htilssu.sport.data.models.Booking;
 import com.htilssu.sport.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +33,5 @@ public class BookingController {
         return ResponseEntity.ok(bookings);
     }
 
-/*
-    @GetMapping("/${id}")
-    public ResponseEntity<Void> getBookingById(@PathVariable("id") int id) {
 
-    }*/
 }
