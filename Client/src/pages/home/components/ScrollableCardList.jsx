@@ -26,7 +26,7 @@ const ScrollableCardList = () => {
                 <Swiper
                     spaceBetween={10}
                     slidesPerView={4}
-                    navigation={true}
+                    navigation={false}
                     autoplay={{ delay: 3000 }}
                     pagination={{ clickable: true }}
                     breakpoints={{
@@ -43,12 +43,10 @@ const ScrollableCardList = () => {
                             <a href={item.link} className="flex-none p-2" style={{ textDecoration: 'none' }}>
                                 <div className="relative w-full h-32 sm:h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md transition-transform transform hover:scale-105 hover:shadow-lg">
                                     <img src={item.imagedeal} alt="Deal Background" className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 hover:scale-110" />
-                                    <div
-                                        className="relative z-10 flex flex-col items-center justify-center h-full p-4 bg-opacity-60 bg-black text-white transition duration-300 hover:bg-opacity-80">
+                                    <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 bg-opacity-60 bg-black text-white transition duration-300 hover:bg-opacity-80">
                                         <h3 className="text-xs sm:text-lg font-semibold mb-2 transition-colors duration-300">{item.title}</h3>
                                         <div className="text-xl font-semibold mb-2 text-red-500">{item.deal}</div>
-                                        <button
-                                            className="px-3 py-1 sm:px-4 sm:py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600 transition duration-300">
+                                        <button className="px-3 py-1 sm:px-4 sm:py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600 transition duration-300">
                                             Đăng Kí Ngay
                                         </button>
                                     </div>

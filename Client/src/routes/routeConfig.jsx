@@ -4,6 +4,8 @@ import {PageNotFound} from "../pages/PageNotFound.jsx";
 import SignUp from "../pages/sign-up/SignUp.jsx";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword.jsx";
 import Home from "../pages/home/HomePage.jsx";
+import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx";
+import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 import SignIn from '../pages/sign-in/SignIn.jsx';
 
 export const router = createBrowserRouter([
@@ -27,4 +29,24 @@ export const router = createBrowserRouter([
     {
         path: 'forgot-password', element: <ForgotPassword/>,
     },
+  {
+    path: '',
+    element: <MainLayout/>,
+    children: [
+      {
+        index: true,
+        element: <Home/>,
+      },
+        {
+            path: '/soccer',
+            element: <SoccerFieldInfo />,
+        },
+        {
+            path: '/soccer/rent-yard',
+            element: <RentYardPage />
+        }
+        ,
+    ],
+    errorElement: <PageNotFound/>,
+  },
 ]);
