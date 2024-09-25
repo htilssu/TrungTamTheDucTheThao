@@ -1,6 +1,6 @@
-package com.htilssu.repository;
+package com.htilssu.sport.repositories;
 
-import com.htilssu.model.Booking;
+import com.htilssu.sport.models.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

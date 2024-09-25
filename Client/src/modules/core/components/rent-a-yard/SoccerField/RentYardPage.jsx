@@ -143,7 +143,7 @@ const RentYardPage = () => {
 
             try {
                 // Gửi yêu cầu POST tới API backend
-                const response = await fetch('http://localhost:8080/api/bookings', {
+                const response = await fetch('http://localhost:8080/v1/bookings', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

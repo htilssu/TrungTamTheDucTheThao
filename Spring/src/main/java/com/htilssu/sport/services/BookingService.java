@@ -1,7 +1,7 @@
-package com.htilssu.service;
+package com.htilssu.sport.services;
 
-import com.htilssu.model.Booking;
-import com.htilssu.repository.BookingRepository;
+import com.htilssu.sport.models.Booking;
+import com.htilssu.sport.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +22,5 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
+
 }
