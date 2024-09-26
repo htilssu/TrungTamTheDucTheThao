@@ -7,6 +7,7 @@ import Home from "../pages/home/HomePage.jsx";
 import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx";
 import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 import SignIn from '../pages/sign-in/SignIn.jsx';
+import Sellcourses from '../modules/core/components/Sellcourses/Sellcourses.jsx';
 
 export const router = createBrowserRouter([
     {
@@ -44,8 +45,11 @@ export const router = createBrowserRouter([
         {
             path: '/soccer/rent-yard',
             element: <RentYardPage />
-        }
-        ,
+        },
+        {
+            path: '/sellcourses',
+            element: <Sellcourses />,
+        },
     ],
     errorElement: <PageNotFound/>,
   },
