@@ -10,6 +10,8 @@ import SignIn from '../pages/sign-in/SignIn.jsx';
 import Layout from '../pages/admin/dashboard/LayoutDashBoard.jsx';
 import ServiceManagementController from '../pages/admin/ServiceManagementController.jsx';
 import OverviewPage from '../pages/admin/OverviewPage.jsx';
+import GymManagement from '../pages/admin/management-post/GymManagement.jsx';
+import SoccerManagement from '../pages/admin/management-post/SoccerManagement.jsx';
 
 export const router = createBrowserRouter([
     {
@@ -39,6 +41,14 @@ export const router = createBrowserRouter([
             {
                 path: 'manage',
                 element: <ServiceManagementController/> 
+            },
+            {
+                path: 'soccer-management',
+                element: <SoccerManagement/> 
+            },
+            {
+                path: 'gym-management',
+                element: <GymManagement/> 
             },
             {
                 path: 'dashboard',

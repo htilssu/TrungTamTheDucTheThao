@@ -16,6 +16,7 @@
     "@htilssu/wowo": "^1.1.8",
     "@mantine/core": "^7.12.2",
     "@mantine/hooks": "^7.12.2",
+    "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
     "@react-buddy/ide-toolbox": "^2.4.0",
     "@react-oauth/google": "^0.12.1",
