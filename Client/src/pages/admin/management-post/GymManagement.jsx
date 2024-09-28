@@ -207,6 +207,7 @@ const GymManagement = () => {
                             />
                         </>
                     )}
+
                     {editData.type === 'trainer' && (
                         <>
                             <TextField
@@ -220,6 +221,7 @@ const GymManagement = () => {
                             />
                         </>
                     )}
+
                     {editData.type === 'package' && (
                         <>
                             <TextField
