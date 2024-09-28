@@ -40,7 +40,7 @@ const Footer = () => {
                     <div className="flex flex-wrap flex-col md:flex-row justify-between items-start w-full">
                         <div className="text-white flex flex-col gap-2 w-full md:w-1/2 lg:w-1/4 p-2">
                             <div className="flex items-center mb-2">
-                                <img src="#" alt="Liên hệ" className="w-6 h-6 mr-2"/>
+                                <img src="/vite.svg" alt="Liên hệ" className="w-6 h-6 mr-2"/>
                                 <span className="text-lg font-semibold">SportNgoKhong.vn</span>
                             </div>
                             <p>Công ty Thể Dục Thể Thao và Sự Kiện SportNgoKhong</p>
@@ -50,10 +50,10 @@ const Footer = () => {
                             </p>
                             <div className="flex items-center">
                                 <a href="#" className="block mr-4">
-                                    <img src="#" alt="" className="w-20 h-10"/>
+                                    <img src="/vite.svg" alt="" className="w-20 h-10"/>
                                 </a>
                                 <a href="#" className="block">
-                                    <img src="#" alt="" className="w-20 h-10"/>
+                                    <img src="/vite.svg" alt="" className="w-20 h-10"/>
                                 </a>
                             </div>
                         </div>
@@ -105,7 +105,7 @@ const Footer = () => {
                     <div className="mt-6 text-center text-white">
                         <h3 className="text-lg font-semibold mb-2">Theo dõi chúng tôi</h3>
                         <div className="flex justify-center space-x-4">
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                            <a href="https://www.facebook.com/profile.php?id=100015999314352&mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer"
                                className="text-gray-400 hover:text-white mx-2">
                                 <FaFacebook size={24}/>
                             </a>
