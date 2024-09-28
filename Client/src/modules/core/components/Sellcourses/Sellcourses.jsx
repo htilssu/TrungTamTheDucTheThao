@@ -293,28 +293,31 @@
                             )}
                         </div>
                         <div className={"flex justify-center mb-2"}>
-                            <strong>{formData.name || "Chưa có thông tin"}</strong>
+                            <strong className="text-center break-words w-full max-w-xs">
+                                {formData.name || "Chưa có thông tin"}
+                            </strong>
                         </div>
-                        <div className="mb-2">
-                            <strong>Mô tả:</strong> {formData.description || "Chưa có thông tin"}
+
+
+                        <div className="mb-2 max-w-xl break-words">
+                            <strong>Giá:</strong> {formData.price ? `${Number(formData.price).toLocaleString('vi-VN')} VNĐ` : "Chưa có thông tin"}
                         </div>
-                        <div className="mb-2">
-                            <strong>Giá:</strong> {formData.price ? `${formData.price} VNĐ` : "Chưa có thông tin"}
+                        <div className="mb-2  max-w-xl break-words">
+                            <strong>Số lượng học viên:</strong> {formData.quantity || "Chưa có thông tin"}
                         </div>
-                        <div className="mb-2">
-                            <strong>Số lượng:</strong> {formData.quantity || "Chưa có thông tin"}
-                        </div>
-                        <div className="mb-2">
+                        <div className="mb-2 max-w-xl break-words">
                             <strong>Thời gian bắt đầu:</strong> {formData.startTime || "Chưa có thông tin"}
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-2  max-w-xl break-words">
                             <strong>Thời gian kết thúc:</strong> {formData.endTime || "Chưa có thông tin"}
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-2  max-w-xl break-words">
                             <strong>Thời lượng:</strong> {formData.duration || "Chưa có thông tin"}
                         </div>
-                        <div className="mb-2">
-                            <strong>Số lượng học viên:</strong> {formData.quantity || "Chưa có thông tin"}
+
+                        <div className="mb-2 max-w-xl break-words">
+                            <strong>Mô tả:</strong>
+                            <p>{formData.description || "Chưa có thông tin"}</p>
                         </div>
                     </div>
 
@@ -337,7 +340,7 @@
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
                                 <h3 className="text-lg font-semibold mb-2 text-white">{formData.name || "Tên khóa học"}</h3>
                                 <div className="text-xl font-semibold mb-2 text-red-500">
-                                    {formData.price ? `${formData.price} VNĐ` : "Giá"}
+                                    {formData.price ?`${Number(formData.price).toLocaleString('vi-VN')} VNĐ` : "Giá"}
                                 </div>
                                 <button className="px-4 py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600 transition duration-300">
                                     Xem chi tiết
