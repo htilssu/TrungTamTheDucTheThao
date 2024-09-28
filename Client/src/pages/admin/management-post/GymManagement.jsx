@@ -209,36 +209,36 @@ const GymManagement = () => {
                     )}
 
                     {editData.type === 'trainer' && (
-                        <>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                label="Tên huấn luyện viên"
-                                type="text"
-                                value={editData.data.name || ''}
-                                onChange={(e) => setEditData({ ...editData, data: { ...editData.data, name: e.target.value } })}
-                                fullWidth
-                            />
-                        </>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Tên huấn luyện viên"
+                            type="text"
+                            value={editData.data.name || ''}
+                            onChange={(e) => setEditData({ ...editData, data: { ...editData.data, name: e.target.value } })}
+                            fullWidth
+                        />
                     )}
 
                     {editData.type === 'package' && (
-                        <>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                label="Tên gói"
-                                type="text"
-                                value={editData.data.name || ''}
-                                onChange={(e) => setEditData({ ...editData, data: { ...editData.data, name: e.target.value } })}
-                                fullWidth
-                            />
-                        </>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Tên gói"
+                            type="text"
+                            value={editData.data.name || ''}
+                            onChange={(e) => setEditData({ ...editData, data: { ...editData.data, name: e.target.value } })}
+                            fullWidth
+                        />
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Hủy</Button>
-                    <Button onClick={handleSave} color="primary">Lưu</Button>
+                    <Button onClick={handleClose} color="primary">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleSave} color="primary">
+                        Lưu
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>
