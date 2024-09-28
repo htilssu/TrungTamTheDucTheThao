@@ -45,7 +45,7 @@ const trainersData = [
 
 const PTCard = ({ image, name, experience, rating, strengths }) => (
     <div className="bg-white p-6 shadow-md rounded-lg text-center">
-        <img src={image} alt={name} className="rounded-full w-24 h-24 mx-auto mb-4" />
+        <img src={image} alt={`Portrait of ${name}, personal trainer`} className="rounded-full w-24 h-24 mx-auto mb-4" />
         <h3 className="text-xl font-semibold mb-2">{name}</h3>
         <p>{experience}</p>
         <div className="flex justify-center mt-2">
