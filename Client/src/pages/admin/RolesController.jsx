@@ -108,9 +108,10 @@ const RolesController = () => {
                         <h2 className="text-2xl font-bold mb-4">Chỉnh sửa quyền Admin</h2>
 
                         <div className="mb-4">
-                            <label className="block text-gray-700">Tên</label>
+                            <label htmlFor="adminName" className="block text-gray-700">Tên</label>
                             <input
                                 type="text"
+                                id="adminName"
                                 value={editingAdmin.name}
                                 readOnly
                                 className="w-full p-2 border rounded-lg bg-gray-100"
@@ -118,9 +119,10 @@ const RolesController = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-gray-700">Email</label>
+                            <label htmlFor="adminEmail" className="block text-gray-700">Email</label>
                             <input
                                 type="email"
+                                id="adminEmail" 
                                 value={editingAdmin.email}
                                 readOnly
                                 className="w-full p-2 border rounded-lg bg-gray-100"
@@ -128,8 +130,9 @@ const RolesController = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-gray-700">Quyền</label>
+                            <label htmlFor="adminRole" className="block text-gray-700">Quyền</label>
                             <select
+                                id="adminRole" 
                                 value={newRole}
                                 onChange={(e) => setNewRole(e.target.value)}
                                 className="w-full p-2 border rounded-lg"

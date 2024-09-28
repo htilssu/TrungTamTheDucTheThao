@@ -69,6 +69,16 @@ const GymManagement = () => {
         }
     };
 
+    // Extracted the title generation logic into an independent statement
+    const getDialogTitle = () => {
+        const { type, data } = editData;
+        if (data.id) {
+            return `Sửa ${type === 'course' ? 'khóa học' : type === 'trainer' ? 'huấn luyện viên' : 'gói'}`;
+        } else {
+            return `Thêm ${type === 'course' ? 'khóa học' : type === 'trainer' ? 'huấn luyện viên' : 'gói'}`;
+        }
+    };
+
     return (
         <div style={{ padding: '20px' }}>
             <Button 
@@ -142,7 +152,7 @@ const GymManagement = () => {
 
             {/* Dialog để thêm hoặc sửa thông tin */}
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{editData.data.id ? `Sửa ${editData.type === 'course' ? 'khóa học' : editData.type === 'trainer' ? 'huấn luyện viên' : 'gói'}` : `Thêm ${editData.type === 'course' ? 'khóa học' : editData.type === 'trainer' ? 'huấn luyện viên' : 'gói'}`}</DialogTitle>
+                <DialogTitle>{getDialogTitle()}</DialogTitle>
                 <DialogContent>
                     {/* Phần chọn file ảnh */}
                     <input 
