@@ -54,6 +54,12 @@ const PackageCard = ({ title, price, promotion, buttonText, buttonAction }) => (
     </div>
 );
 
+const pricingTableData = [
+    { day: "Thứ 2 - Thứ 6", price: "50.000 VND/giờ" },
+    { day: "Thứ 7", price: "60.000 VND/giờ" },
+    { day: "Chủ Nhật", price: "70.000 VND/giờ" },
+];
+
 const PriceGym = () => (
     <section className="bg-gray-900 text-white py-10">
         <div className="container mx-auto px-4">
@@ -67,25 +73,19 @@ const PriceGym = () => (
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td className="py-2 px-4 text-center border border-gray-300">Thứ 2 - Thứ 6</td>
-                        <td className="py-2 px-4 text-center border border-gray-300">50.000 VND/giờ</td>
-                    </tr>
-                    <tr>
-                        <td className="py-2 px-4 text-center border border-gray-300">Thứ 7</td>
-                        <td className="py-2 px-4 text-center border border-gray-300">60.000 VND/giờ</td>
-                    </tr>
-                    <tr>
-                        <td className="py-2 px-4 text-center border border-gray-300">Chủ Nhật</td>
-                        <td className="py-2 px-4 text-center border border-gray-300">70.000 VND/giờ</td>
-                    </tr>
+                    {pricingTableData.map(({day, price}, index) => (
+                        <tr key={day}>
+                            <td className="py-2 px-4 text-center border border-gray-300">{day}</td>
+                            <td className="py-2 px-4 text-center border border-gray-300">{price}</td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {packagesData.map((pkg, index) => (
+                {packagesData.map((pkg) => (
                     <PackageCard
-                        key={index}
+                        key={pkg.title}  // Assuming titles are unique
                         title={pkg.title}
                         price={pkg.price}
                         promotion={pkg.promotion}
