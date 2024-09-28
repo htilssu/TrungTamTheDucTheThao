@@ -72,11 +72,17 @@ const GymManagement = () => {
     // Extracted the title generation logic into an independent statement
     const getDialogTitle = () => {
         const { type, data } = editData;
-        if (data.id) {
-            return `Sửa ${type === 'course' ? 'khóa học' : type === 'trainer' ? 'huấn luyện viên' : 'gói'}`;
-        } else {
-            return `Thêm ${type === 'course' ? 'khóa học' : type === 'trainer' ? 'huấn luyện viên' : 'gói'}`;
+        let entity = '';
+
+        if (type === 'course') {
+            entity = 'khóa học';
+        } else if (type === 'trainer') {
+            entity = 'huấn luyện viên';
+        } else if (type === 'package') {
+            entity = 'gói';
         }
+
+        return data.id ? `Sửa ${entity}` : `Thêm ${entity}`;
     };
 
     return (
