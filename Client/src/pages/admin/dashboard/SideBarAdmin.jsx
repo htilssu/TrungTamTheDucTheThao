@@ -52,7 +52,7 @@ export default function SideBarAdmin() {
             <ListItem 
               button 
               className="hover:bg-gray-700 hover:text-gray-200 bg-gray-800 border-l-4 border-blue-500 rounded-lg px-4 py-3 transition-all duration-300 ease-in-out cursor-pointer"
-              onClick={() => navigate('/admin/manage/users')}
+              onClick={() => navigate('/admin/users')}
             >
               <FaUsers className="mr-4 text-gray-400" />
               <ListItemText primary="Quản lý người dùng" primaryTypographyProps={{ className: 'font-normal text-base' }} />
@@ -74,7 +74,7 @@ export default function SideBarAdmin() {
         <ListItem 
           button 
           className="hover:bg-gradient-to-r from-gray-700 to-gray-600 hover:text-white hover:shadow-xl rounded-lg px-4 py-3 transition-all duration-300 ease-in-out cursor-pointer"
-          onClick={() => navigate('/admin-dashboard/roles')}
+          onClick={() => navigate('/admin/roles')}
         >
           <FaShieldAlt className="mr-4 text-gray-400" />
           <ListItemText primary="Phân quyền" primaryTypographyProps={{ className: 'font-semibold text-lg' }} />
@@ -84,7 +84,7 @@ export default function SideBarAdmin() {
         <ListItem 
           button 
           className="hover:bg-gradient-to-r from-gray-700 to-gray-600 hover:text-white hover:shadow-xl rounded-lg px-4 py-3 transition-all duration-300 ease-in-out cursor-pointer"
-          onClick={() => navigate('/admin-dashboard/settings')}
+          onClick={() => navigate('/admin/settings')}
         >
           <FaCog className="mr-4 text-gray-400" />
           <ListItemText primary="Cài đặt" primaryTypographyProps={{ className: 'font-semibold text-lg' }} />

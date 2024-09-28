@@ -12,6 +12,8 @@ import ServiceManagementController from '../pages/admin/ServiceManagementControl
 import OverviewPage from '../pages/admin/OverviewPage.jsx';
 import GymManagement from '../pages/admin/management-post/GymManagement.jsx';
 import SoccerManagement from '../pages/admin/management-post/SoccerManagement.jsx';
+import RolesController from '../pages/admin/RolesController.jsx';
+import SettingAdmin from '../pages/admin/SettingAdmin.jsx';
 
 export const router = createBrowserRouter([
     {
@@ -41,6 +43,14 @@ export const router = createBrowserRouter([
             {
                 path: 'manage',
                 element: <ServiceManagementController/> 
+            },
+            {
+                path: 'roles',
+                element: <RolesController/> 
+            },
+            {
+                path: 'settings',
+                element: <SettingAdmin/> 
             },
             {
                 path: 'soccer-management',
