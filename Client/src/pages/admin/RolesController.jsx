@@ -6,6 +6,7 @@ const RolesController = () => {
     const [filteredAdmins, setFilteredAdmins] = useState([]);
     const [editingAdmin, setEditingAdmin] = useState(null); 
     const [newRole, setNewRole] = useState(''); 
+    const [adminToDelete, setAdminToDelete] = useState(null); 
 
     useEffect(() => {
         const fetchAdmins = async () => {
@@ -42,8 +43,11 @@ const RolesController = () => {
         setEditingAdmin(null);
     };
 
-    const handleDelete = (adminId) => {
-        setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminId));
+    const handleDelete = () => {
+        if (adminToDelete) {
+            setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminToDelete.id));
+            setAdminToDelete(null);
+        }
     };
 
     return (
@@ -85,7 +89,7 @@ const RolesController = () => {
                                     </button>
                                     <button
                                         className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600"
-                                        onClick={() => handleDelete(admin.id)}
+                                        onClick={() => setAdminToDelete(admin)} 
                                     >
                                         Xóa
                                     </button>
@@ -156,6 +160,29 @@ const RolesController = () => {
                                 onClick={handleSave}
                             >
                                 Lưu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {adminToDelete && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                        <h2 className="text-2xl font-bold mb-4">Xác nhận xóa</h2>
+                        <p>Bạn có chắc chắn muốn xóa Admin <strong>{adminToDelete.name}</strong> không?</p>
+                        <div className="flex justify-end mt-4">
+                            <button
+                                className="bg-gray-500 text-white py-2 px-4 rounded-lg mr-2"
+                                onClick={() => setAdminToDelete(null)} 
+                            >
+                                Hủy
+                            </button>
+                            <button
+                                className="bg-red-500 text-white py-2 px-4 rounded-lg"
+                                onClick={handleDelete} 
+                            >
+                                Xóa
                             </button>
                         </div>
                     </div>
