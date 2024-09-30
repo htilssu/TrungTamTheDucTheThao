@@ -25,9 +25,10 @@ export default function SideBarAdmin() {
           <div key={index}>
             {item.subItems ? (
               <>
-                <div 
-                  className="flex justify-between items-center"
+                <button 
+                  aria-expanded={openSubItems[item.label]} 
                   onClick={() => toggleSubItems(item.label)}
+                  className="flex justify-between items-center w-full text-left focus:outline-none"
                 >
                   <NavItem icon={item.icon} label={item.label} />
                   {openSubItems[item.label] ? (
@@ -35,7 +36,7 @@ export default function SideBarAdmin() {
                   ) : (
                     <ExpandMore className="text-gray-400" />
                   )}
-                </div>
+                </button>
                 {openSubItems[item.label] &&
                   item.subItems.map((subItem, subIndex) => (
                     <NavItem
