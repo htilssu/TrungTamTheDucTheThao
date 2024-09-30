@@ -21,8 +21,8 @@ export default function SideBarAdmin() {
         Admin Panel
       </div>
       <div className="mt-6 space-y-4 px-4">
-        {navItems.map((item, index) => (
-          <div key={index}>
+        {navItems.map((item) => (
+          <div key={item.label}>
             {item.subItems ? (
               <>
                 <button 
@@ -38,9 +38,9 @@ export default function SideBarAdmin() {
                   )}
                 </button>
                 {openSubItems[item.label] &&
-                  item.subItems.map((subItem, subIndex) => (
+                  item.subItems.map((subItem) => (
                     <NavItem
-                      key={subIndex}
+                      key={subItem.label} 
                       icon={subItem.icon}
                       label={subItem.label}
                       onClick={() => navigate(subItem.path)}
