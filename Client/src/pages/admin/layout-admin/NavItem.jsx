@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const NavItem = ({ icon: Icon, label, onClick, isSubItem = false }) => (
   <div 
     role="button"
@@ -12,5 +14,12 @@ const NavItem = ({ icon: Icon, label, onClick, isSubItem = false }) => (
     <span className={`${isSubItem ? 'font-light text-sm text-gray-300' : 'font-semibold text-lg text-gray-100'}`}>{label}</span>
   </div>
 );
+
+NavItem.propTypes = {
+  icon: PropTypes.elementType.isRequired, 
+  label: PropTypes.string.isRequired, 
+  onClick: PropTypes.func.isRequired,
+  isSubItem: PropTypes.bool
+};
 
 export default NavItem;

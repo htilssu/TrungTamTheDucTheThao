@@ -2,6 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { PiCourtBasketballLight } from "react-icons/pi";
 import { CgGym } from "react-icons/cg";
 import { GrYoga } from "react-icons/gr";
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
 export default function ServiceManagementController() {
@@ -37,6 +38,12 @@ export default function ServiceManagementController() {
             {text}
         </Button>
     );
+
+    ServiceButton.propTypes = {
+        icon: PropTypes.elementType.isRequired, 
+        text: PropTypes.string.isRequired,   
+        path: PropTypes.string.isRequired,    
+    };
 
     const buttonData = [
         { icon: PiCourtBasketballLight, text: 'Quản lý sân bóng', path: '/admin/soccer-management' },
