@@ -1,5 +1,6 @@
-    import React, { useState } from "react";
-    import Slider from "react-slick";
+    import  { useState } from "react";
+    import {Swiper, SwiperSlide} from "swiper/react";
+    import {Autoplay, Navigation, Pagination} from "swiper/modules";
 
 
     const Sellcourses = () => {
@@ -87,13 +88,24 @@
                         {images.length > 0 ? (
                             <div className="w-full h-[360px] overflow-hidden rounded-lg mb-4 relative">
                                 {images.length > 1 ? (
-                                    <Slider {...sliderSettings}>
+                                    <Swiper
+                                        {...sliderSettings} // You can adjust Swiper settings accordingly
+                                        spaceBetween={1}
+                                        slidesPerView={1}
+                                        navigation={false}
+                                        autoplay={{ delay: 3000 }}
+                                        pagination={{ clickable: true }}
+                                        breakpoints={{
+                                            300: { slidesPerView: 1, spaceBetween: 16 },
+                                        }}
+                                        modules={[Navigation, Pagination, Autoplay]}
+                                    >
                                         {images.map((image, index) => (
-                                            <div key={index} className="relative flex justify-center items-center h-80">
+                                            <SwiperSlide key={index} className="relative flex justify-center items-center h-80">
                                                 <img
                                                     src={image}
                                                     alt={`slide-${index}`}
-                                                    className="w-full h-full object-contain"
+                                                    className="w-full h-80 object-contain mb-8"
                                                 />
                                                 {editingMode && (
                                                     <button
@@ -104,9 +116,10 @@
                                                         X
                                                     </button>
                                                 )}
-                                            </div>
+                                            </SwiperSlide>
                                         ))}
-                                    </Slider>
+                                    </Swiper>
+
                                 ) : (
                                     <div className="relative">
                                         <img
@@ -265,17 +278,28 @@
                         <h2 className="text-xl font-bold mb-4">Xem trước thông tin khóa học</h2>
                         <div className="mb-4">
                             {images.length > 1 ? (
-                                <Slider {...sliderSettings}>
-                                    {images.map((image, index) => (
-                                        <div key={index} className="w-full h-32">
-                                            <img
-                                                src={image}
-                                                alt={`Slide ${index}`}
-                                                className="w-full h-full object-contain"
-                                            />
-                                        </div>
-                                    ))}
-                                </Slider>
+                                    <Swiper
+                                        {...sliderSettings} // You can adjust Swiper settings accordingly
+                                        spaceBetween={1}
+                                        slidesPerView={1}
+                                        navigation={false}
+                                        autoplay={{ delay: 3000 }}
+                                        pagination={{ clickable: true }}
+                                        breakpoints={{
+                                            300: { slidesPerView: 1, spaceBetween: 16 },
+                                        }}
+                                        modules={[Navigation, Pagination, Autoplay]}
+                                    >
+                                        {images.map((image, index) => (
+                                            <SwiperSlide key={index} className="relative flex justify-center items-center h-80">
+                                                <img
+                                                    src={image}
+                                                    alt={`slide-${index}`}
+                                                    className="w-full h-80 object-contain mb-8"
+                                                />
+                                            </SwiperSlide>
+                                        ))}
+                                    </Swiper>
                             ) : images.length === 1 ? (
                                 <div className="relative">
                                     <img
@@ -328,7 +352,7 @@
                                 <img
                                     src={images[0]}
                                     alt="banner"
-                                    className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 hover:scale-110"
+                                    className="w-full h-full object-contant absolute inset-0 transition-transform duration-300 hover:scale-110"
                                 />
                             ) : (
                                 <img
