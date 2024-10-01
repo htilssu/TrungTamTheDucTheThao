@@ -8,6 +8,10 @@ import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/Ren
 import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 import SignIn from '../pages/sign-in/SignIn.jsx';
 import GymPage from "../modules/core/components/gym/GymPage.jsx";
+import ManagementHome from "../modules/core/components/admin/ManagementHome.jsx";
+import FieldListPage from "../modules/core/components/admin/FieldListPage.jsx";
+import StatisticalPage from "../modules/core/components/admin/StatisticalPage.jsx";
+import BookingSchedule from "../modules/core/components/admin/BookingSchedule.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -51,6 +55,26 @@ export const router = createBrowserRouter([
             path: '/gym',
             element: <GymPage />
         }
+        ,
+        {
+            path: 'manage-soccer',
+            element: <ManagementHome />, // Quản lý sân sẽ là trang cha
+            children: [
+                {
+                    index: true, // Trang mặc định là danh sách sân
+                    path: 'list',
+                    element: <FieldListPage />,
+                },
+                {
+                    path: 'lichdat', // Đường dẫn cho Lịch Đặt
+                    element: <BookingSchedule />,
+                },
+                {
+                    path: 'thongke', // Đường dẫn cho Thống Kê
+                    element: <StatisticalPage />,
+                },
+            ],
+        },
     ],
     errorElement: <PageNotFound/>,
   },
