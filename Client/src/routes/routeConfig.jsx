@@ -14,7 +14,7 @@ import ServiceManagementController from './../pages/admin/ServiceManagementContr
 import RolesController from './../pages/admin/RolesController';
 import SettingAdmin from './../pages/admin/SettingAdmin';
 import GymManagement from './../pages/admin/post-admin/GymManagement';
-
+import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 export const router = createBrowserRouter([
     {
         path: '',
@@ -35,7 +35,11 @@ export const router = createBrowserRouter([
             {
                 path: 'gym',
                 element: <GymPage />,
-            }
+            },
+            {
+                path:'user/:id',
+                element:<UserDisplay/>
+            },
         ],
         errorElement: <PageNotFound />,
     },

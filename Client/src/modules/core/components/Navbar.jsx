@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-
+import { useNavigate } from 'react-router-dom';
 // Component cho một Menu Item
 // eslint-disable-next-line react/prop-types
 const MegaItem = ({ title, description, link }) => {
@@ -76,10 +76,14 @@ const Navbar = () => {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+    const navigate = useNavigate();  // Khởi tạo hàm navigate để chuyển trang
     // Toggle User Menu
     const toggleUserMenu = () => {
         setIsUserMenuOpen(!isUserMenuOpen);
+    };
+    // Hàm xử lý điều hướng đến trang UserDisplay
+    const handleUserClick = () => {
+        navigate('/profile'); // Đường dẫn của trang UserDisplay
     };
     const UsermenuRef = useRef(null); // Ref cho UserMenu
     const UserbuttonRef = useRef(null); // Ref cho nút UserMenu
@@ -163,9 +167,11 @@ const Navbar = () => {
                         {/* User menu dropdown */}
                         {isUserMenuOpen && (
                             <div ref={UsermenuRef} className="absolute right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-                                <div className="px-4 py-3">
-                                    <span className="block text-sm font-medium text-gray-900 dark:text-white">Tuan Anh</span>
-                                    <span className="block text-sm text-gray-500 dark:text-gray-400">ngokhong@gmail.com</span>
+                                <div className="px-4 py-3 cursor-pointer">
+                                    <span className="block text-sm font-medium text-gray-900 dark:text-white">
+                                    <a href={`/user/${5}`}>Tuan Anh</a></span>
+                                    <span className="block text-sm text-gray-500 dark:text-gray-400">
+                                    <a href={`/user/${5}`}>ngokhong@gmail.com</a></span>
                                 </div>
                                 <ul className="py-2">
                                     <UserMenuItem link="/dashboard" text="Dashboard" />
