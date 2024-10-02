@@ -17,10 +17,10 @@ const MegaMenu = () => {
         {
             title: "CLB GYM",
             description: "Connect with third-party tools that you are already using.",
-            link: "/online-stores"
+            link: "/gym"
         },
         {
-            title: "SÂN BÓNG",
+            title: "SÂN BÓNG ĐÁ",
             description: "Segment your audience for targeted marketing.",
             link: "/soccer"
         },
@@ -44,7 +44,7 @@ const MegaMenu = () => {
 
     return (
         <div className="mt-1 border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600">
-            <div className="grid max-w-screen-xl px-4 py-5 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
+            <div className="grid max-w-screen-xl px-4 py-5 mx-auto text-gray-900 dark:text-white sm:grid-cols-3 md:px-6">
                 {menuItems.map((item, index) => (
                     <MegaItem
                         key={index}
@@ -171,7 +171,7 @@ const Navbar = () => {
                                     <UserMenuItem link="/dashboard" text="Dashboard" />
                                     <UserMenuItem link="/settings" text="Settings" />
                                     <UserMenuItem link="/earnings" text="Earnings" />
-                                    <UserMenuItem link="/logout" text="Sign out" />
+                                    <UserMenuItem link="/sign-in" text="Sign out" />
                                 </ul>
                             </div>
                         )}

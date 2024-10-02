@@ -16,28 +16,28 @@ const PricingTable = () => {
                     </thead>
                     <tbody>
                     <tr>
-                        <td className="p-4 border border-gray-300">05:00 - 09:00</td>
+                        <td className="p-4 text-red-600 border border-gray-300">05:00 - 09:00</td>
                         <td className="p-4 border border-gray-300">100.000</td>
                         <td className="p-4 border border-gray-300">120.000</td>
                         <td className="p-4 border border-gray-300">300.000</td>
                         <td className="p-4 border border-gray-300">360.000</td>
                     </tr>
                     <tr>
-                        <td className="p-4 border border-gray-300">09:00 - 15:00</td>
+                        <td className="p-4 text-red-600 border border-gray-300">09:00 - 15:00</td>
                         <td className="p-4 border border-gray-300">120.000</td>
                         <td className="p-4 border border-gray-300">150.000</td>
                         <td className="p-4 border border-gray-300">360.000</td>
                         <td className="p-4 border border-gray-300">420.000</td>
                     </tr>
                     <tr>
-                        <td className="p-4 border border-gray-300">15:00 - 17:00</td>
+                        <td className="p-4 text-red-600 border border-gray-300">15:00 - 17:00</td>
                         <td className="p-4 border border-gray-300">150.000</td>
                         <td className="p-4 border border-gray-300">170.000</td>
                         <td className="p-4 border border-gray-300">450.000</td>
                         <td className="p-4 border border-gray-300">510.000</td>
                     </tr>
                     <tr>
-                        <td className="p-4 border border-gray-300">17:00 - 22:00</td>
+                        <td className="p-4 text-red-600 border border-gray-300">17:00 - 22:00</td>
                         <td className="p-4 border border-gray-300">200.000</td>
                         <td className="p-4 border border-gray-300">200.000</td>
                         <td className="p-4 border border-gray-300">540.000</td>
