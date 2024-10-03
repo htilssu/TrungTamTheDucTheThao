@@ -18,7 +18,7 @@ const UserDisplay = () => {
   // Hàm định dạng ngày
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    if (isNaN(date)) return ""; // Trả về chuỗi rỗng nếu ngày không hợp lệ
+    if (Number.isNaN(date.getTime())) return ""; // Trả về chuỗi rỗng nếu ngày không hợp lệ
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const year = date.getFullYear();
