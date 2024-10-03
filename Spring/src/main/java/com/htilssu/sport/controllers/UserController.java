@@ -1,27 +1,31 @@
 package com.htilssu.sport.controllers;
-
+import com.htilssu.sport.controllers.UserRepository;
 import com.htilssu.sport.data.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.validation.annotation.Validated;
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
-
+    private final UserRepository userRepository;
+    public UserController(UserRepository userRepository) {
+                this.userRepository = userRepository;
+          }
     // Hiển thị thông tin người dùng
     @CrossOrigin(origins = "http://localhost:5173") // Nếu frontend chạy trên port 3000
     @GetMapping("/{id}")
-    public User displayUserInfo(@PathVariable("id") Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
+    public ResponseEntity<User> displayUserInfo(@PathVariable("id") Long id) {
+               return userRepository.findById(id)
+                       .map(user -> ResponseEntity.ok(user))
+                       .orElse(ResponseEntity.notFound().build());
+             }
     
     // Sửa thông tin người dùng
   @PutMapping("/{id}")
-public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User updatedUser) {
+public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @Valid @RequestBody User updatedUser)  {
     return userRepository.findById(id)
         .map(user -> {
             user.setFirstName(updatedUser.getFirstName());
@@ -37,7 +41,8 @@ public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody
 
        // Tạo người dùng mới
        @PostMapping
-       public User createUser(@RequestBody User user) {
-           return userRepository.save(user); // Lưu người dùng vào cơ sở dữ liệu
-       }
+       public ResponseEntity<User> createUser(@RequestBody User user) {
+          User savedUser = userRepository.save(user); // Lưu người dùng vào cơ sở dữ liệu
+          return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        }
 }
