@@ -1,6 +1,6 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { MainLayout } from "../layouts/MainLayout.jsx";
-import { PageNotFound } from "../pages/PageNotFound.jsx";
+import {createBrowserRouter} from 'react-router-dom';
+import {MainLayout} from "../layouts/MainLayout.jsx";
+import {PageNotFound} from "../pages/PageNotFound.jsx";
 import SignUp from "../pages/sign-up/SignUp.jsx";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword.jsx";
 import Home from "../pages/home/HomePage.jsx";
@@ -18,112 +18,131 @@ import ServiceManagementController from './../pages/admin/ServiceManagementContr
 import RolesController from './../pages/admin/RolesController';
 import SettingAdmin from './../pages/admin/SettingAdmin';
 import GymManagement from './../pages/admin/post-admin/GymManagement';
+import Dashboard from "../modules/core/components/admin/mainlayout-admin/Dashboard.jsx";
 
 export const router = createBrowserRouter([
     {
+        path: 'test',
+        element: <Dashboard/>, // Quản lý sân sẽ là trang cha
+        children: [
+            {
+                index: true, // Trang mặc định là danh sách sân
+                path: 'list',
+                element: <FieldListPage/>,
+            },
+            {
+                path: 'lichdat', // Đường dẫn cho Lịch Đặt
+                element: <BookingSchedule/>,
+            },
+            {
+                path: 'thongke', // Đường dẫn cho Thống Kê
+                element: <StatisticalPage/>,
+            },
+        ],
+    },
+    {
         path: '',
-        element: <MainLayout />,
+        element: <MainLayout/>,
         children: [
             {
                 index: true,
-                element: <Home />,
+                element: <Home/>,
             },
             {
                 path: 'soccer',
-                element: <SoccerFieldInfo />,
+                element: <SoccerFieldInfo/>,
             },
             {
                 path: 'soccer/rent-yard',
-                element: <RentYardPage />,
+                element: <RentYardPage/>,
             },
             {
                 path: 'gym',
-                element: <GymPage />,
+                element: <GymPage/>,
             }
         ],
-        errorElement: <PageNotFound />,
+        errorElement: <PageNotFound/>,
     },
     {
         path: 'sign-up',
-        element: <SignUp />,
+        element: <SignUp/>,
     },
     {
         path: 'sign-in',
-        element: <SignIn />,
+        element: <SignIn/>,
     },
     {
         path: 'forgot-password',
-        element: <ForgotPassword />,
+        element: <ForgotPassword/>,
     },
     {
         path: 'admin',
-        element: <LayoutDashBoard />,
+        element: <LayoutDashBoard/>,
         children: [
             {
                 path: 'dashboard',
-                element: <OverviewPage />,
+                element: <OverviewPage/>,
             },
             {
                 path: 'manage',
-                element: <ServiceManagementController />,
+                element: <ServiceManagementController/>,
             },
             {
                 path: 'roles',
-                element: <RolesController />,
+                element: <RolesController/>,
             },
             {
                 path: 'settings-admin',
-                element: <SettingAdmin />,
+                element: <SettingAdmin/>,
             },
             {
                 path: 'gym-management',
-                element: <GymManagement />,
+                element: <GymManagement/>,
+            },
+            {
+                path: 'soccer-management',
+                element: <ManagementHome/>, // Quản lý sân sẽ là trang cha
+                children: [
+                    {
+                        index: true, // Trang mặc định là danh sách sân
+                        path: 'list',
+                        element: <FieldListPage/>,
+                    },
+                    {
+                        path: 'lichdat', // Đường dẫn cho Lịch Đặt
+                        element: <BookingSchedule/>,
+                    },
+                    {
+                        path: 'thongke', // Đường dẫn cho Thống Kê
+                        element: <StatisticalPage/>,
+                    },
+                ],
             },
         ],
-        errorElement: <PageNotFound />,
+        errorElement: <PageNotFound/>,
     },
-  {
-    path: '',
-    element: <MainLayout/>,
-    children: [
-      {
-        index: true,
-        element: <Home/>,
-      },
-        {
-            path: '/soccer',
-            element: <SoccerFieldInfo />,
-        },
-        {
-            path: '/soccer/rent-yard',
-            element: <RentYardPage />
-        }
-        ,
-        {
-            path: '/gym',
-            element: <GymPage />
-        }
-        ,
-        {
-            path: 'manage-soccer',
-            element: <ManagementHome />, // Quản lý sân sẽ là trang cha
-            children: [
-                {
-                    index: true, // Trang mặc định là danh sách sân
-                    path: 'list',
-                    element: <FieldListPage />,
-                },
-                {
-                    path: 'lichdat', // Đường dẫn cho Lịch Đặt
-                    element: <BookingSchedule />,
-                },
-                {
-                    path: 'thongke', // Đường dẫn cho Thống Kê
-                    element: <StatisticalPage />,
-                },
-            ],
-        },
-    ],
-    errorElement: <PageNotFound/>,
-  },
+    {
+        path: '',
+        element: <MainLayout/>,
+        children: [
+            {
+                index: true,
+                element: <Home/>,
+            },
+            {
+                path: '/soccer',
+                element: <SoccerFieldInfo/>,
+            },
+            {
+                path: '/soccer/rent-yard',
+                element: <RentYardPage/>
+            }
+            ,
+            {
+                path: '/gym',
+                element: <GymPage/>
+            }
+        ],
+        errorElement: <PageNotFound/>,
+    },
 ]);

@@ -20,7 +20,7 @@ const FieldList = ({ fields, onUpdateField, onDeleteField }) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {fields.map((field) => (
-                <div key={field.id} className="bg-gray-200 rounded-xl shadow-md overflow-hidden">
+                <div key={field.id} className="flex flex-col justify-between bg-gray-200 rounded-xl shadow-md overflow-hidden">
                     {/* Hiển thị thông tin của sân */}
                     <div className={"bg-white rounded-lg"}>
                         <div className="flex overflow-x-auto space-x-2">
@@ -53,22 +53,24 @@ const FieldList = ({ fields, onUpdateField, onDeleteField }) => {
                     </div>
 
                     {/* Nút chỉnh sửa, xem lịch đặt và xóa sân */}
-                    <div className="p-4 flex justify-between">
-                        <button
-                            className="bg-blue-500 text-white py-1 px-2 rounded"
-                            onClick={() => handleEditClick(field)}
-                        >
-                            Chỉnh sửa
-                        </button>
-                        <button className="bg-yellow-500 text-white py-1 px-2 rounded">
-                            Lịch đặt
-                        </button>
-                        <button
-                            className="bg-red-500 text-white py-1 px-2 rounded"
-                            onClick={() => onDeleteField(field.id)}
-                        >
-                            Xóa sân
-                        </button>
+                    <div className={""}>
+                        <div className="p-4 flex justify-between">
+                            <button
+                                className="bg-blue-500 text-white py-1 px-2 rounded"
+                                onClick={() => handleEditClick(field)}
+                            >
+                                Chỉnh sửa
+                            </button>
+                            <button className="bg-yellow-500 text-white py-1 px-2 rounded">
+                                Lịch đặt
+                            </button>
+                            <button
+                                className="bg-red-500 text-white py-1 px-2 rounded"
+                                onClick={() => onDeleteField(field.id)}
+                            >
+                                Xóa sân
+                            </button>
+                        </div>
                     </div>
                 </div>
             ))}

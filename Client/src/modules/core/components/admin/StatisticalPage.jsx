@@ -3,7 +3,9 @@ import RevenueChart from "./RevenueChart.jsx";
 const StatisticalPage = () => {
     return (
         <>
-            <RevenueChart/>  {/* Sửa ở đây */}
+            <div className={"px-6"}>
+                <RevenueChart/>
+            </div>
         </>
     );
 }

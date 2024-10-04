@@ -97,7 +97,7 @@ const BookingSchedule = () => {
             <h1 className="text-2xl font-bold mb-5">Lịch Sân Bóng</h1>
 
             {/* Chọn ngày xem */}
-            <div className="mb-5">
+            <div className="mb-2">
                 <label className="mr-2">Chọn ngày xem:</label>
                 <input
                     type="date"
@@ -128,11 +128,11 @@ const BookingSchedule = () => {
             <table className="min-w-full border border-gray-300">
                 <thead>
                 <tr>
-                    <th style={{position: 'sticky', top: 150, backgroundColor: 'white', zIndex: 10}}
+                    <th style={{position: 'sticky', top: 70, backgroundColor: 'white', zIndex: 10}}
                         className="border border-gray-300 p-2">Thời gian
                     </th>
                     {dates.map(({date, display}) => (
-                        <th key={date} style={{position: 'sticky', top: 150, backgroundColor: 'white', zIndex: 10}}
+                        <th key={date} style={{position: 'sticky', top: 70, backgroundColor: 'white', zIndex: 10}}
                             className="border border-gray-300 p-2">
                             {display}
                         </th>
