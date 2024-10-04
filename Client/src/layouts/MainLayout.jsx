@@ -12,7 +12,7 @@ export function MainLayout() {
                 <Navbar/>
             </div>
 
-            <div className={"mt-24"}>
+            <div className={"mt-20"}>
                 <div className={"w-full"}></div>
                 <Outlet/>
             </div>

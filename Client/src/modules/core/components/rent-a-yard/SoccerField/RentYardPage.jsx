@@ -227,7 +227,7 @@ const RentYardPage = () => {
                                             ? 'bg-gray-300 text-white cursor-not-allowed'
                                             : selectedTime === slot.time
                                                 ? 'bg-green-500 text-white'
-                                                : 'bg-gray-200 hover:bg-green-400 hover:text-white transition-all duration-300'
+                                                : 'bg-gray-100 hover:bg-green-400 hover:text-white transition-all duration-300'
                                     }`}
                                     onClick={() => !slot.isBooked && handleSelectTime(slot.time)}
                                 >

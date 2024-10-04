@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/api")
+@RequestMapping("v1/api")
 public class SignUpController {
 
     private final UserRepository userRepository;
@@ -29,7 +29,7 @@ public class SignUpController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("sign-up")
     public ResponseEntity<?> signup(@RequestBody SignUpData authData) {
         // Check if username exists
         if (userRepository.existsByUserName(authData.getUsername())) {
