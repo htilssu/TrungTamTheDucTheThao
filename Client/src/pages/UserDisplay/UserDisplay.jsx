@@ -166,7 +166,7 @@ const UserDisplay = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
-
+  const [validationErrors, setValidationErrors] = useState({}); //Để lưu thông báo lỗi
   // Hàm định dạng ngày
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -177,6 +177,56 @@ const UserDisplay = () => {
     return `${day}/${month}/${year}`;
   };
 
+  const validateForm = () => {
+    const errors = {};
+  
+    // Kiểm tra họ (firstName) không được để trống
+    if (!user.firstName.trim()) {
+      errors.firstName = "Họ không được để trống.";
+    }
+  
+    // Kiểm tra tên (lastName) không được để trống
+    if (!user.lastName.trim()) {
+      errors.lastName = "Tên không được để trống.";
+    }
+  
+    // Kiểm tra số điện thoại (phoneNumber)
+    if (!user.phoneNumber.trim()) {
+      errors.phoneNumber = "Số điện thoại không được để trống.";
+    } else if (user.phoneNumber.length !== 10) {
+      errors.phoneNumber = "Số điện thoại phải có 10 chữ số.";
+    } else if (!/^\d+$/.test(user.phoneNumber)) {
+      errors.phoneNumber = "Số điện thoại chỉ được chứa số.";
+    }
+  
+    // Kiểm tra ngày sinh
+    const today = new Date();
+    const dob = new Date(user.dob);
+    const age = today.getFullYear() - dob.getFullYear();
+    const monthDifference = today.getMonth() - dob.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+    if (!user.dob || age < 16) {
+      errors.dob = "Ngày sinh không hợp lệ. Người dùng phải từ 16 tuổi trở lên.";
+    }
+  
+    return errors; // Trả về các lỗi nếu có
+  };
+  
+  
+  // const calculateAge = (dob) => {
+  //   const birthDate = new Date(dob);
+  //   const today = new Date();
+  //   let age = today.getFullYear() - birthDate.getFullYear();
+  //   const monthDiff = today.getMonth() - birthDate.getMonth();
+  //   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+  //     age--;
+  //   }
+  //   return age;
+  // };
+  
+
   // Hàm lấy thông tin người dùng từ API
   useEffect(() => {
     axios
@@ -184,10 +234,8 @@ const UserDisplay = () => {
       .then((response) => {
         const userData = response.data;
         console.log("API Response:", userData);
-  
         // Kiểm tra nếu `dob` là chuỗi và không rỗng
         const formattedDob = userData.dob ? userData.dob : ""; // Gán giá trị `dob` từ API nếu có
-  
         setUser({
           ...userData,
           dob: formattedDob, // Gán ngày sinh từ API vào state
@@ -203,37 +251,57 @@ const UserDisplay = () => {
   
   // Hàm xử lý khi lưu thông tin đã sửa
   const handleSave = () => {
-    setSaving(true);
-
-    // Kiểm tra và format lại `dob` nếu có giá trị
+    // Kiểm tra dữ liệu đầu vào
+    const errors = validateForm();
   
-  // Chuyển đổi `dob` thành định dạng `YYYY-MM-DD`
-  const formattedDate = user.dob ? new Date(user.dob).toISOString().split("T")[0] : null;
+    // Nếu có lỗi, set các lỗi vào validationErrors và không gửi yêu cầu lên server
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
 
-  const updatedUser = { 
-    ...user, 
-    dob: formattedDate // Gán lại ngày sinh sau khi đã format
-  };
+    setSaving(true);
+    const formattedDate = user.dob ? new Date(user.dob).toISOString().split("T")[0] : null;
+    const updatedUser = { 
+        ...user, 
+        dob: formattedDate 
+    };
+  
     axios
       .put(`http://localhost:8080/user/${id}`, updatedUser)
       .then((response) => {
-        setUser(response.data);
-        setIsEditing(false);
-        setSaving(false);
+        setUser(response.data);  // Cập nhật lại thông tin user sau khi lưu thành công
+        setIsEditing(false);     // Thoát chế độ chỉnh sửa
+        setSaving(false);        // Dừng trạng thái đang lưu
+        setValidationErrors({}); // Xóa mọi thông báo lỗi trước đó
       })
-      .catch(() => {
-        setError("Có lỗi xảy ra khi lưu thông tin");
+      .catch((error) => {
+        // Xử lý lỗi từ server
+        if (error.response && error.response.data) {
+            setValidationErrors(error.response.data);
+        } else {
+            console.error("Lỗi không xác định:", error);
+        }
         setSaving(false);
-      });
+    });
   };
+  
 
   // Hàm xử lý khi thay đổi giá trị các trường
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
     // Chuyển đổi giá trị "true" và "false" cho trường gender thành Boolean
     const updatedValue = name === "gender" ? (value === "true") : value;
-    setUser({ ...user, [name]: updatedValue });
+  
+    // Cập nhật thông tin người dùng
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: name === "phoneNumber" ? value.replace(/\D/g, "") : updatedValue,
+    }));
   };
+  
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -251,6 +319,7 @@ const UserDisplay = () => {
           onChange={handleChange}
           disabled={!isEditing}
         />
+        {validationErrors.firstName && <p style={{ color: "red" }}>{validationErrors.firstName}</p>}
       </div>
       <div>
         <label>Tên: </label>
@@ -262,24 +331,32 @@ const UserDisplay = () => {
           onChange={handleChange}
           disabled={!isEditing}
         />
+     {validationErrors.lastName && <p style={{ color: "red" }}>{validationErrors.lastName}</p>}
       </div>
       <div>
         <label>Số điện thoại: </label>
         <input
-          type="text"
+          type="number"
           name="phoneNumber"
           value={user.phoneNumber}
           placeholder="Nhập số điện thoại"
           onChange={handleChange}
           disabled={!isEditing}
+          onPaste={(e) => {
+          const pastedData = e.clipboardData.getData("Text");
+          if (!/^\d+$/.test(pastedData)) {
+          e.preventDefault();  // Ngăn không cho dán dữ liệu nếu nó chứa ký tự không phải số
+       }
+    }}
         />
+     {validationErrors.phoneNumber && <p style={{ color: "red" }}>{validationErrors.phoneNumber}</p>}
       </div>
       <div>
-  <label>Ngày sinh: </label>
-  {!isEditing ? (
-    <span>{user.dob ? formatDate(user.dob) : "Ngày sinh không hợp lệ"}</span> 
-  ) : (
-    <input
+        <label>Ngày sinh: </label>
+        {!isEditing ? (
+        <span>{user.dob ? formatDate(user.dob) : "Ngày sinh không hợp lệ"}</span> 
+        ) : (
+      <input
       type="date"
       name="dob"
       value={user.dob || ""}  // Gán giá trị mặc định là chuỗi rỗng nếu `dob` không tồn tại
@@ -287,6 +364,7 @@ const UserDisplay = () => {
       disabled={!isEditing}
     />
   )}
+  {validationErrors.dob && <p style={{ color: "red" }}>{validationErrors.dob}</p>}
 </div>
 
       <div>
