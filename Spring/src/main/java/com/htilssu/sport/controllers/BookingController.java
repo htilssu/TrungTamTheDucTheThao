@@ -1,8 +1,8 @@
 package com.htilssu.sport.controllers;
 
-import com.htilssu.sport.models.Booking;
+import com.htilssu.sport.data.models.Booking;
 import com.htilssu.sport.services.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/v1/bookings")
 @CrossOrigin(origins = "*")  // Đảm bảo rằng frontend (React) có thể gọi API
 @PreAuthorize("permitAll()") //(khong bat xac thuc)
 public class BookingController {
 
-    @Autowired
     private BookingService bookingService;
 
     // API để lưu thông tin đặt sân
@@ -33,9 +33,5 @@ public class BookingController {
         return ResponseEntity.ok(bookings);
     }
 
-/*
-    @GetMapping("/${id}")
-    public ResponseEntity<Void> getBookingById(@PathVariable("id") int id) {
 
-    }*/
 }
