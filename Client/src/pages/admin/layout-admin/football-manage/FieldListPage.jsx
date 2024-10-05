@@ -1,6 +1,6 @@
 import { useState } from "react";
-import FieldList from "./FieldList";
-import AddFieldForm from "./AddFieldForm";
+import FieldList from "./FieldList.jsx";
+import AddFieldForm from "./AddFieldForm.jsx";
 
 const FieldListPage = () => {
     const [fields, setFields] = useState([

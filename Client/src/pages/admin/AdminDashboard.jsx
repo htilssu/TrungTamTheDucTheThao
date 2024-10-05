@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import Navbar from './Navbar.jsx';
-import Sidebar from './Sidebar.jsx';
-import Content from './Content.jsx';
+import {useState} from "react";
+import Sidebar from "./library-admin/Sidebar.jsx";
+import {Outlet} from "react-router-dom";
+import Navbar from "./library-admin/Navbar.jsx";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(true);
 
@@ -19,11 +19,11 @@ const Dashboard = () => {
             />
             <div className={`flex-1 mt-16 transition-all duration-300 ${isSidebarOpen ? 'ml-60' : 'ml-12'}`}>
                 <div className={""}>
-                    <Content />
+                    <Outlet />
                 </div>
             </div>
         </div>
     );
 };
 
-export default Dashboard;
+export default AdminDashboard;

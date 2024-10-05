@@ -2,8 +2,8 @@ import { Avatar } from "@material-tailwind/react";
 import { useState } from "react";
 import { FcApproval } from "react-icons/fc";
 import { IoSettingsOutline } from "react-icons/io5";
-import { HiOutlineLogout } from "react-icons/hi"; // Import thêm biểu tượng cho "Sign out"
-import { AiOutlineDashboard } from "react-icons/ai"; // Import thêm biểu tượng cho "Dashboard"
+import { HiOutlineLogout } from "react-icons/hi";
+import { AiOutlineDashboard } from "react-icons/ai";
 
 const UserMenuItem = ({ link, text, icon }) => {
     return (
@@ -34,7 +34,7 @@ const Navbar = () => {
                 <div className="flex items-center px-4" onClick={() => setDropdownOpen(!dropdownOpen)}>
                     <div className="flex-none">
                         <Avatar
-                            src='/avatarT.png'
+                            src='/avatarH.png'
                             alt="avatar"
                             withBorder={true}
                             className="p-0.5 rounded-full border-emerald-400 cursor-pointer transition-transform transform hover:scale-110"

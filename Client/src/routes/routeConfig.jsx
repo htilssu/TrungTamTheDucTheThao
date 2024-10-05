@@ -8,37 +8,82 @@ import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/Ren
 import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 import SignIn from '../pages/sign-in/SignIn.jsx';
 import GymPage from "../modules/core/components/gym/GymPage.jsx";
-import ManagementHome from "../modules/core/components/admin/ManagementHome.jsx";
-import FieldListPage from "../modules/core/components/admin/FieldListPage.jsx";
-import StatisticalPage from "../modules/core/components/admin/StatisticalPage.jsx";
-import BookingSchedule from "../modules/core/components/admin/BookingSchedule.jsx";
-import LayoutDashBoard from '../pages/admin/layout-admin/LayoutDashBoard.jsx';
-import OverviewPage from '../pages/admin/OverviewPage.jsx';
-import ServiceManagementController from './../pages/admin/ServiceManagementController';
-import RolesController from './../pages/admin/RolesController';
-import SettingAdmin from './../pages/admin/SettingAdmin';
-import GymManagement from './../pages/admin/post-admin/GymManagement';
-import Dashboard from "../modules/core/components/admin/mainlayout-admin/Dashboard.jsx";
+import FootballLayout from "../pages/admin/layout-admin/football-manage/FootballLayout.jsx";
+import FieldListPage from "../pages/admin/layout-admin/football-manage/FieldListPage.jsx";
+import StatisticalPage from "../pages/admin/layout-admin/football-manage/StatisticalPage.jsx";
+import BookingSchedule from "../pages/admin/layout-admin/football-manage/BookingSchedule.jsx";
+import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
+import EmployeeLayout from "../pages/admin/layout-admin/employee-manage/EmployeeLayout.jsx";
+import StatisticalLayout from "../pages/admin/layout-admin/statistics-manage/StatisticalLayout.jsx";
+import CustomerLayout from "../pages/admin/layout-admin/customer-manage/CustomerLayout.jsx";
+import HomeAdminLayout from "../pages/admin/home-admin/HomeAdminLayout.jsx";
+import PostLayout from "../pages/admin/layout-admin/post-manage/PostLayout.jsx";
+import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
+import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
+import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
+import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
 
 export const router = createBrowserRouter([
     {
-        path: 'test',
-        element: <Dashboard/>, // Quản lý sân sẽ là trang cha
+        path: 'admin',
+        element: <AdminDashboard/>, // Quản lý sân sẽ là trang cha
         children: [
             {
-                index: true, // Trang mặc định là danh sách sân
-                path: 'list',
-                element: <FieldListPage/>,
+                index: true,
+                element: <HomeAdminLayout/>,
             },
             {
-                path: 'lichdat', // Đường dẫn cho Lịch Đặt
-                element: <BookingSchedule/>,
+                path: 'post-manage',
+                element: <PostLayout/>,
             },
             {
-                path: 'thongke', // Đường dẫn cho Thống Kê
-                element: <StatisticalPage/>,
+                path: 'gym-manage',
+                element: <GymLayout/>,
+            },
+            {
+                path: 'customer-manage',
+                element: <CustomerLayout/>,
+            },
+            {
+                path: 'statistic-manage',
+                element: <StatisticalLayout/>,
+            },
+            {
+                path: 'employee-manage',
+                element: <EmployeeLayout/>,
+            },
+            {
+              path: 'soccer-manage',
+              element: <FootballLayout/>,
+              children: [
+                  {
+                      index: true,
+                      element: <HomeSoccerPage/>,
+                  },
+                  {
+                      path: 'list',
+                      element: <FieldListPage/>,
+                  },
+                  {
+                      path: 'lichdat',
+                      element: <BookingSchedule/>,
+                  },
+                  {
+                      path: 'thongke',
+                      element: <StatisticalPage/>,
+                  },
+              ]
+            },
+            {
+                path: 'role-manage',
+                element: <RoleLayout/>,
+            },
+            {
+                path: 'setting',
+                element: <SettingLayout/>,
             },
         ],
+        errorElement: <PageNotFound/>,
     },
     {
         path: '',
@@ -74,52 +119,6 @@ export const router = createBrowserRouter([
     {
         path: 'forgot-password',
         element: <ForgotPassword/>,
-    },
-    {
-        path: 'admin',
-        element: <LayoutDashBoard/>,
-        children: [
-            {
-                path: 'dashboard',
-                element: <OverviewPage/>,
-            },
-            {
-                path: 'manage',
-                element: <ServiceManagementController/>,
-            },
-            {
-                path: 'roles',
-                element: <RolesController/>,
-            },
-            {
-                path: 'settings-admin',
-                element: <SettingAdmin/>,
-            },
-            {
-                path: 'gym-management',
-                element: <GymManagement/>,
-            },
-            {
-                path: 'soccer-management',
-                element: <ManagementHome/>, // Quản lý sân sẽ là trang cha
-                children: [
-                    {
-                        index: true, // Trang mặc định là danh sách sân
-                        path: 'list',
-                        element: <FieldListPage/>,
-                    },
-                    {
-                        path: 'lichdat', // Đường dẫn cho Lịch Đặt
-                        element: <BookingSchedule/>,
-                    },
-                    {
-                        path: 'thongke', // Đường dẫn cho Thống Kê
-                        element: <StatisticalPage/>,
-                    },
-                ],
-            },
-        ],
-        errorElement: <PageNotFound/>,
     },
     {
         path: '',

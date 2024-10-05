@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 
-const ManagementHome = () => {
+const FootballLayout = () => {
     return (
         <div className="min-h-screen bg-gray-100 w-full">
             <div>
@@ -16,4 +16,4 @@ const ManagementHome = () => {
     );
 };
 
-export default ManagementHome;
+export default FootballLayout;
