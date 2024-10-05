@@ -10,7 +10,7 @@ export function PageNotFound() {
     <div className={"h-screen w-full p-10 flex justify-center items-center"}>
       <div className={"w-full flex flex-col justify-center items-center"}>
         <img
-          src="/404.svg"
+          src="/404.png"
           className={"h-full w-full sm:w-2/3 md:w-1/3"}
           alt="404"
         />
