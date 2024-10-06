@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebSecurity
 @EnableWebMvc
 public class SportApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SportApplication.class, args);
     }
