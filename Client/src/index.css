@@ -17,13 +17,89 @@ body {
 }
 /* Dành cho tất cả các trình duyệt */
 input[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
-  appearance: textfield; /* Các trình duyệt khác */
+  -moz-appearance: textfield;
+  appearance: textfield; 
 }
 
-/* Dành riêng cho WebKit (Chrome, Safari, Edge) */
+
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+.loader {
+  border: 8px solid #f3f3f3; /* Màu nền */
+  border-top: 8px solid #3498db; /* Màu của vòng quay */
+  border-radius: 50%;
+  width: 50px; /* Kích thước vòng loading */
+  height: 50px; /* Kích thước vòng loading */
+  animation: spin 1s linear infinite; /* Hiệu ứng xoay */
+}
+
+input[type="date"] {
+  -webkit-appearance: none; /* Ẩn biểu tượng trên trình duyệt WebKit */
+  -moz-appearance: textfield; /* Ẩn biểu tượng trên trình duyệt Firefox */
+  appearance: none; /* Ẩn biểu tượng trên tất cả trình duyệt */
+  background: transparent; /* Đảm bảo nền trong suốt */
+  padding-right: 8px;
+}
+
+/* Nếu bạn muốn thay đổi giao diện cho input */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none; /* Ẩn nút điều chỉnh và biểu tượng lịch */
+}
+
+input[readonly] {
+  background-color: #f0f0f0; /* Màu nền xám nhạt */
+  cursor: not-allowed; /* Hiển thị con trỏ không cho phép */
+  color: #888; /* Màu chữ xám */
+}
+
+input[readonly]:focus {
+  outline: none; /* Không có viền khi focus */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s forwards;
+}
+

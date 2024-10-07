@@ -1,6 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate,useParams,Link } from 'react-router-dom';
+import UserDisplay from '../../../pages/UserDisplay/UserDisplay';
+import axios from 'axios';
+
 // Component cho một Menu Item
 // eslint-disable-next-line react/prop-types
 const MegaItem = ({ title, description, link }) => {
@@ -73,7 +75,11 @@ const UserMenuItem = ({ link, text }) => {
 };
 
 // Component chính của Navbar
-const Navbar = () => {
+const Navbar = ({ firstName, lastName }) => {
+    const { id } = useParams();
+    const [user, setUser] = useState({firstName,lastName});
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -101,6 +107,25 @@ const Navbar = () => {
         };
     }, []);
 
+    useEffect(() => {
+        axios
+          .get(`http://localhost:8080/user/5`)
+          .then((response) => {
+            const { firstName, lastName } = response.data; // Chỉ lấy firstname và lastname
+            setUser({
+              firstName,
+              lastName,
+            });
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching user:", error.response?.status, error.message);
+            setError("Không tìm thấy người dùng");
+            setLoading(false);
+          });
+      }, [id]);
+      
+    
     const menuRef = useRef(null); // Ref cho MegaMenu
     const buttonRef = useRef(null); // Ref cho nút "Dịch Vụ"
     // Hàm xử lý sự kiện khi chuột rời khỏi khu vực menu hoặc nút "Dịch Vụ"
@@ -165,17 +190,19 @@ const Navbar = () => {
                         {/* User menu dropdown */}
                         {isUserMenuOpen && (
                             <div ref={UsermenuRef} className="absolute right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-                                <div className="px-4 py-3 cursor-pointer">
+                                <div className="px-4 py-3">
                                     <span className="block text-sm font-medium text-gray-900 dark:text-white">
-                                    <Link to={`/user/${5}`}>Tuan Anh</Link></span>
+                                    {user.firstName} {user.lastName}</span>
                                     <span className="block text-sm text-gray-500 dark:text-gray-400">
-                                    <Link to={`/user/${5}`}>ngokhong@gmail.com</Link></span>
+                                    ngokhong@gmail.com</span>
                                 </div>
                                 <ul className="py-2">
                                     <UserMenuItem link="/dashboard" text="Dashboard" />
                                     <UserMenuItem link="/settings" text="Settings" />
                                     <UserMenuItem link="/earnings" text="Earnings" />
+                                    <UserMenuItem link={`/user/5`} text="Edit" />
                                     <UserMenuItem link="/sign-in" text="Sign out" />
+                              
                                 </ul>
                             </div>
                         )}
