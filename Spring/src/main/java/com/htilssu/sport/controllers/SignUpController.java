@@ -31,7 +31,7 @@ public class SignUpController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signup(@RequestBody AuthData authData) {
 
-        if (userRepository.existsByUserName(authData.getUsername())) {
+        if (userRepository.existsByUsername(authData.getUsername())) {
             return ResponseHandler.createResponse("Tên người dùng đã tồn tại!", HttpStatus.BAD_REQUEST);
         }
 

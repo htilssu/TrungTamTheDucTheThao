@@ -8,9 +8,9 @@ import com.htilssu.sport.data.models.AuthData;
 
 public interface UserRepository extends JpaRepository<AuthData, Long> {
 
-    Optional<AuthData> findByUserName(String username);
+    Optional<AuthData> findByUsername(String username);
 
-    boolean existsByUserName(String username);
+    boolean existsByUsername(String username);
 
     Optional<AuthData> findByEmail(String email);
 

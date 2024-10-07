@@ -35,7 +35,7 @@ public class SignInController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        Optional<AuthData> userNameAuth = userRepository.findByUserName(authData.getUsername());
+        Optional<AuthData> userNameAuth = userRepository.findByUsername(authData.getUsername());
 
         if (!userNameAuth.isPresent()
                 || !passwordEncoder.matches(authData.getPassword(), userNameAuth.get().getPassword())) {
