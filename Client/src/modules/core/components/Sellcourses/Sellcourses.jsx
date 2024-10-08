@@ -1,6 +1,8 @@
     import  { useState } from "react";
     import {Swiper, SwiperSlide} from "swiper/react";
     import {Autoplay, Navigation, Pagination} from "swiper/modules";
+    import {DatePicker} from "antd";
+    import dayjs from "dayjs";
 
 
     const Sellcourses = () => {
@@ -15,7 +17,9 @@
         });
         const [images, setImages] = useState([]);
         const [editingMode, setEditingMode] = useState(false);
-
+        const disabledDate = (current) => {
+            return current && current < dayjs().startOf('day');
+        };
         const handleChange = (e) => {
             const { name, value } = e.target;
 
@@ -231,11 +235,12 @@
 
                         <div>
                             <label className=" text-gray-700 font-bold mb-2">Thời gian bắt đầu</label>
-                            <input
+                            <DatePicker
                                 type="date"
                                 name="startTime"
                                 value={formData.startTime}
                                 onChange={handleChange}
+                                disabledDate={disabledDate}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 required
                             />
@@ -243,11 +248,12 @@
 
                         <div>
                             <label className=" text-gray-700 font-bold mb-2">Thời gian kết thúc</label>
-                            <input
+                            <DatePicker
                                 type="date"
                                 name="endTime"
                                 value={formData.endTime}
                                 onChange={handleChange}
+                                disabledDate={disabledDate}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 required
                             />
