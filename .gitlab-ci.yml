@@ -1,18 +1,19 @@
 test:
   image: amazoncorretto:22-alpine
   script:
-    - ./gradlew test
+    - cd Spring && ./gradlew test
 
 
 build:
   image: amazoncorretto:22-alpine-full
   script:
-    - ./gradlew build -x test
+    - cd Spring && ./gradlew build -x test
 
 build-docker-image:
   stage: deploy
   image: docker
   script:
+    - cd Spring
     - docker build -t htilssu/trungtamthethao:latest .
     - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - docker push htilssu/trungtamthethao:latest
