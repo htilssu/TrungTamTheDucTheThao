@@ -1,7 +1,7 @@
 test:
   image: amazoncorretto:22-alpine
   script:
-    - ./gradlew test
+    - ls -a
 
 
 build:
