@@ -32,6 +32,6 @@ pull-image:
   script:
     - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
       sudo docker pull htilssu/trungtamthethao:latest &&
-      sudo docker ps -aq  | xargs docker stop | xargs docker rm
+      sudo docker ps -aq  | xargs -r docker stop | xargs -r docker rm &&
       sudo docker run -d --name trungtamthethao -p 8080:8080 htilssu/trungtamthethao:latest
       "
