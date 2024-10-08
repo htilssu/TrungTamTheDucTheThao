@@ -30,7 +30,7 @@ build-image:
 pull-image:
   stage: deploy
   needs:
-    - job: build-docker-image
+    - job: build-image
       artifacts: false
   before_script:
     - chmod 400 $SSH_KEY
