@@ -1,13 +1,17 @@
 test:
   image: amazoncorretto:22-alpine
   script:
-    - cd Spring && ./gradlew test
+    - cd Spring
+    - chmod +x gradlew
+    - ./gradlew test
 
 
 build:
   image: amazoncorretto:22-alpine-full
   script:
-    - cd Spring && ./gradlew build -x test
+    - cd Spring
+    - chmod +x gradlew
+    - ./gradlew build -x test
 
 build-docker-image:
   stage: deploy
