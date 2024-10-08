@@ -31,7 +31,9 @@ pull-image:
     - chmod 400 $SSH_KEY
   script:
     - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
-      cat << EOF > ~/secrets/.env.tttd &&
+      cat << EOF > ~/secrets/.env.tttd
+       $ENV
+       EOF &&
       sudo docker pull htilssu/trungtamthethao:latest &&
       sudo docker ps -aq  | xargs -r docker stop | xargs -r docker rm &&
       sudo docker run --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p 8080:8080 htilssu/trungtamthethao:latest
