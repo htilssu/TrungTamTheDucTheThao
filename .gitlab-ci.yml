@@ -30,6 +30,8 @@ pull-image:
   stage: deploy
   dependencies:
     - build-docker-image
+  before_script:
+    - chmod 400 $SSH_KEY
   script:
     - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
       sudo docker pull htilssu/trungtamthethao:latest &&
