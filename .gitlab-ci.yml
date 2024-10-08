@@ -32,7 +32,7 @@ pull-image:
   script:
     - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
       cat << EOF > ~/secrets/.env.tttd
-       $ENV
+        $ENV
        EOF &&
       sudo docker pull htilssu/trungtamthethao:latest &&
       sudo docker ps -aq  | xargs -r sudo docker stop | xargs -r sudo docker rm &&
