@@ -102,8 +102,8 @@ const EditFieldModal = ({field, onCancel, onUpdate}) => {
                         value={updatedField.status}
                         onChange={handleInputChange}
                     >
-                        <option value="Còn trống">Còn trống</option>
-                        <option value="Đã đặt">Đã đặt</option>
+                        <option value="Đang hoạt động">Đang hoạt động</option>
+                        <option value="Đang sửa chữa">Đang sửa chữa</option>
                     </select>
                 </div>
 

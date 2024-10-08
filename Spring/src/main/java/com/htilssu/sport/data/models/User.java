@@ -34,4 +34,8 @@ public class User {
     @Column(name = "dob", nullable = false)
     private LocalDate dob;
 
+    // Bổ sung thuộc tính email
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
 }

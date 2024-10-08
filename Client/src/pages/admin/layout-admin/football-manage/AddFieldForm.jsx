@@ -1,13 +1,14 @@
 import { useState } from "react";
-import {TiDelete} from "react-icons/ti";
+import { TiDelete } from "react-icons/ti";
+import axios from "axios";
 
 const AddFieldForm = ({ onAddField }) => {
     const [newField, setNewField] = useState({
-        name: "",
-        type: "Sân 5 người",
-        priceSchedule: [{ from: "", to: "", price: "" }],
+        field_name: "",
+        field_type: "5v5",
+        priceSchedule: [{ start_time: "", end_time: "", rate: "" }],
         location: "",
-        status: "Còn trống",
+        status: "active",
         description: "",
         images: [],
     });
@@ -25,16 +26,16 @@ const AddFieldForm = ({ onAddField }) => {
     const handleAddPriceSchedule = () => {
         setNewField({
             ...newField,
-            priceSchedule: [...newField.priceSchedule, { from: "", to: "", price: "" }],
+            priceSchedule: [...newField.priceSchedule, { start_time: "", end_time: "", rate: "" }],
         });
     };
 
     // Xử lý file ảnh khi tải lên nhiều ảnh
     const handleFileUpload = (e) => {
         const files = Array.from(e.target.files);
-        const previews = files.map((file) => URL.createObjectURL(file));
+        setNewField({ ...newField, images: [...newField.images, ...files] });
 
-        setNewField({ ...newField, images: [...newField.images, ...previews] });
+        const previews = files.map((file) => URL.createObjectURL(file));
         setImagePreviews([...imagePreviews, ...previews]);
     };
 
@@ -51,18 +52,39 @@ const AddFieldForm = ({ onAddField }) => {
     };
 
     // Xử lý thêm sân mới
-    const handleAddField = () => {
-        onAddField(newField);
-        setNewField({
-            name: "",
-            type: "Sân 5 người",
-            priceSchedule: [{ from: "", to: "", price: "" }],
-            location: "",
-            status: "Còn trống",
-            description: "",
-            images: [],
-        });
-        setImagePreviews([]); // Reset preview ảnh
+    const handleAddField = async () => {
+        const fieldData = {
+            field: {
+                fieldName: newField.name,
+                location: newField.location,
+                fieldType: newField.type === "Sân 5 người" ? "5v5" : newField.type === "Sân 7 người" ? "7v7" : "11v11",
+                status: newField.status === "Còn trống" ? "active" : "maintenance",
+                description: newField.description,
+                imageUrl: newField.images[0] // Giả định lấy URL của ảnh đầu tiên
+            },
+            prices: newField.priceSchedule.map((schedule) => ({
+                startTime: schedule.from,
+                endTime: schedule.to,
+                rate: parseFloat(schedule.price) // Chuyển đổi giá thành số thực
+            }))
+        };
+
+        try {
+            const response = await axios.post("http://localhost:8080/v1/fields", fieldData);
+            console.log("Field added successfully:", response.data);
+            setNewField({
+                name: "",
+                type: "",
+                priceSchedule: [{ from: "", to: "", price: "" }],
+                location: "",
+                status: "",
+                description: "",
+                images: [],
+            });
+            setImagePreviews([]); // Reset preview ảnh
+        } catch (error) {
+            console.error("Error adding field:", error);
+        }
     };
 
     // Xử lý thay đổi giá trị input
@@ -79,19 +101,19 @@ const AddFieldForm = ({ onAddField }) => {
                     className="p-2 border rounded"
                     type="text"
                     placeholder="Tên sân"
-                    name="name"
-                    value={newField.name}
+                    name="field_name"
+                    value={newField.field_name}
                     onChange={handleInputChange}
                 />
                 <select
                     className="p-2 border rounded"
-                    name="type"
-                    value={newField.type}
+                    name="field_type"
+                    value={newField.field_type}
                     onChange={handleInputChange}
                 >
-                    <option value="Sân 5 người">Sân 5 người</option>
-                    <option value="Sân 7 người">Sân 7 người</option>
-                    <option value="Sân 11 người">Sân 11 người</option>
+                    <option value="5v5">Sân 5 người</option>
+                    <option value="7v7">Sân 7 người</option>
+                    <option value="11v11">Sân 11 người</option>
                 </select>
                 <input
                     className="p-2 border rounded"
@@ -118,24 +140,24 @@ const AddFieldForm = ({ onAddField }) => {
                         className="p-2 border rounded"
                         type="time"
                         placeholder="Từ"
-                        value={schedule.from}
+                        value={schedule.start_time}
                         onChange={(e) =>
-                            handlePriceScheduleChange(index, "from", e.target.value)
+                            handlePriceScheduleChange(index, "start_time", e.target.value)
                         }
                     />
                     <input
                         className="p-2 border rounded"
                         type="time"
                         placeholder="Đến"
-                        value={schedule.to}
-                        onChange={(e) => handlePriceScheduleChange(index, "to", e.target.value)}
+                        value={schedule.end_time}
+                        onChange={(e) => handlePriceScheduleChange(index, "end_time", e.target.value)}
                     />
                     <input
                         className="p-2 border rounded"
                         type="number"
                         placeholder="Giá (VNĐ)"
-                        value={schedule.price}
-                        onChange={(e) => handlePriceScheduleChange(index, "price", e.target.value)}
+                        value={schedule.rate}
+                        onChange={(e) => handlePriceScheduleChange(index, "rate", e.target.value)}
                     />
                 </div>
             ))}
