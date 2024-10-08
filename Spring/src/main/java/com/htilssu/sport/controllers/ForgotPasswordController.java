@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.htilssu.sport.data.models.Account;
 import com.htilssu.sport.data.models.AuthData;
 import com.htilssu.sport.data.models.PasswordResetToken;
 import com.htilssu.sport.data.models.ResetPasswordData;
 import com.htilssu.sport.exceptions.EmailService;
 import com.htilssu.sport.exceptions.ResponseHandler;
+import com.htilssu.sport.reponsitories.AccountRepository;
 import com.htilssu.sport.reponsitories.PasswordResetTokenRepository;
-import com.htilssu.sport.reponsitories.UserRepository;
 
 import jakarta.validation.Valid;
 
@@ -27,7 +28,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/api")
 public class ForgotPasswordController {
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
@@ -36,16 +37,16 @@ public class ForgotPasswordController {
     private String frontendUrl;
 
     public ForgotPasswordController(EmailService emailService, PasswordEncoder passwordEncoder,
-            PasswordResetTokenRepository passwordResetTokenRepository, UserRepository userRepository) {
+            PasswordResetTokenRepository passwordResetTokenRepository, AccountRepository accountRepository) {
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
-        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody @Valid AuthData authData) {
-        Optional<AuthData> userNameAuth = userRepository.findByEmail(authData.getEmail());
+        Optional<Account> userNameAuth = accountRepository.findByEmail(authData.getEmail());
         if (userNameAuth.isEmpty()) {
             return ResponseHandler.createResponse("Email không tồn tại trong hệ thống!", HttpStatus.BAD_REQUEST);
         }
@@ -76,15 +77,15 @@ public class ForgotPasswordController {
 
         PasswordResetToken passwordResetToken = optionalPasswordResetToken.get();
 
-        Optional<AuthData> userNameAuth = userRepository.findByEmail(passwordResetToken.getEmail());
+        Optional<Account> userNameAuth = accountRepository.findByEmail(passwordResetToken.getEmail());
         if (userNameAuth.isEmpty()) {
             return ResponseHandler.createResponse("Người dùng không tồn tại!", HttpStatus.BAD_REQUEST);
         }
 
-        AuthData authData = userNameAuth.get();
+        Account account  = userNameAuth.get();
         String encodedPassword = passwordEncoder.encode(resetPasswordData.getNewPassword());
-        authData.setPassword(encodedPassword);
-        userRepository.save(authData);
+        account.setPassword(encodedPassword);
+        accountRepository.save(account);
 
         passwordResetTokenRepository.delete(passwordResetToken);
 

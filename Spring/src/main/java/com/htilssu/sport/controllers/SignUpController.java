@@ -11,19 +11,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.htilssu.sport.data.models.Account;
 import com.htilssu.sport.data.models.AuthData;
+import com.htilssu.sport.data.models.User;
 import com.htilssu.sport.exceptions.ResponseHandler;
+import com.htilssu.sport.reponsitories.AccountRepository;
 import com.htilssu.sport.reponsitories.UserRepository;
 
 @RestController
 @RequestMapping("/api")
 public class SignUpController {
 
+    private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
-    public SignUpController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public SignUpController(AccountRepository accountRepository, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.accountRepository = accountRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -31,30 +36,30 @@ public class SignUpController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signup(@RequestBody AuthData authData) {
 
-        if (userRepository.existsByUsername(authData.getUsername())) {
-            return ResponseHandler.createResponse("Tên người dùng đã tồn tại!", HttpStatus.BAD_REQUEST);
-        }
-
-        if (userRepository.existsByEmail(authData.getEmail())) {
+        if (accountRepository.existsByEmail(authData.getEmail())) {
             return ResponseHandler.createResponse("Email đã được sử dụng!", HttpStatus.BAD_REQUEST);
         }
 
         String encodedPassword = passwordEncoder.encode(authData.getPassword());
 
-        AuthData newAuth = new AuthData();
-        newAuth.setUsername(authData.getUsername());
-        newAuth.setEmail(authData.getEmail());
-        newAuth.setPassword(encodedPassword);
-
         try {
-            userRepository.save(newAuth);
+
+            User newUser = new User(); 
+            userRepository.save(newUser);
+
+            Account newAccount = new Account();
+            newAccount.setEmail(authData.getEmail());
+            newAccount.setPassword(encodedPassword);
+            newAccount.setUser(newUser); 
+
+            accountRepository.save(newAccount);
+
+            logger.info("Tài khoản đã được tạo thành công cho email: {}", authData.getEmail());
         } catch (DataIntegrityViolationException e) {
-            return ResponseHandler.createResponse("Lỗi: Không thể tạo tài khoản do xung đột dữ liệu.",
-                    HttpStatus.CONFLICT);
+            return ResponseHandler.createResponse("Lỗi: Không thể tạo tài khoản do xung đột dữ liệu.", HttpStatus.CONFLICT);
         } catch (Exception e) {
             logger.error("Đã xảy ra lỗi khi lưu tài khoản mới", e);
-            return ResponseHandler.createResponse("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseHandler.createResponse("Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return ResponseHandler.createResponse("Đăng kí tài khoản thành công", HttpStatus.OK);
