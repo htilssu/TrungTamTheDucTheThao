@@ -19,13 +19,15 @@ default:
     - docker:24.0.5-dind
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
+
 build-image:
+  stage: build
   before_script:
     - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   script:
     - cd Spring
-    - docker buildx build -t trungtamthethao:latest .
-    - docker push trungtamthethao:latest
+    - docker buildx build -t htilssu/trungtamthethao:latest .
+    - docker push htilssu/trungtamthethao:latest
 
 pull-image:
   stage: deploy
