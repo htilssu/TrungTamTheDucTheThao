@@ -1,4 +1,4 @@
-package com.htilssu.sport.data;
+package com.htilssu.sport.data.enums;
 
 public enum Status {
     PENDING,

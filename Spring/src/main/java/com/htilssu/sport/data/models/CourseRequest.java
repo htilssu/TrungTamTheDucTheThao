@@ -1,6 +1,6 @@
 package com.htilssu.sport.data.models;
 
-import com.htilssu.sport.data.Status;
+import com.htilssu.sport.data.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
