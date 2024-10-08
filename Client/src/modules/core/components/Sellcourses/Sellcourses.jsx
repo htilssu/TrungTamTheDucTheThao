@@ -14,6 +14,7 @@
             duration: "",
             startTime: "",
             endTime: "",
+            location: "",
         });
         const [images, setImages] = useState([]);
         const [editingMode, setEditingMode] = useState(false);
@@ -21,7 +22,7 @@
             return current && current < dayjs().startOf('day');
         };
         const handleChange = (e) => {
-            const { name, value } = e.target;
+            const {name, value} = e.target;
 
             // Chỉ cho phép giá trị không âm
             if ((name === "price" || name === "quantity" || name === "duration") && value < 0) {
@@ -32,7 +33,11 @@
                 ...prev,
                 [name]: value,
             }));
-        };
+            if (dayjs(formData.startTime).isAfter(formData.endTime) || dayjs(formData.startTime).isSame(formData.endTime)) {
+                alert("Thời gian bắt đầu phải trước thời gian kết thúc.");
+                return;
+            }
+        }
 
         const handleKeyPress = (e) => {
             // Ngăn chặn nhập dấu '-'
@@ -62,6 +67,12 @@
             Promise.all(promises).then((results) => {
                 setImages((prevImages) => [...prevImages, ...results]);
             });
+        };
+        const handleDateChange = (date, dateString, name) => {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: dateString, // Lưu giá trị đã định dạng
+            }));
         };
 
         const handleDeleteImage = (index) => {
@@ -97,15 +108,16 @@
                                         spaceBetween={1}
                                         slidesPerView={1}
                                         navigation={false}
-                                        autoplay={{ delay: 3000 }}
-                                        pagination={{ clickable: true }}
+                                        autoplay={{delay: 3000}}
+                                        pagination={{clickable: true}}
                                         breakpoints={{
-                                            300: { slidesPerView: 1, spaceBetween: 16 },
+                                            300: {slidesPerView: 1, spaceBetween: 16},
                                         }}
                                         modules={[Navigation, Pagination, Autoplay]}
                                     >
                                         {images.map((image, index) => (
-                                            <SwiperSlide key={index} className="relative flex justify-center items-center h-80">
+                                            <SwiperSlide key={index}
+                                                         className="relative flex justify-center items-center h-80">
                                                 <img
                                                     src={image}
                                                     alt={`slide-${index}`}
@@ -234,12 +246,11 @@
                         </div>
 
                         <div>
-                            <label className=" text-gray-700 font-bold mb-2">Thời gian bắt đầu</label>
+                            <label className="text-gray-700 font-bold mb-2">Thời gian bắt đầu</label>
                             <DatePicker
-                                type="date"
                                 name="startTime"
-                                value={formData.startTime}
-                                onChange={handleChange}
+                                value={formData.startTime ? dayjs(formData.startTime) : null} // Chuyển đổi sang dayjs
+                                onChange={(date, dateString) => handleDateChange(date, dateString, 'startTime')}
                                 disabledDate={disabledDate}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 required
@@ -247,12 +258,11 @@
                         </div>
 
                         <div>
-                            <label className=" text-gray-700 font-bold mb-2">Thời gian kết thúc</label>
+                            <label className="text-gray-700 font-bold mb-2">Thời gian kết thúc</label>
                             <DatePicker
-                                type="date"
-                                name="endTime"
-                                value={formData.endTime}
-                                onChange={handleChange}
+                                name="startTime"
+                                value={formData.endTime ? dayjs(formData.endTime) : null} // Chuyển đổi sang dayjs
+                                onChange={(date, dateString) => handleDateChange(date, dateString, 'endTime')}
                                 disabledDate={disabledDate}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 required
@@ -270,19 +280,23 @@
                                 rows="4"
                             />
                         </div>
-                        <div className={"text-gray-700 font-bold mb-2"}>
-                            <label>Địa điểm</label>
-                            <input
-                                type="number"
-                                name="duration"
-                                value={formData.duration}
-                                onChange={handleChange}
-                                onKeyPress={handleKeyPress}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                placeholder="Nhập thời lượng khóa học"
-                                required
-                            />
-                        </div>
+
+                    </div>
+
+                    <div className={"text-gray-700 font-bold mb-2"}>
+                        <label>Địa điểm</label>
+                        <select
+                            name="location" // Change to 'location'
+                            value={formData.location} // Ensure this is updated in state
+                            onChange={handleChange}
+                            className="w-full px-4 mt-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            required
+                        >
+                            <option value="">Chọn địa điểm</option>
+                            <option value="hanoi">Hà Nội</option>
+                            <option value="hcm">Hồ Chí Minh</option>
+                            <option value="danang">Đà Nẵng</option>
+                        </select>
                     </div>
 
                     <button
@@ -297,28 +311,29 @@
                         <h2 className="text-xl font-bold mb-4">Xem trước thông tin khóa học</h2>
                         <div className="mb-4">
                             {images.length > 1 ? (
-                                    <Swiper
-                                        {...sliderSettings} // You can adjust Swiper settings accordingly
-                                        spaceBetween={1}
-                                        slidesPerView={1}
-                                        navigation={false}
-                                        autoplay={{ delay: 3000 }}
-                                        pagination={{ clickable: true }}
-                                        breakpoints={{
-                                            300: { slidesPerView: 1, spaceBetween: 16 },
-                                        }}
-                                        modules={[Navigation, Pagination, Autoplay]}
-                                    >
-                                        {images.map((image, index) => (
-                                            <SwiperSlide key={index} className="relative flex justify-center items-center h-80">
-                                                <img
-                                                    src={image}
-                                                    alt={`slide-${index}`}
-                                                    className="w-full h-80 object-contain mb-8"
-                                                />
-                                            </SwiperSlide>
-                                        ))}
-                                    </Swiper>
+                                <Swiper
+                                    {...sliderSettings} // You can adjust Swiper settings accordingly
+                                    spaceBetween={1}
+                                    slidesPerView={1}
+                                    navigation={false}
+                                    autoplay={{delay: 3000}}
+                                    pagination={{clickable: true}}
+                                    breakpoints={{
+                                        300: {slidesPerView: 1, spaceBetween: 16},
+                                    }}
+                                    modules={[Navigation, Pagination, Autoplay]}
+                                >
+                                    {images.map((image, index) => (
+                                        <SwiperSlide key={index}
+                                                     className="relative flex justify-center items-center h-80">
+                                            <img
+                                                src={image}
+                                                alt={`slide-${index}`}
+                                                className="w-full h-80 object-contain mb-8"
+                                            />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
                             ) : images.length === 1 ? (
                                 <div className="relative">
                                     <img
@@ -362,11 +377,16 @@
                             <strong>Mô tả:</strong>
                             <p>{formData.description || "Chưa có thông tin"}</p>
                         </div>
+                        <div className="mb-2  max-w-xl break-words">
+                            <strong>Địa diểm:</strong> {formData.location || "Chưa có thông tin"}
+                        </div>
                     </div>
+
 
                     {/* Card hiển thị thông tin khóa học */}
                     <div className=" w-full h-full rounded-lg p-6 md:ml-4 mt-4">
-                        <div className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md transition-transform transform hover:scale-105 hover:shadow-lg">
+                    <div
+                            className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md transition-transform transform hover:scale-105 hover:shadow-lg">
                             {images.length > 0 ? (
                                 <img
                                     src={images[0]}
@@ -380,12 +400,14 @@
                                     className="w-full h-full object-contain absolute inset-0 transition-transform duration-300 hover:scale-110"
                                 />
                             )}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
+                            <div
+                                className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
                                 <h3 className="text-lg font-semibold mb-2 text-white">{formData.name || "Tên khóa học"}</h3>
                                 <div className="text-xl font-semibold mb-2 text-red-500">
-                                    {formData.price ?`${Number(formData.price).toLocaleString('vi-VN')} VNĐ` : "Giá"}
+                                    {formData.price ? `${Number(formData.price).toLocaleString('vi-VN')} VNĐ` : "Giá"}
                                 </div>
-                                <button className="px-4 py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600 transition duration-300">
+                                <button
+                                    className="px-4 py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600 transition duration-300">
                                     Xem chi tiết
                                 </button>
                             </div>
