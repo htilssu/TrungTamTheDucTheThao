@@ -1,0 +1,3 @@
+ALTER TABLE course_request
+ALTER
+COLUMN status TYPE SMALLINT USING (status::SMALLINT);
