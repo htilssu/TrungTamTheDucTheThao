@@ -46,7 +46,7 @@ const OverviewPage = () => {
   const endPage = Math.min(totalPages, currentPage + 1);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 mb-6">
       <div className="text-2xl font-bold text-gray-800 mb-6">Overview</div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
