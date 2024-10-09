@@ -1,4 +1,6 @@
 import { useState } from "react";
+import EditRoom from "../form/edit/EditRoom";
+import { TiDelete, TiEdit } from "react-icons/ti"; // Import icon
 
 const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
     const [editingField, setEditingField] = useState(null);
@@ -19,29 +21,28 @@ const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {fields.map((field) => (
-                <div key={field.id} className="flex flex-col justify-between bg-gray-200 rounded-xl shadow-md overflow-hidden">
-                    {/* Hiển thị thông tin của sân */}
-                    <div className={"bg-white rounded-lg"}>
-                        <div className="flex overflow-x-auto space-x-2">
+                <div key={field.id} className="flex flex-col justify-between bg-gray-100 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                    <div className="bg-white rounded-lg">
+                        <div className="flex overflow-hidden space-x-2">
                             {field.images && field.images.length > 0 ? (
                                 field.images.map((image, index) => (
                                     <img
                                         key={index}
                                         src={image}
                                         alt={field.name}
-                                        className="w-full h-40 object-cover"
+                                        className="w-full h-40 object-cover rounded-t-lg"
                                     />
                                 ))
                             ) : (
                                 <img
                                     src="https://via.placeholder.com/300x200?text=No+Image"
                                     alt={field.name}
-                                    className="w-full h-40 object-cover"
+                                    className="w-full h-40 object-cover rounded-t-lg"
                                 />
                             )}
                         </div>
                         <div className="p-4">
-                            <h3 className="text-lg font-semibold mb-2">{field.name}</h3>
+                            <h3 className="text-xl font-semibold mb-2">{field.name}</h3>
                             <p className="text-sm text-gray-600 mb-1">
                                 <strong>Địa chỉ:</strong> {field.location}
                             </p>
@@ -51,32 +52,30 @@ const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
                         </div>
                     </div>
 
-                    {/* Nút chỉnh sửa, xem lịch đặt và xóa sân */}
-                    <div className={""}>
+                    <div>
                         <div className="p-4 flex justify-between">
                             <button
-                                className="bg-blue-500 text-white py-1 px-2 rounded"
+                                className="flex items-center bg-blue-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-blue-600"
                                 onClick={() => handleEditClick(field)}
                             >
-                                Chỉnh sửa
+                                <TiEdit className="mr-1" /> Chỉnh sửa
                             </button>
-                            <button className="bg-yellow-500 text-white py-1 px-2 rounded">
-                                Lịch đặt
+                            <button className="flex items-center bg-yellow-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-yellow-600">
+                                <span>Lịch đặt</span>
                             </button>
                             <button
-                                className="bg-red-500 text-white py-1 px-2 rounded"
+                                className="flex items-center bg-red-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-red-600"
                                 onClick={() => onDeleteField(field.id)}
                             >
-                                Xóa sân
+                                <TiDelete className="mr-1" /> Xóa phòng
                             </button>
                         </div>
                     </div>
                 </div>
             ))}
 
-            {/* Modal chỉnh sửa sân */}
             {editingField && (
-                <EditFieldModal
+                <EditRoom
                     field={editingField}
                     onCancel={handleCancelEdit}
                     onUpdate={handleUpdateField}

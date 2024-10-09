@@ -21,11 +21,11 @@ import PostLayout from "../pages/admin/layout-admin/post-manage/PostLayout.jsx";
 import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
-import GymCourse from '../pages/admin/layout-admin/gym-manage/show/GymCourse.jsx';
-import GymCost from '../pages/admin/layout-admin/gym-manage/show/GymCost.jsx';
-import GymStatistical from '../pages/admin/layout-admin/gym-manage/show/GymStatistical.jsx';
 import Room from '../pages/admin/layout-admin/gym-manage/show/Room.jsx';
 import RoomLayout from '../pages/admin/layout-admin/gym-manage/layout/RoomLayout.jsx';
+import RoomCourse from '../pages/admin/layout-admin/gym-manage/show/RoomCourse.jsx';
+import RoomCost from '../pages/admin/layout-admin/gym-manage/show/RoomCost.jsx';
+import RoomStatistical from '../pages/admin/layout-admin/gym-manage/show/RoomStatistical.jsx';
 
 export const router = createBrowserRouter([
     {
@@ -53,16 +53,16 @@ export const router = createBrowserRouter([
                         element: <Room/>,
                     },
                     {
-                        path: 'gym-course',
-                        element: <GymCourse/>,
+                        path: 'room-course',
+                        element: <RoomCourse/>,
                     },
                     {
-                        path: 'gym-cost',
-                        element: <GymCost/>,
+                        path: 'room-cost',
+                        element: <RoomCost/>,
                     },
                     {
-                        path: 'gym-statistical',
-                        element: <GymStatistical/>,
+                        path: 'room-statistical',
+                        element: <RoomStatistical/>,
                     },
                 ]
             },
