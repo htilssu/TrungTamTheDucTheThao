@@ -209,6 +209,7 @@
                                 type="number"
                                 name="price"
                                 value={formData.price}
+                                min={"1"}
                                 onChange={handleChange}
                                 onKeyPress={handleKeyPress}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -223,6 +224,7 @@
                                 type="number"
                                 name="quantity"
                                 value={formData.quantity}
+                                min={"1"}
                                 onChange={handleChange}
                                 onKeyPress={handleKeyPress}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -237,6 +239,7 @@
                                 type="number"
                                 name="duration"
                                 value={formData.duration}
+                                min={"1"}
                                 onChange={handleChange}
                                 onKeyPress={handleKeyPress}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -309,7 +312,7 @@
                 </form>
                 <div className={"w-full max-w-xl h-full"}>
                     <div className="max-w-xl w-full h-full bg-white shadow-lg rounded-lg p-6 md:ml-4">
-                        <h2 className="text-xl font-bold mb-4">Xem trước thông tin khóa học</h2>
+                        <h2 className="text-2xl font-bold mb-4 flex justify-center">Xem trước thông tin khóa học</h2>
                         <div className="mb-4">
                             {images.length > 1 ? (
                                 <Swiper
