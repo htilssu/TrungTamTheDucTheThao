@@ -286,17 +286,18 @@
                     <div className={"text-gray-700 font-bold mb-2"}>
                         <label>Địa điểm</label>
                         <select
-                            name="location" // Change to 'location'
+                            name="location"
                             value={formData.location} // Ensure this is updated in state
                             onChange={handleChange}
                             className="w-full px-4 mt-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             required
                         >
                             <option value="">Chọn địa điểm</option>
-                            <option value="hanoi">Hà Nội</option>
-                            <option value="hcm">Hồ Chí Minh</option>
-                            <option value="danang">Đà Nẵng</option>
+                            <option value="GYM1">GYM1</option>
+                            <option value="YOGA1">YOGA1</option>
+                            <option value="GYM2">GYM2</option>
                         </select>
+
                     </div>
 
                     <button
