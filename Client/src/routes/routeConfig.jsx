@@ -20,8 +20,12 @@ import HomeAdminLayout from "../pages/admin/home-admin/HomeAdminLayout.jsx";
 import PostLayout from "../pages/admin/layout-admin/post-manage/PostLayout.jsx";
 import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
-import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
+import Room from '../pages/admin/layout-admin/gym-manage/show/Room.jsx';
+import RoomLayout from '../pages/admin/layout-admin/gym-manage/layout/RoomLayout.jsx';
+import RoomCourse from '../pages/admin/layout-admin/gym-manage/show/RoomCourse.jsx';
+import RoomCost from '../pages/admin/layout-admin/gym-manage/show/RoomCost.jsx';
+import RoomStatistical from '../pages/admin/layout-admin/gym-manage/show/RoomStatistical.jsx';
 
 export const router = createBrowserRouter([
     {
@@ -38,7 +42,29 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'gym-manage',
-                element: <GymLayout/>,
+                element: <RoomLayout/>,
+                children: [
+                    {
+                        index: true,
+                        element: <Room/>,
+                    },
+                    {
+                        path: 'ad-room',
+                        element: <Room/>,
+                    },
+                    {
+                        path: 'room-course',
+                        element: <RoomCourse/>,
+                    },
+                    {
+                        path: 'room-cost',
+                        element: <RoomCost/>,
+                    },
+                    {
+                        path: 'room-statistical',
+                        element: <RoomStatistical/>,
+                    },
+                ]
             },
             {
                 path: 'customer-manage',
