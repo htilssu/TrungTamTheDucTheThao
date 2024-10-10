@@ -22,7 +22,7 @@ import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
 import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
-
+import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 export const router = createBrowserRouter([
     {
         path: 'admin',
@@ -104,7 +104,11 @@ export const router = createBrowserRouter([
             {
                 path: 'gym',
                 element: <GymPage/>,
-            }
+            },
+            {
+                path:'user/:id',
+                element:<UserDisplay/>
+            },
         ],
         errorElement: <PageNotFound/>,
     },
