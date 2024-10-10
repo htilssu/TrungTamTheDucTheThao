@@ -1,153 +1,149 @@
-CREATE TABLE "course"
+create table if not exists role
 (
-    "id"          BIGINT                    NOT NULL,
-    "name"        VARCHAR(255)              NOT NULL,
-    "description" TEXT                      NOT NULL,
-    "price"       DOUBLE PRECISION          NOT NULL,
-    "time"        TIME(0) WITHOUT TIME ZONE NOT NULL,
-    "start_date"  DATE                      NOT NULL,
-    "end_date"    DATE                      NOT NULL,
-    "slot"        SMALLINT                  NOT NULL
+    id   bigint       not null
+        primary key,
+    name varchar(255) not null
 );
-ALTER TABLE
-    "course"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "role"
+
+create table if not exists "user"
 (
-    "id"   BIGINT       NOT NULL,
-    "name" VARCHAR(255) NOT NULL
+    id           bigint       not null
+        primary key,
+    phone_number varchar(10)  not null,
+    first_name   varchar(255) not null,
+    last_name    varchar(255) not null,
+    gender       boolean      not null,
+    dob          date         not null
 );
-ALTER TABLE
-    "role"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "equipment"
+
+create table if not exists role_claim
 (
-    "id"                BIGINT   NOT NULL,
-    "id_equipment_type" INTEGER  NOT NULL,
-    "status"            FLOAT(3) NOT NULL
+    id      bigint not null
+        primary key,
+    id_role bigint not null
+        constraint role_claim_id_role_foreign
+            references role,
+    id_user bigint not null
+        constraint role_claim_id_user_foreign
+            references "user",
+    constraint role_claim_role_user_unique
+        unique (id_role, id_user)
 );
-ALTER TABLE
-    "equipment"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "role_claim"
+
+create table if not exists equipment_type
 (
-    "id"      BIGINT NOT NULL,
-    "id_role" BIGINT NOT NULL,
-    "id_user" BIGINT NOT NULL
+    id     bigint   not null
+        primary key,
+    amount smallint not null
 );
-ALTER TABLE
-    "role_claim"
-    ADD PRIMARY KEY ("id");
-ALTER TABLE role_claim
-    ADD CONSTRAINT role_claim_role_user_unique UNIQUE (id_role, id_user);
-CREATE TABLE "user"
+
+create table if not exists equipment
 (
-    "id"           BIGINT       NOT NULL,
-    "phone_number" VARCHAR(10)  NOT NULL,
-    "first_name"   VARCHAR(255) NOT NULL,
-    "last_name"    VARCHAR(255) NOT NULL,
-    "gender"       BOOLEAN      NOT NULL,
-    "dob"          DATE         NOT NULL
+    id                bigint  not null
+        primary key,
+    id_equipment_type integer not null
+        constraint equipment_id_equipment_type_foreign
+            references equipment_type,
+    status            real    not null
 );
-ALTER TABLE
-    "user"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "equipment_type"
+
+create table if not exists room_type
 (
-    "id"     BIGINT   NOT NULL,
-    "amount" SMALLINT NOT NULL
+    id   bigint       not null
+        primary key,
+    name varchar(255) not null
 );
-ALTER TABLE
-    "equipment_type"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "course_member"
+
+create table if not exists coach
 (
-    "id"        BIGINT NOT NULL,
-    "id_user"   BIGINT NOT NULL,
-    "id_course" BIGINT NOT NULL
+    id bigint not null
+        primary key
 );
-ALTER TABLE
-    "course_member"
-    ADD PRIMARY KEY ("id");
-ALTER TABLE course_member
-    ADD CONSTRAINT course_member_user_course_unique UNIQUE (id_user, id_course);
-CREATE TABLE "room_type"
+
+create table if not exists room
 (
-    "id"   BIGINT       NOT NULL,
-    "name" VARCHAR(255) NOT NULL
+    id           bigint       not null
+        primary key,
+    capacity     integer      not null,
+    name         varchar(255) not null
+        constraint room_name_unique
+            unique,
+    floor        integer,
+    building     varchar(255),
+    id_room_type bigint       not null
+        constraint room_id_room_type_foreign
+            references room_type
 );
-ALTER TABLE
-    "room_type"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "coach"
+
+create table if not exists course
 (
-    "id" BIGINT NOT NULL
+    id          bigint           not null
+        primary key,
+    name        varchar(255)     not null,
+    description text             not null,
+    price       double precision not null,
+    time        time(0)          not null,
+    start_date  date             not null,
+    end_date    date             not null,
+    slot        smallint         not null,
+    thumbnail   varchar(255)     not null,
+    id_coach    bigint           not null
+        constraint fk_course_on_id_coach
+            references coach,
+    id_room     bigint           not null
+        constraint fk_course_on_id_room
+            references room
 );
-ALTER TABLE
-    "coach"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "booking"
+
+create table if not exists course_member
 (
-    "id"         BIGINT                   NOT NULL,
-    "id_user"    BIGINT                   NOT NULL,
-    created_at   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    booking_from TIMESTAMP WITH TIME ZONE NOT NULL,
-    booking_to   TIMESTAMP WITH TIME ZONE NOT NULL,
-    "id_room"    BIGINT                   NOT NULL
+    id        bigint not null
+        primary key,
+    id_user   bigint not null
+        constraint course_member_id_user_foreign
+            references "user",
+    id_course bigint not null
+        constraint course_member_id_course_foreign
+            references course,
+    constraint course_member_user_course_unique
+        unique (id_user, id_course)
 );
-ALTER TABLE
-    "booking"
-    ADD PRIMARY KEY ("id");
-CREATE TABLE "room"
+
+create table if not exists booking
 (
-    "id"           BIGINT       NOT NULL,
-    capacity       INTEGER      NOT NULL,
-    name           VARCHAR(255) NOT NULL,
-    floor          INTEGER,
-    building       VARCHAR(255),
-    "id_room_type" BIGINT       NOT NULL
+    id           bigint                   not null
+        primary key,
+    id_user      bigint                   not null
+        constraint booking_id_user_foreign
+            references "user",
+    created_at   timestamp with time zone default CURRENT_TIMESTAMP,
+    booking_from timestamp with time zone not null,
+    booking_to   timestamp with time zone not null,
+    id_room      bigint                   not null
+        constraint booking_id_room_foreign
+            references room
 );
-ALTER TABLE
-    "room"
-    ADD PRIMARY KEY ("id");
-ALTER TABLE room
-    ADD CONSTRAINT room_name_unique UNIQUE (name);
-CREATE TABLE "account"
+
+create table if not exists course_request
 (
-    "id"       BIGINT       NOT NULL,
-    "email"    VARCHAR(255) NOT NULL,
-    "password" VARCHAR(255) NOT NULL
+    id        bigint  not null
+        primary key,
+    id_course bigint  not null
+        references course,
+    id_user   bigint  not null
+        references "user",
+    status    boolean not null
 );
-ALTER TABLE
-    "account"
-    ADD PRIMARY KEY ("id");
-ALTER TABLE
-    "account"
-    ADD CONSTRAINT "account_email_unique" UNIQUE ("email");
-ALTER TABLE
-    "role_claim"
-    ADD CONSTRAINT "role_claim_id_role_foreign" FOREIGN KEY ("id_role") REFERENCES "role" ("id");
-ALTER TABLE
-    "course_member"
-    ADD CONSTRAINT "course_member_id_course_foreign" FOREIGN KEY ("id_course") REFERENCES "course" ("id");
-ALTER TABLE
-    "room"
-    ADD CONSTRAINT "room_id_room_type_foreign" FOREIGN KEY ("id_room_type") REFERENCES "room_type" ("id");
-ALTER TABLE
-    "booking"
-    ADD CONSTRAINT "booking_id_room_foreign" FOREIGN KEY ("id_room") REFERENCES "room" ("id");
-ALTER TABLE
-    "equipment"
-    ADD CONSTRAINT "equipment_id_equipment_type_foreign" FOREIGN KEY ("id_equipment_type") REFERENCES "equipment_type" ("id");
-ALTER TABLE
-    "role_claim"
-    ADD CONSTRAINT "role_claim_id_user_foreign" FOREIGN KEY ("id_user") REFERENCES "user" ("id");
-ALTER TABLE
-    "course_member"
-    ADD CONSTRAINT "course_member_id_user_foreign" FOREIGN KEY ("id_user") REFERENCES "user" ("id");
-ALTER TABLE
-    "account"
-    ADD CONSTRAINT "account_id_foreign" FOREIGN KEY ("id") REFERENCES "user" ("id");
-ALTER TABLE
-    "booking"
-    ADD CONSTRAINT "booking_id_user_foreign" FOREIGN KEY ("id_user") REFERENCES "user" ("id");
+
+create table if not exists account
+(
+    id       bigint       not null
+        primary key
+        constraint account_id_foreign
+            references "user",
+    email    varchar(255) not null
+        constraint account_email_unique
+            unique,
+    password varchar(255) not null
+);
+

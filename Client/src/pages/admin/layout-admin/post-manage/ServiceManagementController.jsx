@@ -45,9 +45,9 @@ export default function ServiceManagementController() {
     };
 
     const buttonData = [
-        { icon: PiCourtBasketballLight, text: 'Quản lý sân bóng', path: '/admin/soccer-management' },
-        { icon: CgGym, text: 'Quản lý phòng gym', path: '/admin/gym-management' },
-        { icon: GrYoga, text: 'Quản lý lớp yoga', path: '/admin/yoga-management' },
+        { icon: PiCourtBasketballLight, text: 'Quản lý sân bóng', path: '/admin/soccer-manage' },
+        { icon: CgGym, text: 'Quản lý phòng gym', path: '/admin/gym-manage' },
+        { icon: GrYoga, text: 'Quản lý lớp yoga', path: '/admin/yoga-manage' },
     ];
 
     return (

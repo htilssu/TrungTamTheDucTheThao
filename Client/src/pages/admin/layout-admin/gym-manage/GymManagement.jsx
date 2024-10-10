@@ -1,7 +1,8 @@
-import { useState } from 'react';
+
 import { Typography, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { IoArrowBackCircleSharp } from "react-icons/io5";
+import {useState} from "react";
 
 const GymManagement = () => {
     const navigate = useNavigate();
