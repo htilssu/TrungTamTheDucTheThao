@@ -33,5 +33,4 @@ public class User {
 
     @Column(name = "dob", nullable = false)
     private LocalDate dob;
-
 }
