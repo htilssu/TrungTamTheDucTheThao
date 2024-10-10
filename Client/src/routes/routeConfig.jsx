@@ -23,6 +23,7 @@ import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLay
 import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
 import Sellcourses from '../modules/core/components/Sellcourses/Sellcourses.jsx';
+import CoursesManage from "../pages/admin/layout-admin/courses-manage/CoursesManage.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -53,6 +54,11 @@ export const router = createBrowserRouter([
                 path: 'employee-manage',
                 element: <EmployeeLayout/>,
             },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
+
             {
               path: 'soccer-manage',
               element: <FootballLayout/>,
@@ -141,6 +147,8 @@ export const router = createBrowserRouter([
             path: '/sellcourses',
             element: <Sellcourses />,
         },
+
+
     ],
     errorElement: <PageNotFound/>,
   },

@@ -1,8 +1,7 @@
     import  { useState } from "react";
-    import {Swiper, SwiperSlide} from "swiper/react";
-    import {Autoplay, Navigation, Pagination} from "swiper/modules";
     import {DatePicker} from "antd";
     import dayjs from "dayjs";
+    import ImageSwiper from "./ImageSwiper.jsx";
 
 
     const Sellcourses = () => {
@@ -22,22 +21,34 @@
             return current && current < dayjs().startOf('day');
         };
         const handleChange = (e) => {
-            const {name, value} = e.target;
+            const { name, value } = e.target;
 
             // Chỉ cho phép giá trị không âm
-            if ((name === "price" || name === "quantity" || name === "duration") && value < 0) {
+            if (
+                (name === "price" || name === "quantity" || name === "duration") &&
+                value < 0
+            ) {
                 return; // Không cập nhật state nếu giá trị âm
             }
 
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-            if (dayjs(formData.startTime).isAfter(formData.endTime) || dayjs(formData.startTime).isSame(formData.endTime)) {
-                alert("Thời gian bắt đầu phải trước thời gian kết thúc.");
-                return;
-            }
-        }
+            setFormData((prev) => {
+                const updatedFormData = {
+                    ...prev,
+                    [name]: value,
+                };
+
+                // Kiểm tra nếu thời gian bắt đầu và thời gian kết thúc sau khi state đã được cập nhật
+                if (
+                    dayjs(updatedFormData.startTime).isAfter(updatedFormData.endTime) ||
+                    dayjs(updatedFormData.startTime).isSame(updatedFormData.endTime)
+                ) {
+                    alert("Thời gian bắt đầu phải trước thời gian kết thúc.");
+                }
+
+                return updatedFormData;
+            });
+        };
+
 
         const handleKeyPress = (e) => {
             // Ngăn chặn nhập dấu '-'
@@ -97,64 +108,16 @@
 
         return (
             <div className="flex flex-col lg:flex-row justify-center w-full h-auto">
-                <form onSubmit={handleSubmit} className="max-w-3xl p-6 bg-white rounded-lg mb-8">
+                <form onSubmit={handleSubmit} className="max-w-3xl p-6 bg-white rounded-lg mb-8 border-[1px]">
                     {/* Form Inputs */}
                     <div className="mb-6 mt-3">
                         {images.length > 0 ? (
-                            <div className="w-full h-[360px] overflow-hidden rounded-lg mb-4 relative">
-                                {images.length > 1 ? (
-                                    <Swiper
-                                        {...sliderSettings} // You can adjust Swiper settings accordingly
-                                        spaceBetween={1}
-                                        slidesPerView={1}
-                                        navigation={false}
-                                        autoplay={{delay: 3000}}
-                                        pagination={{clickable: true}}
-                                        breakpoints={{
-                                            300: {slidesPerView: 1, spaceBetween: 16},
-                                        }}
-                                        modules={[Navigation, Pagination, Autoplay]}
-                                    >
-                                        {images.map((image, index) => (
-                                            <SwiperSlide key={index}
-                                                         className="relative flex justify-center items-center h-80">
-                                                <img
-                                                    src={image}
-                                                    alt={`slide-${index}`}
-                                                    className="w-full h-80 object-contain mb-8"
-                                                />
-                                                {editingMode && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleDeleteImage(index)}
-                                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 z-10 flex items-center justify-center w-8 h-8"
-                                                    >
-                                                        X
-                                                    </button>
-                                                )}
-                                            </SwiperSlide>
-                                        ))}
-                                    </Swiper>
-
-                                ) : (
-                                    <div className="relative">
-                                        <img
-                                            src={images[0]}
-                                            alt="banner"
-                                            className="w-full h-80 object-contain rounded-lg"
-                                        />
-                                        {editingMode && (
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteImage(0)}
-                                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 z-10"
-                                            >
-                                                X
-                                            </button>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                            <ImageSwiper
+                                images={images}
+                                editingMode={editingMode}
+                                handleDeleteImage={handleDeleteImage}
+                                sliderSettings={sliderSettings}
+                            />
                         ) : (
                             <div className="w-full h-80 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
                                 <img src="/no-image.png" alt="No Image" className="object-contain h-full"/>
@@ -188,6 +151,7 @@
                             {editingMode ? "Hủy sửa" : "Sửa ảnh"}
                         </button>
                     </div>
+
 
                     {/* Form Fields */}
                     <div className="col-span-1 sm:grid sm:grid-cols-2 md:gap-6">
@@ -252,8 +216,8 @@
                             <label className="text-gray-700 font-bold mb-2">Thời gian bắt đầu</label>
                             <DatePicker
                                 name="startTime"
-                                value={formData.startTime ? dayjs(formData.startTime) : null} // Chuyển đổi sang dayjs
-                                onChange={(date, dateString) => handleDateChange(date, dateString, 'startTime')}
+                                value={formData.startTime ? dayjs(formData.startTime) : null}
+                                onChange={(date, dateString) => handleDateChange(date, dateString, "startTime")}
                                 disabledDate={disabledDate}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 required
@@ -263,15 +227,14 @@
                         <div>
                             <label className="text-gray-700 font-bold mb-2">Thời gian kết thúc</label>
                             <DatePicker
-                                name="startTime"
-                                value={formData.endTime ? dayjs(formData.endTime) : null} // Chuyển đổi sang dayjs
-                                onChange={(date, dateString) => handleDateChange(date, dateString, 'endTime')}
+                                name="endTime"
+                                value={formData.endTime ? dayjs(formData.endTime) : null}
+                                onChange={(date, dateString) => handleDateChange(date, dateString, "endTime")}
                                 disabledDate={disabledDate}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 required
                             />
                         </div>
-
                         <div className="col-span-2">
                             <label className=" text-gray-700 font-bold mb-2">Mô tả</label>
                             <textarea
@@ -307,45 +270,21 @@
                         type="submit"
                         className="w-full py-3 mt-4 mb-5 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
                     >
-                        Đăng ký khóa học
+                    Đăng ký khóa học
                     </button>
                 </form>
                 <div className={"w-full max-w-xl h-full"}>
                     <div className="max-w-xl w-full h-full bg-white shadow-lg rounded-lg p-6 md:ml-4">
                         <h2 className="text-2xl font-bold mb-4 flex justify-center">Xem trước thông tin khóa học</h2>
                         <div className="mb-4">
-                            {images.length > 1 ? (
-                                <Swiper
-                                    {...sliderSettings} // You can adjust Swiper settings accordingly
-                                    spaceBetween={1}
-                                    slidesPerView={1}
-                                    navigation={false}
-                                    autoplay={{delay: 3000}}
-                                    pagination={{clickable: true}}
-                                    breakpoints={{
-                                        300: {slidesPerView: 1, spaceBetween: 16},
+                            {images.length > 0 ? (
+                                <ImageSwiper
+                                    images={images}
+                                    editingMode={false}
+                                    handleDeleteImage={() => {
                                     }}
-                                    modules={[Navigation, Pagination, Autoplay]}
-                                >
-                                    {images.map((image, index) => (
-                                        <SwiperSlide key={index}
-                                                     className="relative flex justify-center items-center h-80">
-                                            <img
-                                                src={image}
-                                                alt={`slide-${index}`}
-                                                className="w-full h-80 object-contain mb-8"
-                                            />
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            ) : images.length === 1 ? (
-                                <div className="relative">
-                                    <img
-                                        src={images[0]}
-                                        alt="banner"
-                                        className="w-full h-64 object-contain rounded-lg"
-                                    />
-                                </div>
+                                    sliderSettings={sliderSettings}
+                                />
                             ) : (
                                 <img
                                     src="/no-image.png"
@@ -389,7 +328,7 @@
 
                     {/* Card hiển thị thông tin khóa học */}
                     <div className=" w-full h-full rounded-lg p-6 md:ml-4 mt-4">
-                    <div
+                        <div
                             className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md transition-transform transform hover:scale-105 hover:shadow-lg">
                             {images.length > 0 ? (
                                 <img
