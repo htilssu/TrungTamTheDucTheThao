@@ -4,16 +4,16 @@ import SliderBanner from './components/SliderBanner.jsx';
 
 const Home = () => {
   return (
-      <div className="p-2 sm:p-8 text-center bg-gray-100 min-h-screen">
+      <div className=" sm:p-8 text-center bg-gray-100 ">
         <div>
           <SliderBanner/>
         </div>
-        <div>
+        {/* <div>
           <ScrollableCardList/>
         </div>
         <div>
           <FeatureCategory/>
-        </div>
+        </div> */}
       </div>
   );
 };
