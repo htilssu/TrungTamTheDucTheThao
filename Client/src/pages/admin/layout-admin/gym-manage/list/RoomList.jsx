@@ -18,6 +18,12 @@ const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
         setEditingField(null);
     };
 
+    const handleDelete = (id) => {
+        if (window.confirm("Bạn có chắc muốn xóa phòng này không?")) {
+            onDeleteField(id);
+        }
+    };
+
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {fields.map((field) => (
@@ -60,12 +66,16 @@ const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
                             >
                                 <TiEdit className="mr-1" /> Chỉnh sửa
                             </button>
-                            <button className="flex items-center bg-yellow-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-yellow-600">
+                            <button
+                                className="flex items-center bg-yellow-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-yellow-600"
+                                disabled
+                                title="Chức năng này đang phát triển"
+                            >
                                 <span>Lịch đặt</span>
                             </button>
                             <button
                                 className="flex items-center bg-red-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-red-600"
-                                onClick={() => onDeleteField(field.id)}
+                                onClick={() => handleDelete(field.id)}
                             >
                                 <TiDelete className="mr-1" /> Xóa phòng
                             </button>

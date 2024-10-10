@@ -7,10 +7,13 @@ const Room = () => {
         // Initial room data...
     ]);
 
+    const [nextId, setNextId] = useState(1);
+
     const [showAddForm, setShowAddForm] = useState(false);
 
     const handleAddField = (newField) => {
-        setFields([...fields, { ...newField, id: fields.length + 1 }]);
+        setFields([...fields, { ...newField, id: nextId }]);
+        setNextId(nextId + 1);
     };
 
     const handleUpdateField = (updatedField) => {

@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TiDelete } from "react-icons/ti";
-import { ToastContainer, toast } from 'react-toastify'; 
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const EditRoom = ({ field, onCancel, onUpdate }) => {
     const [updatedField, setUpdatedField] = useState(field);
+   
+    useEffect(() => {
+       setUpdatedField(field);
+    }, [field]);
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -27,61 +31,56 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
         setUpdatedField({ ...updatedField, images: updatedImages });
     };
 
-    // Hàm kiểm tra tính hợp lệ
+    const validateTime = (timeStr) => {
+        const timePattern = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
+        return timePattern.test(timeStr);
+    };
+
     const validateFields = () => {
         let isValid = true;
-
+    
         if (!updatedField.name) {
-            if (!toast.isActive("name-error")) {
-                toast.error("Tên phòng không được để trống.", { toastId: "name-error" });
-            }
+            toast.error("Tên phòng không được để trống.");
             isValid = false;
         }
         if (!updatedField.location) {
-            if (!toast.isActive("location-error")) {
-                toast.error("Địa chỉ không được để trống.", { toastId: "location-error" });
-            }
+            toast.error("Địa chỉ không được để trống.");
             isValid = false;
         }
-
-        updatedField.priceSchedule.forEach((schedule, index) => {
+    
+        updatedField.priceSchedule.forEach((schedule) => {
             if (!schedule.from || !schedule.to) {
-                if (!toast.isActive(`time-error-${schedule.from}`)) {
-                    toast.error(`Giờ mở và giờ đóng không được để trống`, { toastId: `time-error-${schedule.from}` });
-                }
+                toast.error("Giờ mở và giờ đóng không được để trống.");
+                isValid = false;
+            } else if (!validateTime(schedule.from) || !validateTime(schedule.to)) {
+                toast.error("Giờ không hợp lệ. Vui lòng nhập giờ hợp lệ (HH:mm).");
                 isValid = false;
             } else {
                 const fromTime = new Date(`1970-01-01T${schedule.from}:00`);
                 const toTime = new Date(`1970-01-01T${schedule.to}:00`);
-
+    
                 if (toTime <= fromTime) {
-                    if (!toast.isActive(`time-range-error-${schedule.from}`)) {
-                        toast.error(`Giờ đóng phải lớn hơn giờ mở ít nhất 1 tiếng`, { toastId: `time-range-error-${schedule.from}` });
-                    }
+                    toast.error("Giờ đóng phải lớn hơn giờ mở ít nhất 1 tiếng.");
                     isValid = false;
                 }
             }
-
+    
             if (!schedule.price) {
-                if (!toast.isActive(`price-error-${index}`)) {
-                    toast.error(`Giá không được để trống`, { toastId: `price-error-${index}` });
-                }
+                toast.error("Giá không được để trống.");
                 isValid = false;
             } else if (schedule.price < 0) {
-                if (!toast.isActive(`negative-price-error-${index}`)) {
-                    toast.error(`Giá không được là số âm`, { toastId: `negative-price-error-${index}` });
-                }
+                toast.error("Giá không được là số âm.");
                 isValid = false;
             }
         });
-
+    
         return isValid;
     };
 
     const handleUpdate = () => {
         if (validateFields()) {
             console.log("Updating room with data:", updatedField);
-            onUpdate(updatedField); // Gọi hàm onUpdate với dữ liệu đã chỉnh sửa
+            onUpdate(updatedField);
         }
     };
 
