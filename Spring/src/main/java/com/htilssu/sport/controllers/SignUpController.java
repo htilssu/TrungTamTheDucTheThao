@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.htilssu.sport.data.models.Account;
 import com.htilssu.sport.data.models.AuthData;
-import com.htilssu.sport.data.models.User;
 import com.htilssu.sport.exceptions.ResponseHandler;
 import com.htilssu.sport.reponsitories.AccountRepository;
 import com.htilssu.sport.reponsitories.UserRepository;
@@ -44,13 +43,13 @@ public class SignUpController {
 
         try {
 
-            User newUser = new User(); 
-            userRepository.save(newUser);
-
             Account newAccount = new Account();
             newAccount.setEmail(authData.getEmail());
             newAccount.setPassword(encodedPassword);
-            newAccount.setUser(newUser); 
+       
+            newAccount.setUser(null);
+
+            accountRepository.save(newAccount);
 
             accountRepository.save(newAccount);
 
