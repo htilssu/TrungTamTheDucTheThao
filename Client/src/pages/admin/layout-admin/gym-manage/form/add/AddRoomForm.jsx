@@ -7,7 +7,7 @@ const AddRoomForm = ({ onAddField }) => {
     const [newField, setNewField] = useState({
         name: "",
         type: "Gym",
-        priceSchedule: [{ from: "", to: "", price: "" }],
+        priceSchedule: [{ id: Date.now(), from: "", to: "", price: "" }],
         location: "",
         status: "Còn trống",
         description: "",
@@ -16,9 +16,10 @@ const AddRoomForm = ({ onAddField }) => {
 
     const [imagePreviews, setImagePreviews] = useState([]);
 
-    const handlePriceScheduleChange = (index, field, value) => {
-        const updatedPriceSchedule = [...newField.priceSchedule];
-        updatedPriceSchedule[index][field] = value;
+    const handlePriceScheduleChange = (id, field, value) => {
+        const updatedPriceSchedule = newField.priceSchedule.map((schedule) =>
+            schedule.id === id ? { ...schedule, [field]: value } : schedule
+        );
         setNewField({ ...newField, priceSchedule: updatedPriceSchedule });
     };
 
@@ -43,51 +44,44 @@ const AddRoomForm = ({ onAddField }) => {
 
     const validateFields = () => {
         let isValid = true;
-
-        if (!newField.name) {
-            if (!toast.isActive("name-error")) {
-                toast.error("Tên phòng không được để trống.", { toastId: "name-error" });
+    
+        const validateField = (field, toastId, message) => {
+            if (!toast.isActive(toastId)) {
+                toast.error(message, { toastId });
             }
-            isValid = false;
+            return false;
+        };
+    
+        const validatePriceSchedule = (schedule, index) => {
+            const { from, to, price } = schedule;
+    
+            if (!from || !to) {
+                isValid = validateField(`time-error-${from}`, `time-error-${from}`, "Giờ mở và giờ đóng không được để trống");
+            } else {
+                const fromTime = new Date(`1970-01-01T${from}:00`);
+                const toTime = new Date(`1970-01-01T${to}:00`);
+    
+                if (toTime <= fromTime) {
+                    isValid = validateField(`time-range-error-${from}`, `time-range-error-${from}`, "Giờ đóng phải lớn hơn giờ mở ít nhất 1 tiếng");
+                }
+            }
+    
+            if (!price) {
+                isValid = validateField(`price-error-${index}`, `price-error-${index}`, "Giá không được để trống");
+            } else if (price < 0) {
+                isValid = validateField(`negative-price-error-${index}`, `negative-price-error-${index}`, "Giá không được là số âm");
+            }
+        };
+    
+        if (!newField.name) {
+            isValid = validateField("name-error", "name-error", "Tên phòng không được để trống");
         }
         if (!newField.location) {
-            if (!toast.isActive("location-error")) {
-                toast.error("Địa chỉ không được để trống.", { toastId: "location-error" });
-            }
-            isValid = false;
+            isValid = validateField("location-error", "location-error", "Địa chỉ không được để trống");
         }
 
-        newField.priceSchedule.forEach((schedule, index) => {
-            if (!schedule.from || !schedule.to) {
-                if (!toast.isActive(`time-error-${schedule.from}`)) {
-                    toast.error(`Giờ mở và giờ đóng không được để trống`, { toastId: `time-error-${schedule.from}` });
-                }
-                isValid = false;
-            } else {
-                const fromTime = new Date(`1970-01-01T${schedule.from}:00`);
-                const toTime = new Date(`1970-01-01T${schedule.to}:00`);
-
-                if (toTime <= fromTime) {
-                    if (!toast.isActive(`time-range-error-${schedule.from}`)) {
-                        toast.error(`Giờ đóng phải lớn hơn giờ mở ít nhất 1 tiếng`, { toastId: `time-range-error-${schedule.from}` });
-                    }
-                    isValid = false;
-                }
-            }
-
-            if (!schedule.price) {
-                if (!toast.isActive(`price-error-${index}`)) {
-                    toast.error(`Giá không được để trống`, { toastId: `price-error-${index}` });
-                }
-                isValid = false;
-            } else if (schedule.price < 0) {
-                if (!toast.isActive(`negative-price-error-${index}`)) {
-                    toast.error(`Giá không được là số âm`, { toastId: `negative-price-error-${index}` });
-                }
-                isValid = false;
-            }
-        });
-
+        newField.priceSchedule.forEach(validatePriceSchedule);
+    
         return isValid;
     };
 
@@ -97,7 +91,7 @@ const AddRoomForm = ({ onAddField }) => {
             setNewField({
                 name: "",
                 type: "Gym",
-                priceSchedule: [{ from: "", to: "", price: "" }],
+                priceSchedule: [{ id: Date.now(), from: "", to: "", price: "" }],
                 location: "",
                 status: "Còn trống",
                 description: "",
@@ -155,15 +149,15 @@ const AddRoomForm = ({ onAddField }) => {
             </div>
 
             <h4 className="text-xl font-semibold mb-4">Khung giờ mở cửa</h4>
-            {newField.priceSchedule.map((schedule, index) => (
-                <div className="grid grid-cols-3 gap-4 mb-2" key={index}>
+            {newField.priceSchedule.map((schedule) => (
+                <div className="grid grid-cols-3 gap-4 mb-2" key={schedule.id}>
                     <input
                         className="p-2 border rounded"
                         type="time"
                         placeholder="Từ"
                         value={schedule.from}
                         onChange={(e) =>
-                            handlePriceScheduleChange(index, "from", e.target.value)
+                            handlePriceScheduleChange(schedule.id, "from", e.target.value)
                         }
                     />
                     <input
@@ -171,20 +165,20 @@ const AddRoomForm = ({ onAddField }) => {
                         type="time"
                         placeholder="Đến"
                         value={schedule.to}
-                        onChange={(e) => handlePriceScheduleChange(index, "to", e.target.value)}
+                        onChange={(e) => handlePriceScheduleChange(schedule.id, "to", e.target.value)}
                     />
                 </div>
             ))}
 
             <h4 className="text-xl font-semibold mb-4 mt-4">Giá phòng tập</h4>
-            {newField.priceSchedule.map((schedule, index) => (
-                <div className="grid grid-cols-3 gap-4 mb-2" key={index}>
+            {newField.priceSchedule.map((schedule) => (
+                <div className="grid grid-cols-3 gap-4 mb-2" key={schedule.id}>
                     <input
                         className="p-2 border rounded"
                         type="number"
                         placeholder="Giá (VNĐ)"
                         value={schedule.price}
-                        onChange={(e) => handlePriceScheduleChange(index, "price", e.target.value)}
+                        onChange={(e) => handlePriceScheduleChange(schedule.id, "price", e.target.value)}
                     />
                 </div>
             ))}
@@ -201,7 +195,7 @@ const AddRoomForm = ({ onAddField }) => {
                     {imagePreviews.length > 0 && (
                         <div className="grid grid-cols-8 gap-4 bg-gray-100 p-4">
                             {imagePreviews.map((preview, index) => (
-                                <div key={index} className="relative">
+                                <div key={`${preview}-${index}`} className="relative">
                                     <img src={preview} alt={`preview ${index}`} className="w-20 h-20 object-cover" />
                                     <TiDelete
                                         onClick={() => handleImageRemove(index)}
