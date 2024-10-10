@@ -92,8 +92,9 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
 
                 {/* Tên phòng */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2 w-1/3">Tên Phòng:</label>
+                    <label htmlFor="room-name" className="block text-gray-700 font-medium mb-2 w-1/3">Tên Phòng:</label>
                     <input
+                        id="room-name"
                         className="p-3 border border-gray-300 rounded-lg w-2/3 focus:ring focus:ring-indigo-300 transition duration-200"
                         type="text"
                         name="name"
@@ -105,8 +106,9 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
 
                 {/* Địa chỉ */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">Địa chỉ:</label>
+                    <label htmlFor="location" className="block text-gray-700 font-medium mb-2">Địa chỉ:</label>
                     <input
+                        id="location"
                         className="p-3 border border-gray-300 rounded-lg w-full focus:ring focus:ring-indigo-300 transition duration-200"
                         type="text"
                         name="location"
@@ -118,8 +120,9 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
 
                 {/* Mô tả */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">Mô tả:</label>
+                    <label htmlFor="description" className="block text-gray-700 font-medium mb-2">Mô tả:</label>
                     <textarea
+                        id="description"
                         className="p-3 border border-gray-300 rounded-lg w-full focus:ring focus:ring-indigo-300 transition duration-200"
                         name="description"
                         value={updatedField.description}
@@ -136,6 +139,7 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
                             className="p-2 border rounded w-1/4"
                             type="time"
                             value={schedule.from}
+                            id={`schedule-from-${index}`}
                             onChange={(e) => {
                                 const updatedSchedule = [...updatedField.priceSchedule];
                                 updatedSchedule[index].from = e.target.value;
@@ -146,6 +150,7 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
                             className="p-2 border rounded w-1/4"
                             type="time"
                             value={schedule.to}
+                            id={`schedule-to-${index}`}
                             onChange={(e) => {
                                 const updatedSchedule = [...updatedField.priceSchedule];
                                 updatedSchedule[index].to = e.target.value;
@@ -157,6 +162,7 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
                             type="number"
                             placeholder="Giá (VNĐ)"
                             value={schedule.price}
+                            id={`schedule-price-${index}`}
                             onChange={(e) => {
                                 const updatedSchedule = [...updatedField.priceSchedule];
                                 updatedSchedule[index].price = e.target.value;
@@ -168,8 +174,9 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
 
                 {/* Tải lên hình ảnh */}
                 <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">Tải lên hình ảnh:</label>
+                    <label htmlFor="image-upload" className="block text-gray-700 font-medium mb-2">Tải lên hình ảnh:</label>
                     <input
+                        id="image-upload"
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
