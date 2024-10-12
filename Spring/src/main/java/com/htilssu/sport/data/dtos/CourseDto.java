@@ -11,7 +11,7 @@ import java.time.LocalTime;
  */
 public record CourseDto(Long id, String name, String description, Double price, LocalTime time,
                         LocalDate startDate, LocalDate endDate, Short slot,
-                        com.htilssu.sport.data.models.Coach Coach, RoomDto Room, String thumbnail)
+                        com.htilssu.sport.data.dtos.CoachDto Coach, RoomDto Room, String thumbnail)
         implements Serializable {
 
 }
