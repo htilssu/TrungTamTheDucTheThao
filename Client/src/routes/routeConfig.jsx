@@ -7,6 +7,7 @@ import Home from "../pages/home/HomePage.jsx";
 import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx";
 import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 import SignIn from '../pages/sign-in/SignIn.jsx';
+import HistoryBooking from '../modules/core/components/rent-a-yard/SoccerField/HistoryBooking.jsx';
 import GymPage from "../modules/core/components/gym/GymPage.jsx";
 import FootballLayout from "../pages/admin/layout-admin/football-manage/FootballLayout.jsx";
 import FieldListPage from "../pages/admin/layout-admin/football-manage/FieldListPage.jsx";
@@ -142,6 +143,12 @@ export const router = createBrowserRouter([
         {
             path: '/soccer/rent-yard',
             element: <RentYardPage />
+        }
+        ,
+        {
+            path: '/history-booking',
+            element: <HistoryBooking />
+        }
         },
         {
             path: '/sellcourses',
