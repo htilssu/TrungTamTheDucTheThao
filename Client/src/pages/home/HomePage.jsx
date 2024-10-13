@@ -8,12 +8,12 @@ const Home = () => {
         <div>
           <SliderBanner/>
         </div>
-        {/* <div>
+        <div>
           <ScrollableCardList/>
         </div>
         <div>
           <FeatureCategory/>
-        </div> */}
+        </div>
       </div>
   );
 };
