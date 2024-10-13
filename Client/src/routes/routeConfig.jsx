@@ -7,6 +7,7 @@ import Home from "../pages/home/HomePage.jsx";
 import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx";
 import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 import SignIn from '../pages/sign-in/SignIn.jsx';
+import HistoryBooking from '../modules/core/components/rent-a-yard/SoccerField/HistoryBooking.jsx';
 import GymPage from "../modules/core/components/gym/GymPage.jsx";
 import FootballLayout from "../pages/admin/layout-admin/football-manage/FootballLayout.jsx";
 import FieldListPage from "../pages/admin/layout-admin/football-manage/FieldListPage.jsx";
@@ -22,6 +23,8 @@ import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
 import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
+import Sellcourses from '../modules/core/components/Sellcourses/Sellcourses.jsx';
+import CoursesManage from "../pages/admin/layout-admin/courses-manage/CoursesManage.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -52,6 +55,11 @@ export const router = createBrowserRouter([
                 path: 'employee-manage',
                 element: <EmployeeLayout/>,
             },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
+
             {
               path: 'soccer-manage',
               element: <FootballLayout/>,
@@ -120,6 +128,36 @@ export const router = createBrowserRouter([
         path: 'forgot-password',
         element: <ForgotPassword/>,
     },
+  {
+    path: '',
+    element: <MainLayout/>,
+    children: [
+      {
+        index: true,
+        element: <Home/>,
+      },
+        {
+            path: '/soccer',
+            element: <SoccerFieldInfo />,
+        },
+        {
+            path: '/soccer/rent-yard',
+            element: <RentYardPage />
+        }
+        ,
+        {
+            path: '/history-booking',
+            element: <HistoryBooking />
+        },
+        {
+            path: '/sellcourses',
+            element: <Sellcourses />,
+        },
+
+
+    ],
+    errorElement: <PageNotFound/>,
+  },
     {
         path: '',
         element: <MainLayout/>,
