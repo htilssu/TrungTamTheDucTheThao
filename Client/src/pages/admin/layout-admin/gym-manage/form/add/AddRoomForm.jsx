@@ -25,10 +25,15 @@ const AddRoomForm = ({ onAddField }) => {
 
     const handleFileUpload = (e) => {
         const files = Array.from(e.target.files);
-        const previews = files.map((file) => URL.createObjectURL(file));
+        const previews = files.map((file) => {
+            return {
+                file: file,
+                preview: URL.createObjectURL(file)
+            };
+        });
 
-        setNewField({ ...newField, images: [...newField.images, ...previews] });
-        setImagePreviews([...imagePreviews, ...previews]);
+        setNewField({ ...newField, images: [...newField.images, ...previews.map(item => item.file)] });
+        setImagePreviews([...imagePreviews, ...previews.map(item => item.preview)]);
     };
 
     const handleImageRemove = (index) => {
