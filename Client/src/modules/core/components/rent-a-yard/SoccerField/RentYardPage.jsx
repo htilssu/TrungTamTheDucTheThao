@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import DotLoader from "react-spinners/DotLoader";
+import {TextField} from "@mui/material";
 
 const RentYardPage = () => {
     const navigate = useNavigate();
@@ -227,7 +228,7 @@ const RentYardPage = () => {
                                             ? 'bg-gray-300 text-white cursor-not-allowed'
                                             : selectedTime === slot.time
                                                 ? 'bg-green-500 text-white'
-                                                : 'bg-gray-200 hover:bg-green-400 hover:text-white transition-all duration-300'
+                                                : 'bg-gray-100 hover:bg-green-400 hover:text-white transition-all duration-300'
                                     }`}
                                     onClick={() => !slot.isBooked && handleSelectTime(slot.time)}
                                 >
@@ -244,12 +245,14 @@ const RentYardPage = () => {
                     <h3 className="text-2xl font-semibold mb-4">Thông tin người đặt</h3>
                     <div className="flex flex-col gap-4">
                         <div>
-                            <input
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                label="Tên người đặt"
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Tên người đặt"
-                                className="p-2 border border-gray-300 rounded-lg w-full"
+                                fullWidth
                             />
                             {nameError && <p className="text-red-500 text-sm mt-2">{nameError}</p>}
                         </div>
