@@ -37,6 +37,7 @@ const AddRoomForm = ({ onAddField }) => {
     };
 
     const handleImageRemove = (index) => {
+        URL.revokeObjectURL(imagePreviews[index]);
         const updatedImages = [...newField.images];
         const updatedPreviews = [...imagePreviews];
 
