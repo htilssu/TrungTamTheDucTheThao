@@ -51,8 +51,6 @@ public class SignUpController {
 
             accountRepository.save(newAccount);
 
-            accountRepository.save(newAccount);
-
             logger.info("Tài khoản đã được tạo thành công cho email: {}", authData.getEmail());
         } catch (DataIntegrityViolationException e) {
             return ResponseHandler.createResponse("Lỗi: Không thể tạo tài khoản do xung đột dữ liệu.", HttpStatus.CONFLICT);

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuthData {
-    
+
     @NotBlank(message = "Tên người dùng là bắt buộc")
     @Size(min = 3, max = 50, message = "Tên người dùng phải từ 3 đến 50 ký tự")
     private String username;
