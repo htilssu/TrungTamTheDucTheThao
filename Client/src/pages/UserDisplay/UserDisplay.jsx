@@ -1,240 +1,13 @@
 
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { useParams } from "react-router-dom";
-// const UserDisplay = () => {
-//   const { id } = useParams(); // Lấy ID từ URL
-//   const [user, setUser] = useState({
-//     firstName: "",
-//     lastName: "",
-//     phoneNumber: "",
-//     dob: "", // Đảm bảo giá trị dob được khởi tạo
-//     gender: true, // Mặc định cho giới tính
-//   });
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-//   const [saving, setSaving] = useState(false);
-//   const [validationErrors, setValidationErrors] = useState({});
-
-//   // Hàm định dạng ngày về yyyy-MM-dd để tương thích với input type="date"
-//   const formatDateForInput = (dateString) => {
-//     const date = new Date(dateString);
-//     if (Number.isNaN(date.getTime())) return "";
-//     const year = date.getFullYear();
-//     const month = (date.getMonth() + 1).toString().padStart(2, "0");
-//     const day = date.getDate().toString().padStart(2, "0");
-//     return `${year}-${month}-${day}`;
-//   }; 
-//   //Để hiển thị cho người dùng  
-//   const formatDateToDisplay = (dateString) => {
-//     const date = new Date(dateString);
-//     if (Number.isNaN(date.getTime())) return ""; // Trả về chuỗi rỗng nếu ngày không hợp lệ
-//     const day = date.getDate().toString().padStart(2, "0");
-//     const month = (date.getMonth() + 1).toString().padStart(2, "0");
-//     const year = date.getFullYear();
-//     return `${day}-${month}-${year}`; // Định dạng DD-MM-YYYY
-//   };
-  
-//   // Hàm validate form để kiểm tra các trường hợp đầu vào
-//   const validateForm = () => {
-//     const errors = {};
-//     if (!user.firstName.trim()) errors.firstName = "Họ không được để trống.";
-//     if (!user.lastName.trim()) errors.lastName = "Tên không được để trống.";
-//     if (!user.phoneNumber.trim()) {
-//       errors.phoneNumber = "Số điện thoại không được để trống.";
-//     } else if (user.phoneNumber.length !== 10) {
-//       errors.phoneNumber = "Số điện thoại phải có 10 chữ số.";
-//     } else if (!/^\d+$/.test(user.phoneNumber)) {
-//       errors.phoneNumber = "Số điện thoại chỉ được chứa số.";
-//     }
-
-//     // Kiểm tra ngày sinh
-//     if (!user.dob) {
-//       errors.dob = "Ngày sinh không được để trống.";
-//     } else {
-//       const today = new Date();
-//       const dob = new Date(user.dob);
-//       let age = today.getFullYear() - dob.getFullYear();
-//       const monthDifference = today.getMonth() - dob.getMonth();
-//       if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dob.getDate())) {
-//         age--;
-//       }
-//       if (age < 16) {
-//         errors.dob = "Người dùng phải từ 16 tuổi trở lên.";
-//       }
-//     }
-//     return errors;
-//   };
-
-//   // Lấy thông tin người dùng từ API và định dạng ngày sinh
-//   useEffect(() => {
-//     axios
-//       .get(`http://localhost:8080/user/${id}`)
-//       .then((response) => {
-//         const userData = response.data;
-//         const formattedDob = userData.dob ? formatDateForInput(userData.dob) : "";
-//         setUser({
-//          ...userData,
-//         dob: formattedDob,
-//         });
-//         setLoading(false);
-//       })
-//       .catch((error) => {
-//         console.error("Error fetching user:", error.response?.status, error.message);
-//         setError("Không tìm thấy người dùng");
-//         setLoading(false);
-//       });
-//   }, [id]);
-
-//   // Xử lý khi nhấn nút Lưu
-//   const handleSave = () => {
-//     const errors = validateForm();
-//     if (Object.keys(errors).length > 0) {
-//       setValidationErrors(errors);
-//       return; 
-//     }
-//     setSaving(true);
-//       // Không cần dùng moment nếu input đã là type="date"
-//       const formattedDob = user.dob ? user.dob : null;
-
-//     // Định dạng ngày trước khi gửi đi
-//     const updatedUser = {
-//       ...user,
-//       dob: formattedDob,
-//     };
-//     axios
-//       .put(`http://localhost:8080/user/${id}`, updatedUser)
-//       .then((response) => {
-//         setUser(response.data);
-//         setIsEditing(false);
-//         setSaving(false);
-//         setValidationErrors({});
-//       })
-//       .catch((error) => {
-//         if (error.response && error.response.data) {
-//           setValidationErrors(error.response.data);
-//         } else {
-//           console.error("Lỗi không xác định:", error);
-//         }
-//         setSaving(false);
-//       });
-//   };
-
-//   // Hàm xử lý khi thay đổi giá trị input
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     const updatedValue = name === "gender" ? (value === "true") : value;
-//     setUser((prevUser) => ({
-//       ...prevUser,
-//       [name]: name === "phoneNumber" ? value.replace(/\D/g, "") : updatedValue,
-//     }));
-//   };
-
-//   if (loading) return <p>Loading...</p>;
-//   if (error) return <p>{error}</p>;
-
-//   return (
-//     <div>
-//       <h1>Thông tin người dùng</h1>
-//       <div>
-//         <label>Họ: </label>
-//         <input
-//           type="text"
-//           name="firstName"
-//           value={user.firstName}
-//           placeholder="Nhập họ"
-//           onChange={handleChange}
-//           disabled={!isEditing}
-//         />
-//         {validationErrors.firstName && <p style={{ color: "red" }}>{validationErrors.firstName}</p>}
-//       </div>
-//       <div>
-//         <label>Tên: </label>
-//         <input
-//           type="text"
-//           name="lastName"
-//           value={user.lastName}
-//           placeholder="Nhập tên"
-//           onChange={handleChange}
-//           disabled={!isEditing}
-//         />
-//      {validationErrors.lastName && <p style={{ color: "red" }}>{validationErrors.lastName}</p>}
-//       </div>
-//       <div>
-//         <label>Số điện thoại: </label>
-//         <input
-//           type="number"
-//           name="phoneNumber"
-//           value={user.phoneNumber}
-//           placeholder="Nhập số điện thoại"
-//           onChange={handleChange}
-//           disabled={!isEditing}
-//           onPaste={(e) => {
-//           const pastedData = e.clipboardData.getData("Text");
-//           if (!/^\d+$/.test(pastedData)) {
-//           e.preventDefault();  // Ngăn không cho dán dữ liệu nếu nó chứa ký tự không phải số
-//        }
-//     }}
-//         />
-//      {validationErrors.phoneNumber && <p style={{ color: "red" }}>{validationErrors.phoneNumber}</p>}
-//       </div>
-//       <div>
-//       <div>
-//         <label>Ngày sinh: </label>
-//         {!isEditing ? (
-//           <span>{user.dob ? formatDateToDisplay(user.dob) : "Ngày sinh không hợp lệ"}</span>
-//         ) : (
-//           <input
-//             type="date"
-//             name="dob"
-//             value={user.dob || ""}
-//             onChange={handleChange}
-//             disabled={!isEditing}
-//           />
-//         )}
-//         {validationErrors.dob && <p style={{ color: "red" }}>{validationErrors.dob}</p>}
-//       </div>
-
-//       <div>
-//         <label>Giới tính: </label>
-//         {!isEditing ? (
-//           <span>{user.gender ? "Nam" : "Nữ"}</span> // Hiển thị giới tính dưới dạng text nếu không ở chế độ chỉnh sửa
-//         ) : (
-//           <select name="gender" value={user.gender.toString()} onChange={handleChange}>
-//             <option value={true}>Nam</option>
-//             <option value={false}>Nữ</option>
-//           </select>
-//         )}
-//       </div>
-//       {!isEditing ? (
-//         <button onClick={() => setIsEditing(true)}>Chỉnh sửa</button>
-//       ) : (
-//         <button onClick={handleSave} disabled={saving}>
-//           {saving ? "Đang lưu..." : "Lưu"}
-//         </button>
-//       )}
-//     </div>
-//     </div>
-//   );
-// };
-// export default UserDisplay
-
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 const UserDisplay = () => {
   const { id } = useParams(); // Lấy ID từ URL
   const history = useNavigate();
-  const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    dob: "",
-    gender: true,
-  });
+  const { user, setUser } = useContext(UserContext); // Lấy context
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -293,26 +66,20 @@ const UserDisplay = () => {
     return errors;
   };
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:8080/user/${id}`)
-      .then((response) => {
-        const userData = response.data;
-        const formattedDob = userData.dob ? formatDateForInput(userData.dob) : "";
-        setUser({
-          ...userData,
-          dob: formattedDob,
-        });
-        setOriginalDob(formattedDob); // Lưu trữ giá trị gốc
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error.response?.status, error.message);
-        setError("Không tìm thấy người dùng");
-        setLoading(false);
-      });
-  }, [id]);
-
+ // Fetch user data
+ useEffect(() => {
+  axios.get(`http://localhost:8080/user/${id}`)
+    .then(response => {
+      const userData = response.data;
+      setUser(userData); // Lưu dữ liệu người dùng vào context
+      setOriginalDob(userData.dob); // Lưu lại ngày sinh ban đầu
+      setLoading(false);
+    })
+    .catch(error => {
+      setError("Không tìm thấy người dùng");
+      setLoading(false);
+    });
+}, [id, setUser]);
   const handleSave = () => {
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
@@ -420,101 +187,132 @@ const UserDisplay = () => {
       </div>
     )}
 
-    {/* Form người dùng */}
+    
     <div className={`max-w-md mx-auto p-4 mb-4 border border-gray-300 rounded-lg shadow-lg ${showSuccessMessage ? "opacity-50" : ""}`}>
-      <h1 className="text-2xl font-bold mb-4 text-center">Thông tin người dùng</h1>
+  <h1 className="text-2xl font-bold mb-4 text-center">Thông tin người dùng</h1>
 
-      {/** Sử dụng flex để căn chỉnh label và input cho tất cả các trường */}
-      <div className="mb-4 flex items-center">
-        <label className="mr-2 w-1/3 whitespace-nowrap">Họ:</label>
-        <input
-          type="text"
-          name="firstName"
-          value={user.firstName}
-          placeholder="Nhập họ"
-          onChange={handleChange}
-          disabled={!isEditing}
-          className={`flex-grow p-2 rounded transition-transform duration-200 transform ${isEditing ? 'border border-gray-300 focus:ring-2 focus:ring-blue-500 scale-105' : 'bg-transparent'} focus:outline-none text-right`}
-        />
-      </div>
-      {validationErrors.firstName && (
-        <p className="text-red-600 text-right transition-opacity duration-300 opacity-100">{validationErrors.firstName}</p>
-      )}
+  {/* Profile and Cover Image */}
+  <div className="w-full bg-cover bg-center rounded-lg"
+       style={{ 
+        backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQO5521qLHocLI1xyv_xZGm2v3iJTMrzZklg&s')` ,
+       
+        }}>
+    <div className="mx-auto flex justify-center w-[141px] h-[141px] bg-blue-300/20 rounded-full"
+          style={{
+         backgroundImage: `url('https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474073IDQ/anh-ff-ngau-cuc-dep_052208165.jpg')`,
+         backgroundSize: "cover",  // Điều chỉnh kích thước ảnh để bao phủ toàn bộ khung tròn
+         backgroundPosition: "center"  // Căn giữa ảnh trong khung
+       }}>
+      {/* Avatar upload logic remains unchanged */}
+    </div>
+  </div>
 
-      <div className="mb-4 flex items-center">
-        <label className="mr-2 w-1/3 whitespace-nowrap">Tên:</label>
-        <input
-          type="text"
-          name="lastName"
-          value={user.lastName}
-          placeholder="Nhập tên"
-          onChange={handleChange}
-          disabled={!isEditing}
-          className={`flex-grow p-2 rounded transition-transform duration-200 transform ${isEditing ? 'border border-gray-300 focus:ring-2 focus:ring-blue-500 scale-105' : 'bg-transparent'} focus:outline-none text-right`}
-        />
-      </div>
+  {/* User Details */}
+  <div className="flex flex-col gap-4 mt-4">
+    {/* First Name */}
+    <div className="mb-4">
+      <label htmlFor="firstName" className="dark:text-gray-300">Họ</label>
+      <input
+        type="text"
+        name="firstName"
+        value={user.firstName || ""}
+        onChange={handleChange}
+        placeholder="Nhập họ"
+        disabled={!isEditing}
+        className="mt-2 p-4 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
+      />
+       {validationErrors.firstName && (
+      <p className="text-red-500 mt-1">{validationErrors.firstName}</p>
+    )}
+    </div>
+
+    {/* Last Name */}
+    <div className="mb-4">
+      <label htmlFor="lastName" className="dark:text-gray-300">Tên</label>
+      <input
+        type="text"
+        name="lastName"
+        value={user.lastName || ""}
+        onChange={handleChange}
+        placeholder="Nhập tên"
+        disabled={!isEditing}
+        className="mt-2 p-4 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
+      />
       {validationErrors.lastName && (
-        <p className="text-red-600 pb-2 text-right transition-opacity duration-300 opacity-100">{validationErrors.lastName}</p>
-      )}
+      <p className="text-red-500 mt-1">{validationErrors.lastName}</p>
+    )}
+    </div>
 
-      <div className="mb-4 flex items-center">
-        <label className="mr-2 w-1/3 whitespace-nowrap">Số điện thoại:</label>
-        <input
-          type="text"
-          name="phoneNumber"
-          value={user.phoneNumber}
-          placeholder="Nhập số điện thoại"
-          onChange={handleChange}
-          readOnly ={isEditing}
-          className={`flex-grow p-2 rounded transition-transform duration-200 transform ${isEditing ? 'border border-gray-300 focus:ring-2 focus:ring-blue-500 scale-105' : 'bg-transparent'} focus:outline-none text-right`}
-        />
-      </div>
-      {validationErrors.phoneNumber && (
-        <p className="text-red-600 transition-opacity duration-300 opacity-100">{validationErrors.phoneNumber}</p>
-      )}
+     {/* Phone Number */}
+  <div className="mb-4">
+    <label htmlFor="phoneNumber" className="dark:text-gray-300">Số điện thoại</label>
+    <input
+      type="text"
+      name="phoneNumber"
+      value={user.phoneNumber || ""}
+      onChange={handleChange}
+      placeholder="Nhập số điện thoại"
+      readOnly
+      className="mt-2 p-4 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
+    />
+    {validationErrors.phoneNumber && (
+      <p className="text-red-500 mt-1">{validationErrors.phoneNumber}</p>
+    )}
+  </div>
 
-      <div className="mb-4 flex items-center">
-        <label className="mr-2 w-1/3 whitespace-nowrap">Ngày sinh:</label>
-        {!isEditing ? (
-          <p className="flex-grow text-right p-2 pr-2">{user.dob ? formatDateToDisplay(user.dob) : "Ngày sinh không hợp lệ"}</p>
+    {/* Gender */}
+    <div className="mb-4">
+      <h3 className="dark:text-gray-300  dark:border-gray-600">Giới tính</h3>
+      <select
+        name="gender"
+        value={user.gender || ""}
+        onChange={handleChange}
+        disabled={!isEditing}
+        className="w-full p-4 border-2 rounded-lg  dark:border-gray-600 dark:bg-gray-600 "
+        style={{
+      appearance: isEditing ? "auto" : "none", // Ẩn mũi tên khi không chỉnh sửa, hiển thị khi chỉnh sửa
+      WebkitAppearance: isEditing ? "auto" : "none",
+      MozAppearance: isEditing ? "auto" : "none",
+    }}
+      >
+        <option disabled value="">Chọn Giới tính</option>
+        <option value="Male">Nam</option>
+        <option value="Female">Nữ</option>
+      </select>
+    </div>
+
+    {/* Date of Birth */}
+    <div className="mb-4">
+      <h3 className="dark:text-gray-300">Ngày sinh</h3>
+      {!isEditing ? (
+          <p className="flex-grow border-2 rounded-lg  p-4 text-left  dark:text-gray-200 dark:border-gray-600 bg-gray-100 pr-2">{user.dob ? formatDateToDisplay(user.dob) : "Ngày sinh không hợp lệ"}</p>
         ) : (
-          <input
-            type="date"
-            name="dob"
-            value={user.dob || ""}
-            onChange={handleChange}
-            className={`flex-grow p-2 rounded transition-transform duration-200 transform ${isEditing ? 'border border-gray-300 focus:ring-2 focus:ring-blue-500 scale-105' : 'bg-transparent'} focus:outline-none text-right`}
-            readOnly ={isEditing}
-          />
+      <input
+        type="date"
+        name="dob"
+        value={user.dob || ""}
+        readOnly
+        onChange={handleChange}
+        className="p-4 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800 bg-white"
+      />
         )}
-      </div>
-      {validationErrors.dob && (
-        <p className="text-red-600 transition-opacity duration-300 opacity-100">{validationErrors.dob}</p>
-      )}
+        {validationErrors.dob && (
+      <p className="text-red-500 mt-1">{validationErrors.dob}</p>
+    )}
+    </div>
 
-      <div className="mb-4 flex items-center">
-        <label className="mr-2 w-1/3 whitespace-nowrap">Giới tính:</label>
-        <select
-          name="gender"
-          value={user.gender}
-          onChange={handleChange}
-          disabled={!isEditing}
-          className={`flex-grow p-2 rounded transition-transform duration-200 transform ${isEditing ? 'border border-gray-300 focus:ring-2 focus:ring-blue-500 scale-105' : 'bg-transparent'} focus:outline-none text-right ${!isEditing ? 'appearance-none' : ''}`}
-        >
-          <option value={true}>Nam</option>
-          <option value={false}>Nữ</option>
-        </select>
-      </div>
+    {/* Buttons for "Back" and "Edit" */}
+    <div className="flex justify-between mt-4">
+      {/* "Back" Button */}
+      <button
+        onClick={handleBack}
+        className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition duration-300"
+      >
+        Quay lại
+      </button>
 
-      <div className="flex justify-between mt-4">
-  <button
-    onClick={handleBack}
-    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 hover:shadow-lg transition duration-300"
-  >
-    Quay lại
-  </button>
-
-  {isEditing ? (
+      {/* "Edit" Button */}
+      {isEditing ? (
     <button
       onClick={handleSave}
       disabled={saving}
@@ -530,9 +328,11 @@ const UserDisplay = () => {
       Chỉnh sửa
     </button>
   )}
-</div>
     </div>
   </div>
+</div>
+
+  </div> 
 );
 };
 

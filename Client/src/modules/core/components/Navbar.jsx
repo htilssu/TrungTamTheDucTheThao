@@ -1,8 +1,7 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState,useContext} from 'react';
 import { useNavigate,useParams,Link } from 'react-router-dom';
-import UserDisplay from '../../../pages/UserDisplay/UserDisplay';
 import axios from 'axios';
-
+import { UserContext } from '../../../context/UserContext';
 // Component cho một Menu Item
 // eslint-disable-next-line react/prop-types
 const MegaItem = ({ title, description, link }) => {
@@ -75,9 +74,10 @@ const UserMenuItem = ({ link, text }) => {
 };
 
 // Component chính của Navbar
-const Navbar = ({ firstName, lastName }) => {
+const Navbar = () => {
     const { id } = useParams();
-    const [user, setUser] = useState({firstName,lastName});
+    // const [user, setUser] = useState({firstName,lastName});
+    const { user,setUser } = useContext(UserContext); // Lấy dữ liệu người dùng từ context
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
