@@ -1,3 +1,4 @@
+
 package com.htilssu.sport.controllers;
 import com.htilssu.sport.data.models.User;
 import com.htilssu.sport.repository.UserRepository;
@@ -45,6 +46,7 @@ public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @Request
                 user.setPhoneNumber(updatedUser.getPhoneNumber() != null ? updatedUser.getPhoneNumber() : user.getPhoneNumber());
                 user.setDob(updatedUser.getDob() != null ? updatedUser.getDob() : user.getDob());
                 user.setGender(updatedUser.getGender() != null ? updatedUser.getGender() : user.getGender());
+                user.setAvatar(updatedUser.getAvatar() != null ? updatedUser.getAvatar() : user.getAvatar());
                 userRepository.save(user);
                 return ResponseEntity.ok(user);
             })
@@ -56,6 +58,7 @@ public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult
     if (result.hasErrors()) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        System.out.println("Validation errors: " + result.getFieldErrors());
         return ResponseEntity.badRequest().body(errors); 
     }
        // Kiểm tra tuổi trước khi lưu
@@ -64,5 +67,3 @@ public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult
 }
     
 }
-
-

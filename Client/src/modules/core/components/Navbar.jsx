@@ -77,7 +77,7 @@ const UserMenuItem = ({ link, text }) => {
 const Navbar = () => {
     const { id } = useParams();
     // const [user, setUser] = useState({firstName,lastName});
-    const { user,setUser } = useContext(UserContext); // Lấy dữ liệu người dùng từ context
+    const {user,setUser } = useContext(UserContext); // Lấy dữ liệu người dùng từ context
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -111,10 +111,11 @@ const Navbar = () => {
         axios
           .get(`http://localhost:8080/user/5`)
           .then((response) => {
-            const { firstName, lastName } = response.data; // Chỉ lấy firstname và lastname
+            const { firstName, lastName,avatar } = response.data; // Chỉ lấy firstname và lastname
             setUser({
               firstName,
               lastName,
+              avatar,
             });
             setLoading(false);
           })
@@ -184,7 +185,7 @@ const Navbar = () => {
                             aria-haspopup="true"
                         >
                             <span className="sr-only">Open user menu</span>
-                            <img className="w-8 h-8 rounded-full" src="/avatarH.png" alt="User Avatar" />
+                            <img className="w-9 h-9 rounded-full" src={user?.avatar} alt="User Avatar" />
                         </button>
 
                         {/* User menu dropdown */}

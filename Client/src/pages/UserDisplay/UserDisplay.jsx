@@ -15,8 +15,9 @@ const UserDisplay = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [originalDob, setOriginalDob] = useState(""); // Thêm biến trạng thái cho ngày sinh gốc
-   // Thêm state cho việc hiển thị thông báo
-   const [fadeOut, setFadeOut] = useState(false); // Thêm state cho việc mờ dần
+  // Thêm state cho việc hiển thị thông báo
+  const [fadeOut, setFadeOut] = useState(false); // Thêm state cho việc mờ dần
+  const [avatarUrl,setAvatarUrl] = useState(user?.avatar);
 
   const formatDateForInput = (dateString) => {
     const date = new Date(dateString);
@@ -73,6 +74,7 @@ const UserDisplay = () => {
       const userData = response.data;
       setUser(userData); // Lưu dữ liệu người dùng vào context
       setOriginalDob(userData.dob); // Lưu lại ngày sinh ban đầu
+      setAvatarUrl(userData.avatar); // Set the avatar URL in state
       setLoading(false);
     })
     .catch(error => {
@@ -80,6 +82,7 @@ const UserDisplay = () => {
       setLoading(false);
     });
 }, [id, setUser]);
+//Xử lý sự kiện lưu
   const handleSave = () => {
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
@@ -87,11 +90,11 @@ const UserDisplay = () => {
       return;
     }
     setSaving(true);
-    const formattedDob = user.dob ? user.dob : null;
-
+  
     const updatedUser = {
       ...user,
       dob: user.dob || originalDob,
+      avatar: avatarUrl, // Send the updated avatar URL to the backend
     };
     axios
       .put(`http://localhost:8080/user/${id}`, updatedUser)
@@ -101,13 +104,13 @@ const UserDisplay = () => {
         setSaving(false);
         setValidationErrors({});
         // Đặt lại trạng thái trước khi hiển thị thông báo
-      setFadeOut(false); 
-      setShowSuccessMessage(true);
+        setFadeOut(false); 
+        setShowSuccessMessage(true);
 
-      // Bắt đầu mờ dần sau 1 giây
-      setTimeout(() => setFadeOut(true), 1000);
+        // Bắt đầu mờ dần sau 1 giây
+        setTimeout(() => setFadeOut(true), 1000);
 
-      // Ẩn thông báo sau khi mờ dần
+        // Ẩn thông báo sau khi mờ dần
         setTimeout(() => {
         setShowSuccessMessage(false);
         setFadeOut(false); // Reset lại fadeOut để sử dụng cho lần sau
@@ -132,6 +135,11 @@ const UserDisplay = () => {
     
     }));
   };
+  //Xử lý sự kiện thay đổi avatar
+  const handleAvatarChange = (e) => {
+    setAvatarUrl(e.target.value);
+  };
+
   //Xử lý sự kiện quay về
   const handleBack = () => {
     history(-1); // Quay lại trang trước
@@ -187,30 +195,43 @@ const UserDisplay = () => {
       </div>
     )}
 
-    
-    <div className={`max-w-md mx-auto p-4 mb-4 border border-gray-300 rounded-lg shadow-lg ${showSuccessMessage ? "opacity-50" : ""}`}>
-  <h1 className="text-2xl font-bold mb-4 text-center">Thông tin người dùng</h1>
+  <div className={`custom-form  mx-auto p-4 mb-4 border border-gray-300 rounded-lg shadow-lg ${showSuccessMessage ? "opacity-50" : ""}`}>
+      <h1 className="text-2xl font-bold mb-4 text-center">Thông tin người dùng</h1>
 
   {/* Profile and Cover Image */}
-  <div className="w-full bg-cover bg-center rounded-lg"
+  <div className="w-full bg-contain bg-center rounded-lg"
        style={{ 
         backgroundImage: `url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQO5521qLHocLI1xyv_xZGm2v3iJTMrzZklg&s')` ,
-       
+
         }}>
     <div className="mx-auto flex justify-center w-[141px] h-[141px] bg-blue-300/20 rounded-full"
           style={{
-         backgroundImage: `url('https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474073IDQ/anh-ff-ngau-cuc-dep_052208165.jpg')`,
-         backgroundSize: "cover",  // Điều chỉnh kích thước ảnh để bao phủ toàn bộ khung tròn
-         backgroundPosition: "center"  // Căn giữa ảnh trong khung
-       }}>
+              backgroundImage: `url(${avatarUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrGKrWJMnf0Lnvb8oezcde-Hvu9qTlCMZ_6w&s'})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}>
       {/* Avatar upload logic remains unchanged */}
     </div>
   </div>
 
-  {/* User Details */}
-  <div className="flex flex-col gap-4 mt-4">
+ {/* User Details */}
+ <div className="grid grid-cols-2 gap-4 mt-4">
+   {/* Input for Avatar URL */}
+   {isEditing && (
+          <div className="col-span-2 mb-2">
+            <label htmlFor="avatar" className="dark:text-gray-300">Ảnh đại diện</label>
+            <input
+              type="text"
+              name="avatar"
+              value={avatarUrl}
+              onChange={handleAvatarChange}
+              placeholder="Dán link ảnh vào đây"
+              className="mt-2 p-4 w-full border-2 rounded-lg dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800"
+            />
+          </div>
+        )}
     {/* First Name */}
-    <div className="mb-4">
+    <div className="mb-2">
       <label htmlFor="firstName" className="dark:text-gray-300">Họ</label>
       <input
         type="text"
@@ -227,7 +248,7 @@ const UserDisplay = () => {
     </div>
 
     {/* Last Name */}
-    <div className="mb-4">
+    <div className="mb-2">
       <label htmlFor="lastName" className="dark:text-gray-300">Tên</label>
       <input
         type="text"
@@ -244,7 +265,7 @@ const UserDisplay = () => {
     </div>
 
      {/* Phone Number */}
-  <div className="mb-4">
+  <div className=" mb-2">
     <label htmlFor="phoneNumber" className="dark:text-gray-300">Số điện thoại</label>
     <input
       type="text"
@@ -261,7 +282,7 @@ const UserDisplay = () => {
   </div>
 
     {/* Gender */}
-    <div className="mb-4">
+    <div className="mb-2">
       <h3 className="dark:text-gray-300  dark:border-gray-600">Giới tính</h3>
       <select
         name="gender"
@@ -282,7 +303,7 @@ const UserDisplay = () => {
     </div>
 
     {/* Date of Birth */}
-    <div className="mb-4">
+    <div className="mb-2">
       <h3 className="dark:text-gray-300">Ngày sinh</h3>
       {!isEditing ? (
           <p className="flex-grow border-2 rounded-lg  p-4 text-left  dark:text-gray-200 dark:border-gray-600 bg-gray-100 pr-2">{user.dob ? formatDateToDisplay(user.dob) : "Ngày sinh không hợp lệ"}</p>
@@ -302,7 +323,7 @@ const UserDisplay = () => {
     </div>
 
     {/* Buttons for "Back" and "Edit" */}
-    <div className="flex justify-between mt-4">
+    <div className="col-span-2 flex justify-between mt-4">
       {/* "Back" Button */}
       <button
         onClick={handleBack}
@@ -331,8 +352,7 @@ const UserDisplay = () => {
     </div>
   </div>
 </div>
-
-  </div> 
+ </div> 
 );
 };
 

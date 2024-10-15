@@ -103,3 +103,14 @@ input[readonly]:focus {
   animation: slideInRight 0.5s forwards;
 }
 
+.custom-form {
+  width: calc(60%); 
+  margin-left: auto; /* Để căn giữa form */
+  margin-right: auto; /* Để căn giữa form */
+}
+
+img {
+  image-rendering: crisp-edges; 
+  max-width: 100%;
+  height: auto;
+}
