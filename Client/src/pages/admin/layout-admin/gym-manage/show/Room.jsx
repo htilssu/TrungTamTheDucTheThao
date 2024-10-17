@@ -1,15 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RoomList from '../list/RoomList'; // Import RoomList
 import AddRoomForm from "../form/add/AddRoomForm";
 
 const Room = () => {
-    const [fields, setFields] = useState([
-        // Initial room data...
-    ]);
-
+    const [fields, setFields] = useState([]);
+    const [roomTypes, setRoomTypes] = useState([]); 
     const [nextId, setNextId] = useState(1);
-
     const [showAddForm, setShowAddForm] = useState(false);
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/roomtypes')
+            .then((response) => response.json())
+            .then((data) => setRoomTypes(data))
+            .catch((error) => console.error('Error fetching room types:', error));
+
+        fetch('http://localhost:8080/api/rooms')
+            .then((response) => response.json())
+            .then((data) => {
+                const formattedRooms = data.map((room) => ({
+                    id: room.id,
+                    name: room.name,
+                    type: room.RoomType.name, 
+                    capacity: room.capacity,
+                    floor: room.floor,
+                    building: room.building
+                }));
+                setFields(formattedRooms);
+                const maxId = Math.max(...data.map((room) => room.id), 0);
+                setNextId(maxId + 1);
+            })
+            .catch((error) => console.error('Error fetching rooms:', error));
+    }, []);
 
     const handleAddField = (newField) => {
         setFields([...fields, { ...newField, id: nextId }]);
@@ -42,17 +63,17 @@ const Room = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-2xl font-semibold mb-4">Danh Sách Phòng Tập</h3>
 
-                {["Gym", "Yoga", "Swim"].map((type) => (
-                    <div key={type}>
-                        <h4 className="text-xl font-semibold mb-4 mt-5">{`Phòng Tập ${type}`}</h4>
-                        {filterFieldsByType(type).length > 0 ? (
+                {roomTypes.map((type) => (
+                    <div key={type.id}>
+                        <h4 className="text-xl font-semibold mb-4 mt-5">{`Phòng Tập ${type.name}`}</h4>
+                        {filterFieldsByType(type.name).length > 0 ? (
                             <RoomList
-                                fields={filterFieldsByType(type)}
+                                fields={filterFieldsByType(type.name)}
                                 onUpdateField={handleUpdateField}
                                 onDeleteField={handleDeleteField}
                             />
                         ) : (
-                            <p>Không có phòng tập {type.toLowerCase()} nào.</p>
+                            <p>Không có phòng tập {type.name.toLowerCase()} nào.</p>
                         )}
                     </div>
                 ))}
