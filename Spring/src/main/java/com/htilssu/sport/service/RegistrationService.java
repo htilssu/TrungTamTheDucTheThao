@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import com.htilssu.sport.repositories.AccountRepository;
 import com.htilssu.sport.repositories.UserRepository;
 
 @Service
+@AllArgsConstructor
 public class RegistrationService {
 
     private final UserRepository userRepository;
@@ -28,13 +30,7 @@ public class RegistrationService {
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
     private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$";
 
-    @Autowired
-    public RegistrationService(UserRepository userRepository, AccountRepository accountRepository, PasswordEncoder passwordEncoder, AccountMapper accountMapper) {
-        this.userRepository = userRepository;
-        this.accountRepository = accountRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.accountMapper = accountMapper;
-    }
+
 
     public AccountDto registerUser(RegistrationDto registrationDto) {
         Optional<Account> existingAccount = accountRepository.findByEmail(registrationDto.email());
