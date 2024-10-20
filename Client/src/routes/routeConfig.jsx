@@ -148,7 +148,6 @@ export const router = createBrowserRouter([
         {
             path: '/history-booking',
             element: <HistoryBooking />
-        }
         },
         {
             path: '/sellcourses',
