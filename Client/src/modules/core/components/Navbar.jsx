@@ -38,9 +38,9 @@ const MegaMenu = () => {
         }
         ,
         {
-            title: "TUẤN MÈO",
-            description: "Analyze data to make informed decisions.",
-            link: "/analytics"
+            title: "Đăng ký bán khóa học",
+            description: "Các HLV đăng các khóa học để cho học viên",
+            link: "/sellcourses"
         }
     ];
 

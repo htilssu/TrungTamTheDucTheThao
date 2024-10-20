@@ -1,0 +1,38 @@
+test:
+  stage: test
+  image: amazoncorretto:22-alpine
+  script:
+    - cd Spring
+    - chmod +x gradlew
+    - ./gradlew test
+
+default:
+  image: docker
+  services:
+    - docker:24.0.5-dind
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+build-image:
+  stage: build
+  before_script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  script:
+    - cd Spring
+    - docker buildx build -t htilssu/trungtamthethao:latest .
+    - docker push htilssu/trungtamthethao:latest
+
+pull-image:
+  stage: deploy
+  needs:
+    - job: build-image
+      artifacts: false
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
+      echo \"$ENV\" > ~/secrets/.env.tttd &&
+      sudo docker pull htilssu/trungtamthethao:latest &&
+      sudo docker ps -aq  | xargs -r sudo docker stop | xargs -r sudo docker rm &&
+      sudo docker run --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p 8080:8080 htilssu/trungtamthethao:latest
+      "

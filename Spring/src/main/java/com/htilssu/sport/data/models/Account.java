@@ -17,15 +17,15 @@
         private Long id;
 
         @MapsId
-        @OneToOne(fetch = FetchType.LAZY, optional = false)
-        @JoinColumn(name = "id", nullable = false)
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "id")
         private User user;
 
         @NotBlank(message = "Email không được để trống")
         @Email(message = "Email không đúng định dạng")
         @Column(name = "email", nullable = false, unique = true, updatable = false) // Thêm ràng buộc unique
         private String email;
-        
+
         @NotBlank(message = "Mật khẩu không được để trống")
         @Column(name = "password", nullable = false)
         private String password;

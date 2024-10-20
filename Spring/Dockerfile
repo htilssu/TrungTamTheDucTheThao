@@ -5,7 +5,7 @@ WORKDIR /app
 COPY build.gradle settings.gradle gradlew gradlew.bat ./
 COPY ./src ./src
 
-RUN gradle build
+RUN gradle build -x test
 
 FROM amazoncorretto:22-alpine-full AS runtime
 WORKDIR /app
