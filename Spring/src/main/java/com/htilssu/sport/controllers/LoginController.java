@@ -1,32 +1,38 @@
-// package com.htilssu.sport.controllers;
+package com.htilssu.sport.controllers;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-// import com.htilssu.sport.data.dtos.LoginDto;
-// import com.htilssu.sport.service.LoginService;
+import com.htilssu.sport.data.dtos.LoginDto;
+import com.htilssu.sport.response.ApiResponse;
+import com.htilssu.sport.service.LoginService;
 
-// import io.swagger.v3.oas.annotations.parameters.RequestBody;
+@RestController
+public class LoginController {
 
-// @RestController
-// public class LoginController {
+    private final LoginService loginService;
 
-//     private final LoginService loginService;
+    @Autowired
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
-//     @Autowired
-//     public LoginController(LoginService loginService) {
-//         this.loginService = loginService;
-//     }
+    @PostMapping("/api/login")
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginDto loginDto) {
+        boolean isAuthenticated = loginService.login(loginDto);
+        if (isAuthenticated) {
+            return ResponseEntity.ok(new ApiResponse("Đăng nhập thành công", null));
+        } else {
+            return ResponseEntity.status(401).body(new ApiResponse("Email hoặc mật khẩu không đúng", null));
+        }
+    }
 
-//     @PostMapping("/api/login")
-//     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-//         boolean isAuthenticated = loginService.login(loginDto);
-//         if (isAuthenticated) {
-//             return ResponseEntity.ok("Đăng nhập thành công");
-//         } else {
-//             return ResponseEntity.status(401).body("Email hoặc mật khẩu không đúng");
-//         }
-//     }
-// }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(new ApiResponse(ex.getMessage(), null));
+    }
+}
