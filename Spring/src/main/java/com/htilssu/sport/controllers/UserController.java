@@ -1,7 +1,7 @@
 
 package com.htilssu.sport.controllers;
 import com.htilssu.sport.data.models.User;
-import com.htilssu.sport.repository.UserRepository;
+import com.htilssu.sport.repositories.UserRepository;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.badRequest().build(); // Xử lý nếu ID không hợp lệ
     }
     return userRepository.findById(id)
-            .map(user -> ResponseEntity.ok(user))
+            .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
 }
     // Sửa thông tin người dùng
