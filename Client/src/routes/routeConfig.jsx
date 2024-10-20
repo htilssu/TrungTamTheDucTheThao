@@ -25,7 +25,7 @@ import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
 import Sellcourses from '../modules/core/components/Sellcourses/Sellcourses.jsx';
 import CoursesManage from "../pages/admin/layout-admin/courses-manage/CoursesManage.jsx";
-
+import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 export const router = createBrowserRouter([
     {
         path: 'admin',
@@ -112,7 +112,11 @@ export const router = createBrowserRouter([
             {
                 path: 'gym',
                 element: <GymPage/>,
-            }
+            },
+            {
+                path:'user/:id',
+                element:<UserDisplay/>
+            },
         ],
         errorElement: <PageNotFound/>,
     },
