@@ -7,4 +7,4 @@ import java.io.Serializable;
  */
 public record AccountDto(Long id, UserDto user, String email, String password)
         implements Serializable {
-  }
+}
