@@ -119,11 +119,19 @@ export const router = createBrowserRouter([
                 path:'user/:id',
                 element:<UserDisplay/>
             },
-            },
             {
                 path: 'booking',
                 element: <BookingPage/>,
             }
+            ,
+            {
+                path: '/history-booking',
+                element: <HistoryBooking />
+            },
+            {
+                path: '/sellcourses',
+                element: <Sellcourses />,
+            },
         ],
         errorElement: <PageNotFound/>,
     },
@@ -139,58 +147,5 @@ export const router = createBrowserRouter([
         path: 'forgot-password',
         element: <ForgotPassword/>,
     },
-  {
-    path: '',
-    element: <MainLayout/>,
-    children: [
-      {
-        index: true,
-        element: <Home/>,
-      },
-        {
-            path: '/soccer',
-            element: <SoccerFieldInfo />,
-        },
-        {
-            path: '/soccer/rent-yard',
-            element: <RentYardPage />
-        }
-        ,
-        {
-            path: '/history-booking',
-            element: <HistoryBooking />
-        },
-        {
-            path: '/sellcourses',
-            element: <Sellcourses />,
-        },
 
-
-    ],
-    errorElement: <PageNotFound/>,
-  },
-    {
-        path: '',
-        element: <MainLayout/>,
-        children: [
-            {
-                index: true,
-                element: <Home/>,
-            },
-            {
-                path: '/soccer',
-                element: <SoccerFieldInfo/>,
-            },
-            {
-                path: '/soccer/rent-yard',
-                element: <RentYardPage/>
-            }
-            ,
-            {
-                path: '/gym',
-                element: <GymPage/>
-            }
-        ],
-        errorElement: <PageNotFound/>,
-    },
 ]);
