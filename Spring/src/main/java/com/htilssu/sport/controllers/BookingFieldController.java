@@ -19,8 +19,8 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1/booking-field")
-@CrossOrigin(origins = "*")
-@PreAuthorize("permitAll()")
+//@CrossOrigin(origins = "*")  //miền nào sẽ thực hiện yêu cầu đến endpoint này
+//@PreAuthorize("isAuthenticated()") //quyền truy cập
 public class BookingFieldController {
     @Autowired
     private BookingFieldService bookingFieldService;
