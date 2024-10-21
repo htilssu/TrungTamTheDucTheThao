@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
@@ -23,15 +24,15 @@ public class Booking {
     private User idUser;
 
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @NotNull
     @Column(name = "booking_from", nullable = false)
-    private OffsetDateTime bookingFrom;
+    private ZonedDateTime bookingFrom;
 
     @NotNull
     @Column(name = "booking_to", nullable = false)
-    private OffsetDateTime bookingTo;
+    private ZonedDateTime bookingTo;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
