@@ -1,5 +1,6 @@
-// package com.htilssu.sport.data.dtos;
+package com.htilssu.sport.data.dtos;
 
-// public class LoginDto {
-    
-// }
+import java.io.Serializable;
+
+public record LoginDto(String email, String password) implements Serializable {
+}
