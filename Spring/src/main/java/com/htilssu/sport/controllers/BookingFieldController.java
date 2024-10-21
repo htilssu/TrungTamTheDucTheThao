@@ -1,8 +1,8 @@
 package com.htilssu.sport.controllers;
 
 import com.htilssu.sport.data.models.BookingField;
-import com.htilssu.sport.dto.BookingFieldDTO;
-import com.htilssu.sport.dto.ErrorResponse; // Import lớp ErrorResponse
+import com.htilssu.sport.data.dtos.BookingFieldDTO;
+import com.htilssu.sport.data.dtos.ErrorResponse; // Import lớp ErrorResponse
 import com.htilssu.sport.services.BookingFieldService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

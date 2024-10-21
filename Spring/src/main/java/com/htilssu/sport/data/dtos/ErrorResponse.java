@@ -1,4 +1,4 @@
-package com.htilssu.sport.dto;
+package com.htilssu.sport.data.dtos;
 
 public class ErrorResponse {
     private String message;

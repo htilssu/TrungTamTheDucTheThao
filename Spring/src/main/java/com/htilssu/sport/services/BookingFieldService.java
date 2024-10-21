@@ -4,12 +4,12 @@ import com.htilssu.sport.data.models.BookingField;
 import com.htilssu.sport.data.models.FootballField;
 import com.htilssu.sport.data.models.PricingField;
 import com.htilssu.sport.data.models.User;
-import com.htilssu.sport.dto.BookingFieldDTO;
+import com.htilssu.sport.data.dtos.BookingFieldDTO;
 import com.htilssu.sport.enums.BookingStatus;
 import com.htilssu.sport.repositories.BookingFieldRepository;
 import com.htilssu.sport.repositories.FootballFieldRepository;
 import com.htilssu.sport.repositories.PricingFieldRepository;
-import com.htilssu.sport.repositories.UserRepository;
+import com.htilssu.sport.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

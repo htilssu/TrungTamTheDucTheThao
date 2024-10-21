@@ -1,4 +1,4 @@
-package com.htilssu.sport.dto;
+package com.htilssu.sport.data.dtos;
 
 import com.htilssu.sport.data.models.FootballField;
 import com.htilssu.sport.data.models.User;

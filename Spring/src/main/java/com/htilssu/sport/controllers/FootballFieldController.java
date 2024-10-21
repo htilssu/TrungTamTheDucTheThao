@@ -1,7 +1,7 @@
 package com.htilssu.sport.controllers;
 
 import com.htilssu.sport.data.models.FootballField;
-import com.htilssu.sport.dto.ErrorResponse;
+import com.htilssu.sport.data.dtos.ErrorResponse;
 import com.htilssu.sport.request.CreateFieldRequest;
 import com.htilssu.sport.services.FootballFieldService;
 import jakarta.validation.Valid;
@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
