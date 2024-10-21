@@ -1,5 +1,6 @@
 package com.htilssu.sport.data.models;
 
+import com.htilssu.sport.data.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -27,6 +28,5 @@ public class CourseRequest {
 
     @NotNull
     @Column(name = "status", nullable = false)
-    private Boolean status = false;
-
+    private Status status = Status.PENDING;
 }

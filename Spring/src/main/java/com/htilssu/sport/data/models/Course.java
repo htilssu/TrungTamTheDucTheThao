@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -48,4 +50,8 @@ public class Course {
 
     @Column(name = "thumbnail", nullable = false)
     private String thumbnail;
+
+    @OneToMany(mappedBy = "idCourse")
+    private Set<CourseMember> courseMembers = new LinkedHashSet<>();
+
 }
