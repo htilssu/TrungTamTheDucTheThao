@@ -1,5 +1,6 @@
 package com.htilssu.sport.data.models;
 
+import com.htilssu.sport.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Timestamp;
@@ -20,6 +21,12 @@ public class BookingField {
     @JoinColumn(name = "customer_id", nullable = false)
     private User customer;
 
+    @Column(name = "customer_name", nullable = false)
+    private String customerName;
+
+    @Column(name = "customer_phone", nullable = false, length = 10)
+    private String customerPhone;
+
     @Column(nullable = false)
     private Timestamp startTime;
 
@@ -27,7 +34,7 @@ public class BookingField {
     private Timestamp endTime;
 
     @Column(nullable = false)
-    private String bookingStatus;
+    private BookingStatus bookingStatus;
 
     @Column(nullable = false)
     private Double depositAmount;
@@ -39,4 +46,8 @@ public class BookingField {
 
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
+
+    public BookingField() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
 }

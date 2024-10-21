@@ -6,6 +6,7 @@ import com.htilssu.sport.repositories.FootballFieldRepository;
 import com.htilssu.sport.repositories.PricingFieldRepository; // Thêm import cho PricingFieldRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -22,7 +23,8 @@ public class FootballFieldService {
     }
 
     public FootballField getFieldById(Long id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy sân bóng với id: " + id));
     }
 
     // Tạo sân bóng mới
@@ -38,14 +40,23 @@ public class FootballFieldService {
         return createdField;
     }
 
+    //lay ds loai san
+    public List<FootballField> getFieldsByType(String fieldType) {
+        List<FootballField> fields = repository.findByFieldType(fieldType);
+        return fields;
+    }
+
     public void deleteField(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Không tìm thấy sân bóng với id: " + id);
+        }
         repository.deleteById(id);
     }
 
     // Phương thức cập nhật sân bóng (nếu có)
     public FootballField updateField(Long id, FootballField field) {
         if (!repository.existsById(id)) {
-            return null; // Hoặc ném ngoại lệ
+            throw new RuntimeException("Không tìm thấy sân bóng với id: " + id);
         }
         field.setFieldId(id); // Cập nhật ID
         return repository.save(field); // Cập nhật sân bóng

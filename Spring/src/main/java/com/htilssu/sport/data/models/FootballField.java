@@ -31,7 +31,7 @@ public class FootballField {
 
     @NotNull(message = "Trạng thái không được để trống")
     @Column(nullable = false)
-    private String status; // có thể sử dụng Enum để quản lý trạng thái nếu muốn
+    private String status;
 
     @Size(max = 500, message = "Mô tả không được vượt quá 500 ký tự")
     private String description;

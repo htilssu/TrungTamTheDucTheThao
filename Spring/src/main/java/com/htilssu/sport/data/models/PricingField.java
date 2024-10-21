@@ -13,9 +13,9 @@ public class PricingField {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pricingId;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Sử dụng LAZY để cải thiện hiệu suất
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "field_id", nullable = false)
-    private FootballField footballField; // Tên biến đổi thành footballField cho đồng nhất
+    private FootballField footballField;
 
     @Column(nullable = false)
     private LocalTime startTime;

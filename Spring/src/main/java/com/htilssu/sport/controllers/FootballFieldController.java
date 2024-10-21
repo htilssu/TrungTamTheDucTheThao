@@ -1,6 +1,7 @@
 package com.htilssu.sport.controllers;
 
 import com.htilssu.sport.data.models.FootballField;
+import com.htilssu.sport.dto.ErrorResponse;
 import com.htilssu.sport.request.CreateFieldRequest;
 import com.htilssu.sport.services.FootballFieldService;
 import jakarta.validation.Valid;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -16,6 +19,13 @@ public class FootballFieldController {
 
     @Autowired
     private FootballFieldService service;
+
+    // Trả về sân bóng mới tạo
+    @PostMapping
+    public ResponseEntity<FootballField> createField(@Valid @RequestBody CreateFieldRequest request) {
+        FootballField createdField = service.createField(request.getField(), request.getPrices());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdField);
+    }
 
     // Trả về danh sách sân bóng
     @GetMapping
@@ -28,18 +38,27 @@ public class FootballFieldController {
     @GetMapping("/{id}")
     public ResponseEntity<FootballField> getFieldById(@PathVariable Long id) {
         FootballField field = service.getFieldById(id);
+        if (field == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(field);
     }
+    //tra ve ds loai san
+    @GetMapping("/type/{fieldType}")
+    public ResponseEntity<?> getFieldsByType(@PathVariable String fieldType) {
+        List<FootballField> fields = service.getFieldsByType(fieldType);
 
-    // Trả về sân bóng mới tạo
-    @PostMapping
-    public ResponseEntity<FootballField> createField(@Valid @RequestBody CreateFieldRequest request) {
-        FootballField createdField = service.createField(request.getField(), request.getPrices());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdField);
+        if (fields.isEmpty()) {
+            ErrorResponse response = new ErrorResponse("Không tìm thấy sân bóng với loại sân: " + fieldType);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        return ResponseEntity.ok(fields);
     }
 
+    //cập nhật sân
     @PutMapping("/{id}")
-    public ResponseEntity<FootballField> updateField(@PathVariable Long id, @RequestBody FootballField field) {
+    public ResponseEntity<FootballField> updateField(@PathVariable Long id, @Valid @RequestBody FootballField field) {
         FootballField updatedField = service.updateField(id, field);
         return ResponseEntity.ok(updatedField);
     }
