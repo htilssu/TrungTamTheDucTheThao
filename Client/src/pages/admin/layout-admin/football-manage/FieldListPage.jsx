@@ -36,9 +36,9 @@ const FieldListPage = () => {
     };
 
     return (
-        <div className="container mx-auto p-6">
+        <div className="container mx-auto px-6">
             <button
-                className="bg-blue-500 text-white py-2 px-4 rounded mb-6 hover:bg-blue-600"
+                className="bg-emerald-500 text-white py-2 px-4 rounded mb-6 hover:bg-emerald-400"
                 onClick={() => setShowAddForm((prev) => !prev)}
             >
                 {showAddForm ? "Hủy thêm sân" : "Thêm Sân Bóng"}
