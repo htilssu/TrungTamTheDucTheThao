@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -24,15 +23,15 @@ public class Booking {
     private User idUser;
 
     @Column(name = "created_at")
-    private ZonedDateTime createdAt;
+    private Instant createdAt;
 
     @NotNull
     @Column(name = "booking_from", nullable = false)
-    private ZonedDateTime bookingFrom;
+    private Instant bookingFrom;
 
     @NotNull
     @Column(name = "booking_to", nullable = false)
-    private ZonedDateTime bookingTo;
+    private Instant bookingTo;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
