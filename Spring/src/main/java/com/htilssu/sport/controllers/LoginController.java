@@ -23,9 +23,9 @@ public class LoginController {
 
     @PostMapping("/api/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginDto loginDto) {
-        boolean isAuthenticated = loginService.login(loginDto);
-        if (isAuthenticated) {
-            return ResponseEntity.ok(new ApiResponse("Đăng nhập thành công", null));
+        String token = loginService.login(loginDto);
+        if (token != null) {
+            return ResponseEntity.ok(new ApiResponse("Đăng nhập thành công", token));
         } else {
             return ResponseEntity.status(401).body(new ApiResponse("Email hoặc mật khẩu không đúng", null));
         }

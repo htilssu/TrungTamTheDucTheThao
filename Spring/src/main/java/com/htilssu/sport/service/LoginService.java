@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.htilssu.sport.data.dtos.LoginDto;
 import com.htilssu.sport.data.models.Account;
+import com.htilssu.sport.data.util.JwtUtil;
 import com.htilssu.sport.repositories.AccountRepository;
 
 @Service
@@ -22,7 +23,7 @@ public class LoginService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean login(LoginDto loginDto) {
+    public String login(LoginDto loginDto) {
         if (loginDto.email() == null || loginDto.email().isEmpty()) {
             throw new IllegalArgumentException("Email không được để trống");
         }
@@ -37,9 +38,9 @@ public class LoginService {
             Account account = accountOpt.get();
             
             if (passwordEncoder.matches(loginDto.password(), account.getPassword())) {
-                return true;
+                return JwtUtil.generateToken(account);
             }
         }
-        return false; 
+        return null; 
     }
 }
