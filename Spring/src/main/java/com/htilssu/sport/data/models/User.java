@@ -2,10 +2,7 @@
     package com.htilssu.sport.data.models;
 
     import com.htilssu.sport.validation.MinAge;
-    import jakarta.persistence.Column;
-    import jakarta.persistence.Entity;
-    import jakarta.persistence.Id;
-    import jakarta.persistence.Table;
+    import jakarta.persistence.*;
     import jakarta.validation.constraints.NotBlank;
     import jakarta.validation.constraints.Pattern;
     import jakarta.validation.constraints.Past;
@@ -22,6 +19,8 @@
 
         @Id
         @Column(name = "id", nullable = false)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+        @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
         private Long id;
 
         @NotBlank(message = "Số điện thoại không được để trống")

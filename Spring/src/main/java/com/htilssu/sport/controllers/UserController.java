@@ -27,7 +27,6 @@ public class UserController {
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
-     
     }
 
     // Hiển thị thông tin người dùng

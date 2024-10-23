@@ -1,20 +1,41 @@
+CREATE SEQUENCE IF NOT EXISTS account_sequence START WITH 1 INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS user_sequence START WITH 1 INCREMENT BY 1;
+
 CREATE TABLE account
 (
-    id       BIGINT       NOT NULL,
+    user_id  BIGINT       NOT NULL,
     email    VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    CONSTRAINT pk_account PRIMARY KEY (id)
+    CONSTRAINT pk_account PRIMARY KEY (user_id)
 );
 
 CREATE TABLE booking
 (
-    id           BIGINT                      NOT NULL,
-    id_user      BIGINT                      NOT NULL,
+    id           BIGINT NOT NULL,
+    id_user      BIGINT NOT NULL,
     created_at   TIMESTAMP WITHOUT TIME ZONE,
     booking_from TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     booking_to   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    id_room      BIGINT                      NOT NULL,
+    id_room      BIGINT NOT NULL,
     CONSTRAINT pk_booking PRIMARY KEY (id)
+);
+
+CREATE TABLE bookingfield
+(
+    booking_id     BIGINT           NOT NULL,
+    field_id       BIGINT           NOT NULL,
+    customer_id    BIGINT           NOT NULL,
+    customer_name  VARCHAR(255)     NOT NULL,
+    customer_phone VARCHAR(10)      NOT NULL,
+    start_time     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    end_time       TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    booking_status SMALLINT         NOT NULL,
+    deposit_amount DOUBLE PRECISION NOT NULL,
+    total_amount   DOUBLE PRECISION NOT NULL,
+    payment_method VARCHAR(255),
+    created_at     TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_bookingfield PRIMARY KEY (booking_id)
 );
 
 CREATE TABLE coach
@@ -25,17 +46,17 @@ CREATE TABLE coach
 
 CREATE TABLE course
 (
-    id          BIGINT                 NOT NULL,
-    name        VARCHAR(255)           NOT NULL,
-    description TEXT                   NOT NULL,
-    price       DOUBLE PRECISION       NOT NULL,
+    id          BIGINT           NOT NULL,
+    name        VARCHAR(255)     NOT NULL,
+    description TEXT             NOT NULL,
+    price       DOUBLE PRECISION NOT NULL,
     time        time WITHOUT TIME ZONE NOT NULL,
-    start_date  date                   NOT NULL,
-    end_date    date                   NOT NULL,
-    slot        SMALLINT               NOT NULL,
-    id_coach    BIGINT                 NOT NULL,
-    id_room     BIGINT                 NOT NULL,
-    thumbnail   VARCHAR(255)           NOT NULL,
+    start_date  date             NOT NULL,
+    end_date    date             NOT NULL,
+    slot        SMALLINT         NOT NULL,
+    id_coach    BIGINT           NOT NULL,
+    id_room     BIGINT           NOT NULL,
+    thumbnail   VARCHAR(255)     NOT NULL,
     CONSTRAINT pk_course PRIMARY KEY (id)
 );
 
@@ -49,10 +70,10 @@ CREATE TABLE course_member
 
 CREATE TABLE course_request
 (
-    id        BIGINT  NOT NULL,
-    id_course BIGINT  NOT NULL,
-    id_user   BIGINT  NOT NULL,
-    status    BOOLEAN NOT NULL,
+    id        BIGINT   NOT NULL,
+    id_course BIGINT   NOT NULL,
+    id_user   BIGINT   NOT NULL,
+    status    SMALLINT NOT NULL,
     CONSTRAINT pk_course_request PRIMARY KEY (id)
 );
 
@@ -69,6 +90,29 @@ CREATE TABLE equipment_type
     id     BIGINT   NOT NULL,
     amount SMALLINT NOT NULL,
     CONSTRAINT pk_equipment_type PRIMARY KEY (id)
+);
+
+CREATE TABLE football_field
+(
+    field_id    BIGINT       NOT NULL,
+    field_name  VARCHAR(100) NOT NULL,
+    location    VARCHAR(255) NOT NULL,
+    field_type  VARCHAR(255) NOT NULL,
+    status      VARCHAR(255) NOT NULL,
+    description VARCHAR(500),
+    image_url   VARCHAR(255),
+    created_at  TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT pk_football_field PRIMARY KEY (field_id)
+);
+
+CREATE TABLE pricefield
+(
+    pricing_id BIGINT           NOT NULL,
+    field_id   BIGINT           NOT NULL,
+    start_time time WITHOUT TIME ZONE NOT NULL,
+    end_time   time WITHOUT TIME ZONE NOT NULL,
+    rate       DOUBLE PRECISION NOT NULL,
+    CONSTRAINT pk_pricefield PRIMARY KEY (pricing_id)
 );
 
 CREATE TABLE role
@@ -112,64 +156,21 @@ CREATE TABLE "user"
     last_name    VARCHAR(255) NOT NULL,
     gender       BOOLEAN      NOT NULL,
     dob          date         NOT NULL,
+    avatar       VARCHAR(255) NOT NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
--- Sân Bóng
-CREATE TABLE football_field
-(
-    field_id    BIGSERIAL PRIMARY KEY,
-    field_name  VARCHAR(100) NOT NULL,
-    location    VARCHAR(255) NOT NULL,
-    field_type  VARCHAR(20)  NOT NULL CHECK (field_type IN ('5v5', '7v7', '11v11')),
-    status      VARCHAR(20)  NOT NULL CHECK (status IN ('active', 'maintenance')) DEFAULT 'active',
-    description TEXT,
-    image_url   VARCHAR(255),
-    created_at  TIMESTAMP                                                         DEFAULT CURRENT_TIMESTAMP
-);
--- Giá thuê sân theo khung giờ
-CREATE TABLE pricefield
-(
-    pricing_id BIGSERIAL PRIMARY KEY,
-    field_id   BIGINT           NOT NULL,
-    start_time TIME             NOT NULL,
-    end_time   TIME             NOT NULL,
-    rate       DOUBLE PRECISION NOT NULL,
-    CHECK (start_time < end_time),
-    FOREIGN KEY (field_id) REFERENCES football_field (field_id) ON DELETE CASCADE
-);
--- Lịch đặt sân
-CREATE TABLE bookingfield
-(
-    booking_id     BIGSERIAL PRIMARY KEY,
-    field_id       BIGINT           NOT NULL,
-    customer_id    BIGINT           NOT NULL,
-    customer_name  VARCHAR(255)     NOT NULL,
-    customer_phone VARCHAR(10)      NOT NULL,
-    start_time     TIMESTAMP        NOT NULL,
-    end_time       TIMESTAMP        NOT NULL,
-    booking_status VARCHAR(20)      NOT NULL DEFAULT 'PENDING', --CONFIRMED, CANCELLED
-    deposit_amount DOUBLE PRECISION NOT NULL DEFAULT 0.00,
-    total_amount   DOUBLE PRECISION NOT NULL,
-    payment_method VARCHAR(20) CHECK (payment_method IN ('cash', 'bank_transfer')),
-    created_at     TIMESTAMP                 DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (field_id) REFERENCES football_field (field_id) ON DELETE CASCADE,
-    FOREIGN KEY (customer_id) REFERENCES "user" (id) ON DELETE CASCADE,
-    CHECK (start_time < end_time)
-);
--- Thời gian mặc định của sân
-CREATE TABLE time_slots
-(
-    timeslot_id BIGSERIAL PRIMARY KEY,
-    field_id    BIGINT NOT NULL,
-    start_time  TIME   NOT NULL,
-    end_time    TIME   NOT NULL,
-    FOREIGN KEY (field_id) REFERENCES football_field (field_id) ON DELETE CASCADE,
-    CHECK (start_time < end_time)
-);
+ALTER TABLE account
+    ADD CONSTRAINT uc_72c8b62cc63aa647776639d41 UNIQUE (email);
 
 ALTER TABLE account
-    ADD CONSTRAINT FK_ACCOUNT_ON_ID FOREIGN KEY (id) REFERENCES "user" (id);
+    ADD CONSTRAINT FK_ACCOUNT_ON_USER FOREIGN KEY (user_id) REFERENCES "user" (id);
+
+ALTER TABLE bookingfield
+    ADD CONSTRAINT FK_BOOKINGFIELD_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES "user" (id);
+
+ALTER TABLE bookingfield
+    ADD CONSTRAINT FK_BOOKINGFIELD_ON_FIELD FOREIGN KEY (field_id) REFERENCES football_field (field_id);
 
 ALTER TABLE booking
     ADD CONSTRAINT FK_BOOKING_ON_ID_ROOM FOREIGN KEY (id_room) REFERENCES room (id);
@@ -197,6 +198,9 @@ ALTER TABLE course_request
 
 ALTER TABLE equipment
     ADD CONSTRAINT FK_EQUIPMENT_ON_ID_EQUIPMENT_TYPE FOREIGN KEY (id_equipment_type) REFERENCES equipment_type (id);
+
+ALTER TABLE pricefield
+    ADD CONSTRAINT FK_PRICEFIELD_ON_FIELD FOREIGN KEY (field_id) REFERENCES football_field (field_id);
 
 ALTER TABLE role_claim
     ADD CONSTRAINT FK_ROLE_CLAIM_ON_ID_ROLE FOREIGN KEY (id_role) REFERENCES role (id);
