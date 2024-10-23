@@ -151,12 +151,12 @@ CREATE TABLE room_type
 CREATE TABLE "user"
 (
     id           BIGINT       NOT NULL,
-    phone_number VARCHAR(10)  NOT NULL,
-    first_name   VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(10)  NULL,
+    first_name   VARCHAR(255) NULL,
     last_name    VARCHAR(255) NOT NULL,
     gender       BOOLEAN      NOT NULL,
     dob          date         NOT NULL,
-    avatar       VARCHAR(255) NOT NULL,
+    avatar       VARCHAR(255) NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 

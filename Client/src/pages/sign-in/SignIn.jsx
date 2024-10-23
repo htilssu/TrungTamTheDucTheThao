@@ -76,6 +76,7 @@ const SignIn = () => {
   const errorMessage = (error) => {
     console.log(error);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -94,6 +95,7 @@ const SignIn = () => {
     setEmail("");
     setPassword("");
   };
+  
   return (
     <div
       className="flex md:justify-end justify-center items-center"

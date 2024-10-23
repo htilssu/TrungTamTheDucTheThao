@@ -1,15 +1,23 @@
 
     package com.htilssu.sport.data.models;
 
-    import com.htilssu.sport.validation.MinAge;
-    import jakarta.persistence.*;
-    import jakarta.validation.constraints.NotBlank;
-    import jakarta.validation.constraints.Pattern;
-    import jakarta.validation.constraints.Past;
-    import jakarta.validation.constraints.Size;
-    import lombok.Getter;
-    import lombok.Setter;
     import java.time.LocalDate;
+
+    import com.htilssu.sport.validation.MinAge;
+
+    import jakarta.persistence.Column;
+    import jakarta.persistence.Entity;
+    import jakarta.persistence.GeneratedValue;
+    import jakarta.persistence.GenerationType;
+    import jakarta.persistence.Id;
+    import jakarta.persistence.SequenceGenerator;
+    import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
     @Getter
     @Setter
@@ -24,13 +32,13 @@
         private Long id;
 
         @NotBlank(message = "Số điện thoại không được để trống")
-        @Size(min = 10, max = 10, message = "Số điện thoại phải có 10 chữ số")
+        @Size(min = 10, max = 13, message = "Số điện thoại phải có 10 đến 13 chữ số")
         @Pattern(regexp = "\\d+", message = "Số điện thoại chỉ được chứa số")
-        @Column(name = "phone_number", nullable = false, length = 10)
+        @Column(name = "phone_number", nullable = true, length = 10)
         private String phoneNumber;
 
         @NotBlank(message = "Họ không được để trống")
-        @Column(name = "first_name", nullable = false)
+        @Column(name = "first_name", nullable = true)
         private String firstName;
 
         @NotBlank(message = "Tên không được để trống")
@@ -45,7 +53,6 @@
         @Column(name = "dob", nullable = false)
         private LocalDate dob;
 
-        // Thêm cột avatar
-        @Column(name = "avatar", nullable = false)
+        @Column(name = "avatar", nullable = true)
         private String avatar = "";
     }

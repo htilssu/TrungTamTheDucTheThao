@@ -1,12 +1,12 @@
 package com.htilssu.sport.service;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +18,8 @@ import com.htilssu.sport.data.models.User;
 import com.htilssu.sport.repositories.AccountRepository;
 import com.htilssu.sport.repositories.UserRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
 @AllArgsConstructor
 public class RegistrationService {
@@ -28,12 +30,25 @@ public class RegistrationService {
     private final AccountMapper accountMapper;
 
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-    private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$";
-
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,18}$";
 
 
     public AccountDto registerUser(RegistrationDto registrationDto) {
         Optional<Account> existingAccount = accountRepository.findByEmail(registrationDto.email());
+        if(registrationDto.user().lastName().length() < 2){
+            throw new IllegalArgumentException("Tên phải trong khoảng từ 2 đến 30 kí tự");
+        }
+
+        if(registrationDto.user().dob() == null){
+            throw new IllegalArgumentException("Ngày sinh không được để trống");
+        } else if(!isValidDob(registrationDto.user().dob())) {
+            throw new IllegalArgumentException("Tuổi phải lớn hơn 13");
+        }
+
+        if(registrationDto.user().gender() == null){
+            throw new IllegalArgumentException("Có lỗi về giới tính");
+        }
+        
         if (existingAccount.isPresent()) {
             throw new IllegalArgumentException("Email đã được sử dụng");
         }
@@ -47,7 +62,7 @@ public class RegistrationService {
         }
 
         if (!isValidPassword(registrationDto.password())) {
-            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 6 ký tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt");
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất từ 6 đến 18 kí tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt");
         }
 
         if (!registrationDto.password().equals(registrationDto.confirmPassword())) {
@@ -55,12 +70,12 @@ public class RegistrationService {
         }
 
         User user = new User();
-        user.setId(generateUserId());
-        user.setPhoneNumber(registrationDto.user().phoneNumber());
-        user.setFirstName(registrationDto.user().firstName());
+        user.setPhoneNumber(null);
+        user.setFirstName(null);
         user.setLastName(registrationDto.user().lastName());
         user.setGender(registrationDto.user().gender());
         user.setDob(LocalDate.parse(registrationDto.user().dob()));
+        user.setAvatar(null);
 
         User savedUser = userRepository.save(user);
 
@@ -74,10 +89,6 @@ public class RegistrationService {
         return accountMapper.toDto(savedAccount);
     }
 
-    private Long generateUserId() {
-        return UUID.randomUUID().getMostSignificantBits();
-    }
-
     private boolean isValidEmail(String email) {
         return Pattern.compile(EMAIL_REGEX).matcher(email).matches();
     }
@@ -85,4 +96,20 @@ public class RegistrationService {
     private boolean isValidPassword(String password) {
         return Pattern.compile(PASSWORD_REGEX).matcher(password).matches();
     }
+
+    private boolean isValidDob(String dob) {
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate birthDate = LocalDate.parse(dob, formatter);
+            
+            LocalDate currentDate = LocalDate.now();
+
+            Period age = Period.between(birthDate, currentDate);
+
+            return age.getYears() >= 13;
+        } catch (DateTimeParseException e){
+            return false;
+        }
+    }
+
 }
