@@ -26,7 +26,8 @@ import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSocc
 import Sellcourses from '../modules/core/components/Sellcourses/Sellcourses.jsx';
 import CoursesManage from "../pages/admin/layout-admin/courses-manage/CoursesManage.jsx";
 import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
-import BookingPage from "../modules/core/components/rent-a-yard/SoccerField/BookingList.jsx";
+import BookingPage from "../modules/core/components/booking/field/BookingFieldList.jsx";
+import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -132,6 +133,10 @@ export const router = createBrowserRouter([
                 path: '/sellcourses',
                 element: <Sellcourses />,
             },
+            {
+                path: '/contact',
+                element: <ContactPage/>,
+            }
         ],
         errorElement: <PageNotFound/>,
     },
