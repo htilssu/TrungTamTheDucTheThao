@@ -9,6 +9,8 @@ import {RiFileList3Fill} from "react-icons/ri";
 import {NavLink} from "react-router-dom";
 import {IoIosArrowForward, IoMdPersonAdd} from "react-icons/io";
 import {PiBookOpenBold} from "react-icons/pi";
+import { PiShoppingCart } from "react-icons/pi";
+
 
 
 const Sidebar = ({isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode}) => {
@@ -34,7 +36,9 @@ const Sidebar = ({isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode}) =
         {name: 'Quản lý Bài Đăng', link: '/admin/post-manage', icon: <RiFileList3Fill/>},
         {name: 'Quản lý Khách hàng', link: '/admin/customer-manage', icon: <BsPersonVcardFill/>},
         {name: 'Quản lý Nhân viên', link: '/admin/employee-manage', icon: <MdGroups2/>},
-        {name: 'Quản lý khóa học', link: '/admin/courses-manage', icon: <PiBookOpenBold />}
+        {name: 'Quản lý khóa học', link: '/admin/courses-manage', icon: <PiBookOpenBold />},
+        {name: 'Bán khóa học', link: '/admin/sellcourses', icon: <PiShoppingCart />}
+
     ];
 
     return (

@@ -1,10 +1,8 @@
 package com.htilssu.sport.services;
 
 import com.htilssu.sport.data.models.Course;
-import com.htilssu.sport.repositories.*;
-
-import lombok.*;
-
+import com.htilssu.sport.repositories.CourseRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,24 +12,29 @@ import java.util.Optional;
 @Service
 public class CourseService {
 
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
+    // Lấy tất cả khóa học
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
+    // Lấy khóa học theo ID
     public Optional<Course> getCourseById(Long id) {
         return courseRepository.findById(id);
     }
 
+    // Tạo khóa học
     public Course createCourse(Course course) {
         return courseRepository.save(course);
     }
 
+    // Cập nhật khóa học theo ID
     public Course updateCourse(Long id, Course courseDetails) {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found with id " + id));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học với ID " + id));
 
+        // Cập nhật các trường
         course.setName(courseDetails.getName());
         course.setDescription(courseDetails.getDescription());
         course.setPrice(courseDetails.getPrice());
@@ -46,9 +49,10 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
+    // Xóa khóa học theo ID
     public void deleteCourse(Long id) {
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found with id " + id));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học với ID " + id));
         courseRepository.delete(course);
     }
 }

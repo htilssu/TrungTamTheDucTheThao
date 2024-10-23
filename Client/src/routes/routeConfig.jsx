@@ -23,7 +23,7 @@ import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLay
 import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
-
+import Sellcourses from '../pages/admin/layout-admin/employee-manage/Sellcourses.jsx'
 export const router = createBrowserRouter([
     {
         path: 'admin',
@@ -57,7 +57,10 @@ export const router = createBrowserRouter([
                 path: 'courses-manage',
                 element: <CoursesManage/>,
             },
-
+            {
+                path: 'sellcourses',
+                element: <Sellcourses />,
+            },
             {
               path: 'soccer-manage',
               element: <FootballLayout/>,
@@ -142,10 +145,7 @@ export const router = createBrowserRouter([
             path: '/soccer/rent-yard',
             element: <RentYardPage />
         },
-        // {
-        //     path: '/sellcourses',
-        //     element: <Sellcourses />,
-        // },
+        
 
 
     ],
