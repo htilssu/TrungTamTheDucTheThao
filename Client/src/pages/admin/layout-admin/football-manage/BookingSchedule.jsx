@@ -1,5 +1,6 @@
 // src/BookingSchedule.js
 import React, { useState } from 'react';
+import {DatePicker} from "antd";
 
 const BookingSchedule = () => {
     // Khởi tạo biến hôm nay
@@ -96,19 +97,16 @@ const BookingSchedule = () => {
         <div className="max-w-6xl mx-auto ">
             <h1 className="text-2xl font-bold mb-5">Lịch Sân Bóng</h1>
 
-            <div className={"flex flex-row justify-start items-center mb-5 gap-10"}>
-                {/* Chọn ngày xem */}
-                <div className="">
-                    <label className="mr-2">Chọn ngày xem:</label>
-                    <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={(e) => {
-                            setSelectedDate(e.target.value);
-                        }}
-                        className="border rounded p-2"
-                    />
-                </div>
+            {/* Chọn ngày xem */}
+            <div className="mb-2">
+                <label className="mr-2">Chọn ngày xem:</label>
+                <DatePicker
+                    onChange={(e) => {
+                        setSelectedDate(e.target.value);
+                    }}
+                    className="border rounded p-2"
+                />
+            </div>
 
                 {/* Chọn loại sân */}
                 <div className="">

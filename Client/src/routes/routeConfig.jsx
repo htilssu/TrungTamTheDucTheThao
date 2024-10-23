@@ -23,16 +23,16 @@ import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
 import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
-import Sellcourses from '../modules/core/components/Sellcourses/Sellcourses.jsx';
-import CoursesManage from "../pages/admin/layout-admin/courses-manage/CoursesManage.jsx";
 import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 import BookingPage from "../modules/core/components/booking/field/BookingFieldList.jsx";
 import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
 
+import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
+import Sellcourses from '../pages/admin/layout-admin/employee-manage/Sellcourses.jsx'
 export const router = createBrowserRouter([
     {
         path: 'admin',
-        element: <AdminDashboard/>, // Quản lý sân sẽ là trang cha
+        element: <AdminDashboard/>,
         children: [
             {
                 index: true,
@@ -63,6 +63,14 @@ export const router = createBrowserRouter([
                 element: <CoursesManage/>,
             },
 
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
+            {
+                path: 'sellcourses',
+                element: <Sellcourses />,
+            },
             {
               path: 'soccer-manage',
               element: <FootballLayout/>,
