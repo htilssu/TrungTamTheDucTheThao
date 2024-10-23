@@ -93,47 +93,49 @@ const BookingSchedule = () => {
     };
 
     return (
-        <div className="max-w-6xl mx-auto p-5">
+        <div className="max-w-6xl mx-auto ">
             <h1 className="text-2xl font-bold mb-5">Lịch Sân Bóng</h1>
 
-            {/* Chọn ngày xem */}
-            <div className="mb-2">
-                <label className="mr-2">Chọn ngày xem:</label>
-                <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => {
-                        setSelectedDate(e.target.value);
-                    }}
-                    className="border rounded p-2"
-                />
-            </div>
+            <div className={"flex flex-row justify-start items-center mb-5 gap-10"}>
+                {/* Chọn ngày xem */}
+                <div className="">
+                    <label className="mr-2">Chọn ngày xem:</label>
+                    <input
+                        type="date"
+                        value={selectedDate}
+                        onChange={(e) => {
+                            setSelectedDate(e.target.value);
+                        }}
+                        className="border rounded p-2"
+                    />
+                </div>
 
-            {/* Chọn loại sân */}
-            <div className="mb-5">
-                <label className="mr-2">Chọn loại sân:</label>
-                <select
-                    value={selectedField}
-                    onChange={(e) => {
-                        setSelectedField(e.target.value);
-                    }}
-                    className="border rounded p-2"
-                >
-                    <option value="5">Sân 5</option>
-                    <option value="7">Sân 7</option>
-                    <option value="11">Sân 11</option>
-                </select>
+                {/* Chọn loại sân */}
+                <div className="">
+                    <label className="mr-2">Chọn loại sân:</label>
+                    <select
+                        value={selectedField}
+                        onChange={(e) => {
+                            setSelectedField(e.target.value);
+                        }}
+                        className="border rounded p-2"
+                    >
+                        <option value="5">Sân 5</option>
+                        <option value="7">Sân 7</option>
+                        <option value="11">Sân 11</option>
+                    </select>
+                </div>
             </div>
 
             <table className="min-w-full border border-gray-300">
                 <thead>
                 <tr>
-                    <th style={{position: 'sticky', top: 70, backgroundColor: 'white', zIndex: 10}}
-                        className="border border-gray-300 p-2">Thời gian
+                    <th style={{position: 'sticky', top: 65, backgroundColor: 'slategray', zIndex: 10}}
+                        className="border border-gray-300 p-2 text-white">Khung giờ
                     </th>
                     {dates.map(({date, display}) => (
-                        <th key={date} style={{position: 'sticky', top: 70, backgroundColor: 'white', zIndex: 10}}
-                            className="border border-gray-300 p-2">
+                        <th key={date} style={{position: 'sticky', top: 65, backgroundColor: 'slategray', zIndex: 10}}
+                            className="border border-gray-300 p-2 text-white">
                             {display}
                         </th>
                     ))}

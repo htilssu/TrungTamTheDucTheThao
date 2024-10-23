@@ -29,10 +29,10 @@ pull-image:
       artifacts: false
   before_script:
     - chmod 400 $SSH_KEY
-    - cat << EOF > ~/secrets/.env.tttd
   script:
     - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
+      echo \"$ENV\" > ~/secrets/.env.tttd &&
       sudo docker pull htilssu/trungtamthethao:latest &&
-      sudo docker ps -aq  | xargs -r docker stop | xargs -r docker rm &&
+      sudo docker ps -aq  | xargs -r sudo docker stop | xargs -r sudo docker rm &&
       sudo docker run --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p 8080:8080 htilssu/trungtamthethao:latest
       "

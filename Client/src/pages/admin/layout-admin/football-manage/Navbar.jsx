@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
     return (
         <div className=" w-full">
-            <nav className="bg-gradient-to-r from-green-500 to-teal-500 w-full p-4 shadow-lg">
+            <nav className="bg-gradient-to-r from-gray-800 to-teal-500 w-full p-4 px-14 shadow-lg">
                 <div className="container mx-auto flex justify-between items-center">
                     {/* Logo / Title */}
                     <div className="text-white text-2xl font-medium tracking-wider transform transition-transform hover:scale-105">

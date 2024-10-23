@@ -7,6 +7,7 @@ import Home from "../pages/home/HomePage.jsx";
 import RentYardPage from "../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx";
 import SoccerFieldInfo from "../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx";
 import SignIn from '../pages/sign-in/SignIn.jsx';
+import HistoryBooking from '../modules/core/components/rent-a-yard/SoccerField/HistoryBooking.jsx';
 import GymPage from "../modules/core/components/gym/GymPage.jsx";
 import FootballLayout from "../pages/admin/layout-admin/football-manage/FootballLayout.jsx";
 import FieldListPage from "../pages/admin/layout-admin/football-manage/FieldListPage.jsx";
@@ -22,12 +23,16 @@ import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
 import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
+import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
+import BookingPage from "../modules/core/components/booking/field/BookingFieldList.jsx";
+import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
+
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 import Sellcourses from '../pages/admin/layout-admin/employee-manage/Sellcourses.jsx'
 export const router = createBrowserRouter([
     {
         path: 'admin',
-        element: <AdminDashboard/>, 
+        element: <AdminDashboard/>,
         children: [
             {
                 index: true,
@@ -53,6 +58,11 @@ export const router = createBrowserRouter([
                 path: 'employee-manage',
                 element: <EmployeeLayout/>,
             },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
+
             {
                 path: 'courses-manage',
                 element: <CoursesManage/>,
@@ -113,6 +123,27 @@ export const router = createBrowserRouter([
             {
                 path: 'gym',
                 element: <GymPage/>,
+            },
+            {
+                path:'user/:id',
+                element:<UserDisplay/>
+            },
+            {
+                path: 'booking',
+                element: <BookingPage/>,
+            }
+            ,
+            {
+                path: '/history-booking',
+                element: <HistoryBooking />
+            },
+            {
+                path: '/sellcourses',
+                element: <Sellcourses />,
+            },
+            {
+                path: '/contact',
+                element: <ContactPage/>,
             }
         ],
         errorElement: <PageNotFound/>,
@@ -129,50 +160,5 @@ export const router = createBrowserRouter([
         path: 'forgot-password',
         element: <ForgotPassword/>,
     },
-  {
-    path: '',
-    element: <MainLayout/>,
-    children: [
-      {
-        index: true,
-        element: <Home/>,
-      },
-        {
-            path: '/soccer',
-            element: <SoccerFieldInfo />,
-        },
-        {
-            path: '/soccer/rent-yard',
-            element: <RentYardPage />
-        },
-        
 
-
-    ],
-    errorElement: <PageNotFound/>,
-  },
-    {
-        path: '',
-        element: <MainLayout/>,
-        children: [
-            {
-                index: true,
-                element: <Home/>,
-            },
-            {
-                path: '/soccer',
-                element: <SoccerFieldInfo/>,
-            },
-            {
-                path: '/soccer/rent-yard',
-                element: <RentYardPage/>
-            }
-            ,
-            {
-                path: '/gym',
-                element: <GymPage/>
-            }
-        ],
-        errorElement: <PageNotFound/>,
-    },
 ]);
