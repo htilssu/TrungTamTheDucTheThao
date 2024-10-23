@@ -22,11 +22,12 @@ import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
 import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
+import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 
 export const router = createBrowserRouter([
     {
         path: 'admin',
-        element: <AdminDashboard/>, // Quản lý sân sẽ là trang cha
+        element: <AdminDashboard/>, 
         children: [
             {
                 index: true,
@@ -52,6 +53,11 @@ export const router = createBrowserRouter([
                 path: 'employee-manage',
                 element: <EmployeeLayout/>,
             },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
+
             {
               path: 'soccer-manage',
               element: <FootballLayout/>,
@@ -120,6 +126,31 @@ export const router = createBrowserRouter([
         path: 'forgot-password',
         element: <ForgotPassword/>,
     },
+  {
+    path: '',
+    element: <MainLayout/>,
+    children: [
+      {
+        index: true,
+        element: <Home/>,
+      },
+        {
+            path: '/soccer',
+            element: <SoccerFieldInfo />,
+        },
+        {
+            path: '/soccer/rent-yard',
+            element: <RentYardPage />
+        },
+        // {
+        //     path: '/sellcourses',
+        //     element: <Sellcourses />,
+        // },
+
+
+    ],
+    errorElement: <PageNotFound/>,
+  },
     {
         path: '',
         element: <MainLayout/>,

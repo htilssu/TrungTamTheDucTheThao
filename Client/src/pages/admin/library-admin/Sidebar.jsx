@@ -4,10 +4,12 @@ import {MdHome, MdSettings, MdAssessment, MdManageAccounts, MdGroups2} from "rea
 import {Collapse} from '@material-tailwind/react';
 import {useState} from "react";
 import {SiGoogletagmanager} from "react-icons/si";
-import {IoIosArrowForward, IoMdPersonAdd} from "react-icons/io";
 import {BsPersonVcardFill} from "react-icons/bs";
 import {RiFileList3Fill} from "react-icons/ri";
 import {NavLink} from "react-router-dom";
+import {IoIosArrowForward, IoMdPersonAdd} from "react-icons/io";
+import {PiBookOpenBold} from "react-icons/pi";
+
 
 const Sidebar = ({isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode}) => {
     // Function to toggle sidebar open/close
@@ -32,7 +34,7 @@ const Sidebar = ({isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode}) =
         {name: 'Quản lý Bài Đăng', link: '/admin/post-manage', icon: <RiFileList3Fill/>},
         {name: 'Quản lý Khách hàng', link: '/admin/customer-manage', icon: <BsPersonVcardFill/>},
         {name: 'Quản lý Nhân viên', link: '/admin/employee-manage', icon: <MdGroups2/>},
-        {name: 'Quản lý ..', link: '/admin/', icon: <IoMdPersonAdd />},
+        {name: 'Quản lý khóa học', link: '/admin/courses-manage', icon: <PiBookOpenBold />}
     ];
 
     return (
