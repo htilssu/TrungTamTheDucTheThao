@@ -25,6 +25,9 @@ import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
 import Sellcourses from '../modules/core/components/Sellcourses/Sellcourses.jsx';
 import CoursesManage from "../pages/admin/layout-admin/courses-manage/CoursesManage.jsx";
+import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
+import BookingPage from "../modules/core/components/booking/field/BookingFieldList.jsx";
+import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -112,6 +115,27 @@ export const router = createBrowserRouter([
             {
                 path: 'gym',
                 element: <GymPage/>,
+            },
+            {
+                path:'user/:id',
+                element:<UserDisplay/>
+            },
+            {
+                path: 'booking',
+                element: <BookingPage/>,
+            }
+            ,
+            {
+                path: '/history-booking',
+                element: <HistoryBooking />
+            },
+            {
+                path: '/sellcourses',
+                element: <Sellcourses />,
+            },
+            {
+                path: '/contact',
+                element: <ContactPage/>,
             }
         ],
         errorElement: <PageNotFound/>,
@@ -128,58 +152,5 @@ export const router = createBrowserRouter([
         path: 'forgot-password',
         element: <ForgotPassword/>,
     },
-  {
-    path: '',
-    element: <MainLayout/>,
-    children: [
-      {
-        index: true,
-        element: <Home/>,
-      },
-        {
-            path: '/soccer',
-            element: <SoccerFieldInfo />,
-        },
-        {
-            path: '/soccer/rent-yard',
-            element: <RentYardPage />
-        }
-        ,
-        {
-            path: '/history-booking',
-            element: <HistoryBooking />
-        },
-        {
-            path: '/sellcourses',
-            element: <Sellcourses />,
-        },
 
-
-    ],
-    errorElement: <PageNotFound/>,
-  },
-    {
-        path: '',
-        element: <MainLayout/>,
-        children: [
-            {
-                index: true,
-                element: <Home/>,
-            },
-            {
-                path: '/soccer',
-                element: <SoccerFieldInfo/>,
-            },
-            {
-                path: '/soccer/rent-yard',
-                element: <RentYardPage/>
-            }
-            ,
-            {
-                path: '/gym',
-                element: <GymPage/>
-            }
-        ],
-        errorElement: <PageNotFound/>,
-    },
 ]);

@@ -1,5 +1,7 @@
-import {useEffect, useRef, useState} from 'react';
-
+import {useEffect, useRef, useState,useContext} from 'react';
+import { useNavigate,useParams,Link } from 'react-router-dom';
+import axios from 'axios';
+import { UserContext } from '../../../context/UserContext';
 // Component cho một Menu Item
 // eslint-disable-next-line react/prop-types
 const MegaItem = ({ title, description, link }) => {
@@ -73,14 +75,20 @@ const UserMenuItem = ({ link, text }) => {
 
 // Component chính của Navbar
 const Navbar = () => {
+    const { id } = useParams();
+    // const [user, setUser] = useState({firstName,lastName});
+    const {user,setUser } = useContext(UserContext); // Lấy dữ liệu người dùng từ context
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+    const navigate = useNavigate();  // Khởi tạo hàm navigate để chuyển trang
     // Toggle User Menu
     const toggleUserMenu = () => {
         setIsUserMenuOpen(!isUserMenuOpen);
     };
+    // Hàm xử lý điều hướng đến trang UserDisplay
     const UsermenuRef = useRef(null); // Ref cho UserMenu
     const UserbuttonRef = useRef(null); // Ref cho nút UserMenu
 
@@ -99,6 +107,26 @@ const Navbar = () => {
         };
     }, []);
 
+    useEffect(() => {
+        axios
+          .get(`http://localhost:8080/user/5`)
+          .then((response) => {
+            const { firstName, lastName,avatar } = response.data; // Chỉ lấy firstname và lastname
+            setUser({
+              firstName,
+              lastName,
+              avatar,
+            });
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching user:", error.response?.status, error.message);
+            setError("Không tìm thấy người dùng");
+            setLoading(false);
+          });
+      }, [id]);
+      
+    
     const menuRef = useRef(null); // Ref cho MegaMenu
     const buttonRef = useRef(null); // Ref cho nút "Dịch Vụ"
     // Hàm xử lý sự kiện khi chuột rời khỏi khu vực menu hoặc nút "Dịch Vụ"
@@ -157,21 +185,24 @@ const Navbar = () => {
                             aria-haspopup="true"
                         >
                             <span className="sr-only">Open user menu</span>
-                            <img className="w-8 h-8 rounded-full" src="/avatarH.png" alt="User Avatar" />
+                            <img className="w-9 h-9 rounded-full" src={user?.avatar} alt="User Avatar" />
                         </button>
 
                         {/* User menu dropdown */}
                         {isUserMenuOpen && (
                             <div ref={UsermenuRef} className="absolute right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
                                 <div className="px-4 py-3">
-                                    <span className="block text-sm font-medium text-gray-900 dark:text-white">Tuan Anh</span>
-                                    <span className="block text-sm text-gray-500 dark:text-gray-400">ngokhong@gmail.com</span>
+                                    <span className="block text-sm font-medium text-gray-900 dark:text-white">
+                                    {user.firstName} {user.lastName}</span>
+                                    <span className="block text-sm text-gray-500 dark:text-gray-400">
+                                    ngokhong@gmail.com</span>
                                 </div>
                                 <ul className="py-2">
                                     <UserMenuItem link="/dashboard" text="Dashboard" />
                                     <UserMenuItem link="/settings" text="Settings" />
-                                    <UserMenuItem link="/earnings" text="Earnings" />
+                                    <UserMenuItem link={`/user/5`} text="Edit" />
                                     <UserMenuItem link="/sign-in" text="Sign out" />
+                              
                                 </ul>
                             </div>
                         )}
@@ -213,12 +244,12 @@ const Navbar = () => {
                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Khóa Học</a>
                         </li>
                         <li>
-                            <a href="#"
-                               className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Đặt
-                                Lịch</a>
+                            <a href="/booking"
+                               className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                                Lịch Đặt</a>
                         </li>
                         <li>
-                            <a href="#"
+                            <a href="/contact"
                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Liên Hệ</a>
                         </li>
                     </ul>
