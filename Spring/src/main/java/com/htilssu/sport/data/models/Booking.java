@@ -2,14 +2,9 @@ package com.htilssu.sport.data.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
 import java.time.Instant;
 
 @Getter
@@ -28,15 +23,15 @@ public class Booking {
     private User idUser;
 
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 
     @NotNull
     @Column(name = "booking_from", nullable = false)
-    private OffsetDateTime bookingFrom;
+    private Instant bookingFrom;
 
     @NotNull
     @Column(name = "booking_to", nullable = false)
-    private OffsetDateTime bookingTo;
+    private Instant bookingTo;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
