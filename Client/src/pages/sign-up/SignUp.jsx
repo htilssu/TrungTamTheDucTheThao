@@ -2,118 +2,129 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
-    const [name, setName] = useState('');
-    const [gender, setGender] = useState(true);
-    const [dob, setDob] = useState(null);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [rePassword, setRepassword] = useState('');
-    const [error, setError] = useState("");
-    const [isMale, setIsMale] = useState(true);
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState(true);
+  const [dob, setDob] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rePassword, setRepassword] = useState('');
+  const [isMale, setIsMale] = useState(true);
+  const navigate = useNavigate(); 
 
-    const nowDate = new Date();
+  const nowDate = new Date();
 
-    const calculateAge = (date) => {
-        if (!date) return 0;
-        const ageDiff = nowDate - date;
-        const ageDate = new Date(ageDiff); 
-        return Math.abs(ageDate.getUTCFullYear() - 1970);
-    };
+  const calculateAge = (date) => {
+      if (!date) return 0;
+      const ageDiff = nowDate - date;
+      const ageDate = new Date(ageDiff); 
+      return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
 
-    const toggleGender = () => {
-        setIsMale(!isMale);
-        setGender(isMale ? true : false);
-    };
+  const toggleGender = () => {
+      setIsMale(!isMale);
+      setGender(isMale ? true : false);
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+      e.preventDefault();
 
-        let hasError = false;
-        setError("");
-
-        if (!name) {
-            setError('Tên không được để trống.');
-            hasError = true;
-        } else if (name.length < 2 || name.length > 30) {
-            setError('Tên phải có từ 2 đến 30 ký tự.');
-            hasError = true;
+      const showToast = (message) => {
+        const toastId = message;
+        if (!toast.isActive(toastId)) {
+            toast.error(message, {toastId});
         }
+        return false;
+      };  
 
-        if (!dob) {
-            setError('Ngày sinh không được để trống.');
-            hasError = true;
-        } else if (calculateAge(dob) < 13) {
-            setError('Tuổi phải lớn hơn hoặc bằng 13.');
-            hasError = true;
-        }
+      let hasError = false;
 
-        if (!email) {
-            setError('Email không được để trống.');
-            hasError = true;
-        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-            setError('Email không hợp lệ.');
-            hasError = true;
-        }
+      if (!name) {
+        showToast('Tên không được để trống.');
+        hasError = true;
+      } else if (name.length < 2 || name.length > 30) {
+          showToast('Tên phải có từ 2 đến 30 ký tự.');
+          hasError = true;
+      }
 
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,18}$/;
+      if (!dob) {
+          showToast('Ngày sinh không được để trống.');
+          hasError = true;
+      } else if (calculateAge(dob) < 13) {
+          showToast('Tuổi phải lớn hơn hoặc bằng 13.');
+          hasError = true;
+      }
 
-        if (!password) {
-            setError('Mật khẩu không được để trống.');
-            hasError = true;
-        } else if (password.length < 6 || password.length > 18) {
-            setError('Mật khẩu phải có ít nhất 6 ký tự.');
-            hasError = true;
-        } else if (!passwordRegex.test(password)) {
-            setError('Mật khẩu phải có từ 6 kí tự đến 18 kí tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt.');
-            hasError = true;
-        }
+      if (!email) {
+          showToast('Email không được để trống.');
+          hasError = true;
+      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+          showToast('Email không hợp lệ.');
+          hasError = true;
+      }
 
-        if (password !== rePassword) {
-            setError('Mật khẩu nhập lại không khớp.');
-            hasError = true;
-        }
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,18}$/;
 
-        if (!hasError) {
-            try {
-                const response = await fetch('http://localhost:8080/api/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        user: {
-                            lastName: name,
-                            gender: gender,
-                            dob: dob.toISOString().split('T')[0] 
-                        },
-                        email: email,
-                        password: password,
-                        confirmPassword: rePassword
-                    }),
-                });
+      if (!password) {
+          showToast('Mật khẩu không được để trống.');
+          hasError = true;
+      } else if (password.length < 6 || password.length > 18) {
+          showToast('Mật khẩu phải có ít nhất 6 ký tự.');
+          hasError = true;
+      } else if (!passwordRegex.test(password)) {
+          showToast('Mật khẩu phải có từ 6 kí tự đến 18 kí tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt.');
+          hasError = true;
+      }
 
-                if (response.ok) {
-                    console.log('Đăng ký tài khoản thành công!');
-                    setName('');
-                    setGender(true);
-                    setDob(null);
-                    setEmail('');
-                    setPassword('');
-                    setRepassword('');
-                } else {
-                    const errorData = await response.json();
-                    console.error('Đăng ký tài khoản thất bại: ', errorData.message);
-                    setError(errorData.message || 'Đăng ký tài khoản thất bại.');
-                }
-            } catch (error) {
-                console.error('Lỗi khi gửi yêu cầu: ', error);
-                setError('Lỗi khi gửi yêu cầu.');
-            }
-        }
-    };
+      if (!rePassword) {
+          showToast('Nhập lại mật khẩu không được để trống.');
+          hasError = true;
+      } else if (password !== rePassword) {
+          showToast('Mật khẩu nhập lại không khớp.');
+          hasError = true;
+      }
+
+      if (!hasError) {
+          try {
+              const response = await fetch('http://localhost:8080/api/register', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                      user: {
+                          lastName: name,
+                          gender: gender,
+                          dob: dob.toISOString().split('T')[0]
+                      },
+                      email: email,
+                      password: password,
+                      confirmPassword: rePassword
+                  }),
+              });
+
+              if (response.ok) {
+                  toast.success('Đăng ký tài khoản thành công!');
+                  setName('');
+                  setGender(true);
+                  setDob(null);
+                  setEmail('');
+                  setPassword('');
+                  setRepassword('');
+                  return navigate('/sign-in');
+              } else {
+                  const errorData = await response.json();
+                  showToast(errorData.message || 'Đăng ký tài khoản thất bại.');
+              }
+          } catch {
+              showToast('Lỗi khi gửi yêu cầu.');
+          }
+      }
+  };
 
     return (
         <div
@@ -179,17 +190,6 @@ const SignUp = () => {
               >
                 Sport Center
               </motion.h1>
-              {/* Log Error */}
-              {error && (
-                <motion.p
-                  className="text-red-500 text-sm mb-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {error}
-                </motion.p>
-              )}
               {/* Form */}
               <form onSubmit={handleSubmit} className="w-full">
                 {/* Name */}
@@ -382,6 +382,7 @@ const SignUp = () => {
                   </p>
                 </motion.div>
               </form>
+              <ToastContainer />
             </div>
           </div>
         </div>
