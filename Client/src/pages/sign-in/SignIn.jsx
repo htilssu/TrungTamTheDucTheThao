@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaFacebookF } from "react-icons/fa"; // Import icon Facebook
 import { GoogleLogin } from "@react-oauth/google"; //google sign in
@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { SiGithub } from "react-icons/si";
 import { FcGoogle } from 'react-icons/fc';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // import axios from 'axios';
 
@@ -16,9 +18,17 @@ const SignIn = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const [token, setToken] = useState(null);
     const loginGitHub = () => {
-    window.location.assign("https://github.com/login/oauth/authorize?client_id=" + gitAppId);
-  }
+      window.location.assign("https://github.com/login/oauth/authorize?client_id=" + gitAppId);
+    }
+
+    useEffect (() => {
+      const saveToken = localStorage.getItem('token');
+      if(saveToken){
+        setToken(saveToken);
+      }
+    }, []);
   /////GOOGLE API
   // const [user, setUser] = useState(null);
   // const [profile, setProfile] = useState(null);
@@ -76,24 +86,83 @@ const SignIn = () => {
   const errorMessage = (error) => {
     console.log(error);
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let hasError = false;
+
+    const showToast = (message) => {
+      const toastId = message;
+      if (!toast.isActive(toastId)) {
+          toast.error(message, {toastId});
+      }
+      return false;
+    };
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) {
+    if (!email.trim()) {
+      showToast("Email không được để trống.");
+      hasError = true;
+    } else if (!emailRegex.test(email)) {
       setError("Email không hợp lệ.");
-      return;
+      hasError = true;
     }
-    if (password.length < 6) {
-      setError("Mật khẩu phải có ít nhất 6 ký tự.");
-      return;
+    
+    if (!password.trim()) {
+      showToast("Mật khẩu không được để trống.");
+      hasError = true;
+    } else if (password.length < 6 || password.length > 18) {
+      showToast("Mật khẩu phải từ 6 kí tự đến 18 kí tự.");
+      return true;
     }
-    setError("");
     if (import.meta.env.DEV) {
       console.log("Signing in with email:", email);
     }
     setEmail("");
     setPassword("");
+
+    if (!hasError) {  
+      try {
+        const response = await fetch('http://localhost:8080/api/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: email,
+              password: password,
+          }),
+      });
+
+        if (response.ok) {
+          toast.success('Đăng nhập tài khoản thành công!');
+          //save token
+          const data = await response.json();
+          if(import.meta.env.DEV){
+            console.log("data =", data);
+          }
+          const token = data.detail;
+          localStorage.setItem('token', token);
+          setToken(token);
+          if (import.meta.env.DEV) {
+            console.log("token =", token);
+          }
+          //
+          setEmail('');
+          setPassword('');
+
+          return navigate('/');
+        } else {
+            const errorData = await response.json();
+            showToast(errorData.message || 'Đăng nhập tài khoản thất bại.');
+        }
+      } catch {
+        showToast('Lỗi khi gửi yêu cầu.');
+      }
+    }
   };
+  
   return (
     <div
       className="flex md:justify-end justify-center items-center"
@@ -348,6 +417,7 @@ const SignIn = () => {
                </div>
             </motion.div>
           </form>
+          <ToastContainer />
         </div>
       </div>
     </div>
