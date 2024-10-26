@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaFacebookF } from "react-icons/fa"; // Import icon Facebook
 import { GoogleLogin } from "@react-oauth/google"; //google sign in
@@ -18,17 +18,10 @@ const SignIn = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const [token, setToken] = useState(null);
     const loginGitHub = () => {
       window.location.assign("https://github.com/login/oauth/authorize?client_id=" + gitAppId);
     }
 
-    useEffect (() => {
-      const saveToken = localStorage.getItem('token');
-      if(saveToken){
-        setToken(saveToken);
-      }
-    }, []);
   /////GOOGLE API
   // const [user, setUser] = useState(null);
   // const [profile, setProfile] = useState(null);
@@ -89,79 +82,80 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let hasError = validateForm(); 
+    if (hasError) return; 
 
-    let hasError = false;
-
-    const showToast = (message) => {
-      const toastId = message;
-      if (!toast.isActive(toastId)) {
-          toast.error(message, {toastId});
-      }
-      return false;
-    };
-
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!email.trim()) {
-      showToast("Email không được để trống.");
-      hasError = true;
-    } else if (!emailRegex.test(email)) {
-      setError("Email không hợp lệ.");
-      hasError = true;
-    }
-    
-    if (!password.trim()) {
-      showToast("Mật khẩu không được để trống.");
-      hasError = true;
-    } else if (password.length < 6 || password.length > 18) {
-      showToast("Mật khẩu phải từ 6 kí tự đến 18 kí tự.");
-      return true;
-    }
     if (import.meta.env.DEV) {
-      console.log("Signing in with email:", email);
+        console.log("Signing in with email:", email);
     }
-    setEmail("");
-    setPassword("");
 
-    if (!hasError) {  
-      try {
-        const response = await fetch('http://localhost:8080/api/login', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-              email: email,
-              password: password,
-          }),
-      });
+    try {
+        const response = await sendLoginRequest(email, password); 
 
         if (response.ok) {
-          toast.success('Đăng nhập tài khoản thành công!');
-          //save token
-          const data = await response.json();
-          if(import.meta.env.DEV){
-            console.log("data =", data);
-          }
-          const token = data.detail;
-          localStorage.setItem('token', token);
-          setToken(token);
-          if (import.meta.env.DEV) {
-            console.log("token =", token);
-          }
-          //
-          setEmail('');
-          setPassword('');
-
-          return navigate('/');
+            await handleLoginSuccess(response); 
         } else {
             const errorData = await response.json();
             showToast(errorData.message || 'Đăng nhập tài khoản thất bại.');
         }
-      } catch {
+    } catch {
         showToast('Lỗi khi gửi yêu cầu.');
-      }
     }
-  };
+};
+
+const validateForm = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email.trim()) {
+        showToast("Email không được để trống.");
+        return true;
+    }
+    if (!emailRegex.test(email)) {
+        setError("Email không hợp lệ.");
+        return true;
+    }
+
+    if (!password.trim()) {
+        showToast("Mật khẩu không được để trống.");
+        return true;
+    }
+    if (password.length < 6 || password.length > 18) {
+        showToast("Mật khẩu phải từ 6 kí tự đến 18 kí tự.");
+        return true;
+    }
+    return false;
+};
+
+const sendLoginRequest = (email, password) => {
+    return fetch('http://localhost:8080/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+    });
+};
+
+const handleLoginSuccess = async (response) => {
+    const data = await response.json();
+    const token = data.detail;
+    localStorage.setItem('token', token);
+    
+    if (import.meta.env.DEV) {
+        console.log("token =", token);
+    }
+
+    setEmail('');
+    setPassword('');
+    toast.success('Đăng nhập tài khoản thành công!');
+    return navigate('/');
+};
+
+const showToast = (message) => {
+    const toastId = message;
+    if (!toast.isActive(toastId)) {
+        toast.error(message, { toastId });
+    }
+};
   
   return (
     <div
