@@ -1,13 +1,13 @@
 import ScrollableCardList from './components/ScrollableCardList.jsx';
 import FeatureCategory from './components/FeatureCategory.jsx';
 import SliderBanner from './components/SliderBanner.jsx';
-import GymLayout from '../admin/layout-admin/gym-manage/GymLayout.jsx';
+import Banner from './components/Banner';
 
 const Home = () => {
   return (
       <div className=" sm:p-8 text-center bg-gray-100 ">
         <div>
-          <GymLayout/>
+          <Banner/>
         </div>
         <div>
           <SliderBanner/>

@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import '../../../home/components/SliderBanner.css';
+import './SliderBanner.css';
 
-const GymLayout = () => {
+const Banner = () => {
     const slides = [
         { image: 'gym-thumbnail1.png', name: 'SPORT CENTER', description: 'Tinh ru anh hieu di chay pho, chua kip chay pho thi anhchay mat tieu' },
         { image: 'gym-thumbnail2.png', name: 'SPORT CENTER', description: 'Tinh ru anh toan di chay pho, chua kip chay pho thi anhchay mat tieu' },
@@ -71,4 +71,4 @@ const GymLayout = () => {
     );
 };
 
-export default GymLayout;
+export default Banner;
