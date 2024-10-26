@@ -1,25 +1,34 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import {ScrollRestoration, useNavigate} from "react-router-dom";
-import { DatePicker } from 'antd';
+import {DatePicker} from 'antd';
 import dayjs from 'dayjs';
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import DotLoader from "react-spinners/DotLoader";
 import {TextField} from "@mui/material";
+import axios from "axios";
+import {MdLocationPin} from "react-icons/md";
 
 const RentYardPage = () => {
     const navigate = useNavigate();
-
-    // State lưu trữ loại sân, ngày, giờ, thông tin người đặt
+    const [fields, setFields] = useState([]);
     const [fieldType, setFieldType] = useState(null);
-    const [selectedField, setSelectedField] = useState(null); // Sân được chọn
-    const [selectedDate, setSelectedDate] = useState(null); // Ngày chọn
-    const [selectedTime, setSelectedTime] = useState(null); // Giờ chọn
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [deposit, setDeposit] = useState(''); // Số tiền đặt cọc
+    const [selectedField, setSelectedField] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDay, setSelectedDay] = useState('');
+    const [startTime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [selectedTime, setSelectedTime] = useState(null);
+    const [customerId, setCustomerId] = useState('');
+    const [customerName, setCustomerName] = useState('');
+    const [customerPhone, setCustomerPhone] = useState('');
+    const [depositAmount, setDepositAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [paymentMethod, setPaymentMethod] = useState('cash');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
+    // Thông báo lỗi
     const [fieldTypeError, setFieldTypeError] = useState('');
     const [selectedFieldError, setSelectedFieldError] = useState('');
     const [selectedDateError, setSelectedDateError] = useState('');
@@ -27,38 +36,82 @@ const RentYardPage = () => {
     const [nameError, setNameError] = useState('');
     const [phoneError, setPhoneError] = useState('');
 
-    // Danh sách sân 5 người, sân 7 người và sân 11 người
-    const fields = {
-        '5': [
-            { id: 'field-5-1', name: 'Sân 5 - Số 1', img: '/sanbong1.png' },
-            { id: 'field-5-2', name: 'Sân 5 - Số 2', img: '/sanbong2.png' },
-            { id: 'field-5-3', name: 'Sân 5 - Số 3', img: '/sanbong3.png' },
-        ],
-        '7': [
-            { id: 'field-7-1', name: 'Sân 7 - Số 1', img: '/sanbong1.png' },
-            { id: 'field-7-2', name: 'Sân 7 - Số 2', img: '/sanbong2.png' },
-        ]
-        ,
-        '11': [
-            { id: 'field-11-1', name: 'Sân 11 - Số 1', img: '/san11.png' },
-        ]
+    const fetchFields = async (fieldType) => {
+        try {
+            setLoading(true);
+            const response = await axios.get(`http://localhost:8080/v1/fields/type/${fieldType}`);
+            if (response && response.data && response.data.length > 0) {
+                setFields(response.data);
+            } else {
+                setFields([]);
+                setError("Không có sân nào cho loại này.");
+            }
+        } catch (err) {
+            console.error("Error fetching fields:", err);
+            setError("Failed to load fields.");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const availableTimes = [
-        { time: "05:00 - 06:30", isBooked: false },
-        { time: "06:30 - 08:00", isBooked: true },
-        { time: "08:00 - 09:30", isBooked: false },
-        { time: "09:30 - 11:00", isBooked: false },
-        { time: "11:00 - 12:30", isBooked: false },
-        { time: "12:30 - 14:00", isBooked: false },
-        { time: "14:00 - 15:30", isBooked: false },
-        { time: "15:30 - 17:00", isBooked: true },
-        { time: "17:00 - 18:30", isBooked: false },
-        { time: "18:30 - 20:00", isBooked: true },
-        { time: "20:00 - 21:30", isBooked: false },
-        { time: "21:30 - 23:00", isBooked: true },
-        { time: "23:00 - 00:30", isBooked: false },
-    ];
+    const [availableTimes, setAvailableTimes] = useState([
+        {time: "05:00 - 06:30", isBooked: false},
+        {time: "06:31 - 08:00", isBooked: false},
+        {time: "08:01 - 09:30", isBooked: false},
+        {time: "09:31 - 11:00", isBooked: false},
+        {time: "11:01 - 12:30", isBooked: false},
+        {time: "12:31 - 14:00", isBooked: false},
+        {time: "14:01 - 15:30", isBooked: false},
+        {time: "15:31 - 17:00", isBooked: false},
+        {time: "17:01 - 18:30", isBooked: false},
+        {time: "18:31 - 20:00", isBooked: false},
+        {time: "20:01 - 21:30", isBooked: false},
+        {time: "21:31 - 23:00", isBooked: false},
+        {time: "23:01 - 00:30", isBooked: false},
+    ]);
+
+    // Lấy khung giờ đã đặt cho một sân cụ thể vào một ngày cụ thể
+    const fetchBookedTimes = async (fieldId, date) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/v1/booking-field/available-times/${fieldId}?date=${date}`);
+            const bookedTimes = response.data.bookedTimes;
+
+            // Sử dụng bookedTimes để cập nhật trạng thái "isBooked"
+            setAvailableTimes(prevAvailableTimes =>
+                prevAvailableTimes.map((timeSlot) => ({
+                    ...timeSlot,
+                    isBooked: bookedTimes.includes(timeSlot.time),
+                }))
+            );
+        } catch (error) {
+            console.error("Error fetching booked times:", error);
+            setError("Failed to load booked times.");
+        }
+    };
+
+    // Xử lý khi chọn ngày và sân
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        setSelectedDay(getDayOfWeek(date));
+        if (selectedField) {
+            // Gọi API để lấy các khung giờ đã đặt của sân vào ngày được chọn
+            fetchBookedTimes(selectedField, date.format('YYYY-MM-DD'));
+        }
+    };
+    const handleFieldSelection = (fieldId) => {
+        setSelectedField(fieldId);
+        if (selectedDate) {
+            // Gọi API để lấy các khung giờ đã đặt của sân vào ngày được chọn
+            fetchBookedTimes(fieldId, selectedDate.format('YYYY-MM-DD'));
+        }
+    };
+
+
+    const getDayOfWeek = (date) => {
+        if (!date) return '';
+        const daysOfWeek = ['Chủ nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+        return daysOfWeek[date.day()];
+    };
 
     // Không cho phép chọn ngày quá khứ
     const disabledDate = (current) => {
@@ -67,28 +120,49 @@ const RentYardPage = () => {
 
     // Xử lý việc chọn khung giờ
     const handleSelectTime = (time) => {
-        setSelectedTime(time);
-    };
+        // Check if the selected time is booked
+        const selectedSlot = availableTimes.find(slot => slot.time === time);
 
-    // Tự động đặt số tiền đặt cọc dựa trên loại sân
-    const handleFieldTypeSelection = (type) => {
-        setFieldType(type);
-        setSelectedField(null); // Reset sân khi đổi loại sân
-        if (type === '5') {
-            setDeposit(100000); // Đặt cọc mặc định sân 5 người
-        } else if (type === '7') {
-            setDeposit(150000); // Đặt cọc mặc định sân 7 người
-        }
-        else if (type === '11') {
-            setDeposit(500000); // Đặt cọc mặc định sân 7 người
+        if (selectedSlot && !selectedSlot.isBooked) {
+            setStartTime(time.split(" - ")[0]);
+            setEndTime(time.split(" - ")[1]);
+            setSelectedTime(time);
+            setSelectedTimeError('');
+        } else {
+            setSelectedTimeError('Khung giờ đã được đặt. Vui lòng chọn khung giờ khác.');
         }
     };
 
-    // Xử lý việc đặt sân
-    const handleSubmit = () => {
+    // Xử lý khi chọn loại sân
+    const handleFieldTypeSelection = (fieldType) => {
+        fetchFields(fieldType);
+        setFieldType(fieldType);
+        setSelectedField(null);
+        setSelectedDate(null);
+        setStartTime('');
+        setEndTime('');
+        setSelectedTime('');
+
+        // Xác định tiền đặt cọc dựa trên loại sân
+        switch (fieldType) {
+            case '5v5':
+                setDepositAmount(100000);
+                break;
+            case '7v7':
+                setDepositAmount(150000);
+                break;
+            case '11v11':
+                setDepositAmount(500000);
+                break;
+            default:
+                setDepositAmount(0);
+        }
+    };
+
+    const validateForm = () => {
         let isValid = true;
 
-        // Reset all errors
+        // Reset tất cả các lỗi
         setFieldTypeError('');
         setSelectedFieldError('');
         setSelectedDateError('');
@@ -109,54 +183,109 @@ const RentYardPage = () => {
             setSelectedDateError('Vui lòng chọn ngày đặt.');
             isValid = false;
         }
-        if (!selectedTime) {
+        if (!startTime || !endTime) {
             setSelectedTimeError('Vui lòng chọn khung giờ.');
             isValid = false;
         }
-        if (!name) {
+        if (!customerName) {
             setNameError('Vui lòng nhập tên.');
             isValid = false;
         }
-        if (!phone || phone.length < 10) {
+        if (!customerPhone || customerPhone.length < 10) {
             setPhoneError('Vui lòng nhập số điện thoại hợp lệ.');
             isValid = false;
         }
 
+        return isValid;
+    };
+
+    // Xử lý việc đặt sân
+    const handleSubmit = async () => {
+        const isValid = validateForm();
         if (isValid) {
             setLoading(true);
-            setTimeout(() => {
+
+            // Parse startTime and endTime to a Day.js object
+            const startDateTime = dayjs(selectedDate)
+                .hour(parseInt(startTime.split(':')[0]))
+                .minute(parseInt(startTime.split(':')[1]))
+                .second(0);
+
+            const endDateTime = dayjs(selectedDate)
+                .hour(parseInt(endTime.split(':')[0]))
+                .minute(parseInt(endTime.split(':')[1]))
+                .second(0);
+
+            // Tạo object chứa dữ liệu cần gửi
+            const bookingData = {
+                footballField: {fieldId: selectedField},
+                customer: {id: 1},
+                customerName: customerName,
+                customerPhone: customerPhone,
+                startTime: startDateTime.toISOString(),
+                endTime: endDateTime.toISOString(),
+                depositAmount: depositAmount / 100000,
+                totalAmount: totalAmount / 100000,
+                paymentMethod: paymentMethod
+            };
+
+            try {
+                const response = await axios.post('http://localhost:8080/v1/booking-field', bookingData);
+
+                if (response.status === 200) {
+                    toast.success('Đặt sân thành công!');
+                    resetForm();
+                    // navigate('/');
+                } else {
+                    toast.error('Có lỗi xảy ra khi đặt sân!');
+                }
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                toast.error('Không thể đặt sân!');
+            } finally {
                 setLoading(false);
-                toast.success('Đặt sân thành công!');
-                navigate('/');
-            }, 4000);
+                resetForm();
+            }
         }
+    };
+
+    const resetForm = () => {
+        setSelectedField(null);
+        setCustomerName('');
+        setCustomerPhone('');
+        setStartTime('');
+        setEndTime('');
+        setSelectedTime('');
+        setDepositAmount(0);
+        setTotalAmount(0);
+        setPaymentMethod('cash');
     };
 
     return (
         <div>
             <div className="container mx-auto p-8 bg-white shadow-lg rounded-lg">
                 {/* Tiêu đề */}
-                <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 text-blue-700">Đặt sân bóng đá</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-center mb-6 text-blue-700">Đặt sân bóng đá</h2>
 
                 {/* Chọn loại sân */}
-                <div className="mb-6 ">
+                <div className="mb-6">
                     <h3 className="text-2xl font-semibold mb-4">Chọn loại sân</h3>
                     <div className="flex space-x-4 sm:justify-start justify-between">
                         <button
-                            className={`p-4 rounded-lg shadow-lg ${fieldType === '5' ? 'bg-green-500 text-white' : 'bg-gray-200'} hover:bg-green-400 transition-all duration-300`}
-                            onClick={() => handleFieldTypeSelection('5')}
+                            className={`p-4 rounded-lg shadow-lg ${fieldType === '5v5' ? 'bg-green-500 text-white' : 'bg-gray-200'} hover:bg-green-400 transition-all duration-300`}
+                            onClick={() => handleFieldTypeSelection('5v5')}
                         >
                             Sân 5 người
                         </button>
                         <button
-                            className={`p-4 rounded-lg shadow-lg ${fieldType === '7' ? 'bg-green-500 text-white' : 'bg-gray-200'} hover:bg-green-400 transition-all duration-300`}
-                            onClick={() => handleFieldTypeSelection('7')}
+                            className={`p-4 rounded-lg shadow-lg ${fieldType === '7v7' ? 'bg-green-500 text-white' : 'bg-gray-200'} hover:bg-green-400 transition-all duration-300`}
+                            onClick={() => handleFieldTypeSelection('7v7')}
                         >
                             Sân 7 người
                         </button>
                         <button
-                            className={`p-4 rounded-lg shadow-lg ${fieldType === '11' ? 'bg-green-500 text-white' : 'bg-gray-200'} hover:bg-green-400 transition-all duration-300`}
-                            onClick={() => handleFieldTypeSelection('11')}
+                            className={`p-4 rounded-lg shadow-lg ${fieldType === '11v11' ? 'bg-green-500 text-white' : 'bg-gray-200'} hover:bg-green-400 transition-all duration-300`}
+                            onClick={() => handleFieldTypeSelection('11v11')}
                         >
                             Sân 11 người
                         </button>
@@ -168,71 +297,92 @@ const RentYardPage = () => {
                 {fieldType && (
                     <div className="mb-6">
                         <h3 className="text-2xl font-semibold mb-4">Chọn sân cụ thể</h3>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            {fields[fieldType].map((field) => (
-                                <div
-                                    key={field.id}
-                                    className={`p-4 rounded-lg shadow-md text-center ${selectedField === field.id ? 'border-4 border-blue-500' : 'border-2 border-gray-300'} cursor-pointer`}
-                                    onClick={() => setSelectedField(field.id)}
-                                >
-                                    <img src={field.img} alt={field.name}
-                                         className="w-full h-40 object-cover rounded-md mb-2"/>
-                                    <p className="text-lg font-semibold">{field.name}</p>
-                                </div>
-                            ))}
-                        </div>
-                        {selectedFieldError && <p className="text-red-500 text-sm mt-2">{selectedFieldError}</p>}
+                        {fields.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {fields.map((field) => (
+                                    <div
+                                        key={field.fieldId}
+                                        className={`transition-transform duration-300 transform hover:scale-105 p-3 rounded-lg shadow-lg text-center ${selectedField === field.fieldId ? 'border-4 border-green-600' : 'border border-green-200'} cursor-pointer hover:border-green-400`}
+                                        onClick={() => handleFieldSelection(field.fieldId)}
+                                    >
+                                        <img
+                                            src={field.imageUrl || "/sanbong2.png"}
+                                            alt={field.fieldName}
+                                            className="w-full h-40 object-cover rounded-lg mb-3 shadow-md"
+                                        />
+                                        <p className="text-lg font-semibold text-gray-800">{field.fieldName}</p>
+                                        <div className="text-sm flex items-start justify-center p-1">
+                                            <MdLocationPin className="text-blue-600 mr-1"/>
+                                            <span className="text-gray-600">{field.location}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-red-600 text-lg font-semibold text-center">{error}</div>
+                        )}
+                        {selectedFieldError &&
+                            <p className="text-red-600 text-sm mt-2 text-center">{selectedFieldError}</p>}
                     </div>
                 )}
 
                 {/* Chọn ngày */}
-                <div className="mb-6">
-                    <h3 className="text-2xl font-semibold mb-4">Chọn ngày</h3>
-                    <DatePicker
-                        onChange={(date) => setSelectedDate(date)}
-                        disabledDate={disabledDate}
-                        className="p-2 border border-gray-300 rounded-lg w-full"
-                        placeholder="Chọn ngày"
-                        showToday={false}
-                    />
-                    {selectedDateError && <p className="text-red-500 text-sm mt-2">{selectedDateError}</p>}
-                </div>
+                {selectedField && (
+                    <div className="mb-8">
+                        <div className="flex flex-row gap-4 items-center mb-3">
+                            <h3 className="text-2xl font-semibold text-gray-800">Chọn ngày</h3>
+                        </div>
+                        <div className={"flex flex-row gap-4 items-center"}>
+                            <DatePicker
+                                onChange={(date) => {
+                                    handleDateChange(date)
+                                }}
+                                disabledDate={disabledDate}
+                            />
+                            {selectedDate && (
+                                <p className="mr-4 text-gray-600">
+                                    {selectedDay}, Ngày {selectedDate.format('DD/MM/YYYY')}.
+                                </p>
+                            )}
+                        </div>
+                        {selectedDateError && <p className="text-red-500 text-sm mt-2">{selectedDateError}</p>}
+                    </div>
+                )}
 
-                {/* Hiển thị khung giờ chỉ khi đã chọn ngày */}
+                {/* Chọn khung giờ */}
                 {selectedDate && (
-                    <div className="mb-6">
-                        <h3 className="text-2xl font-semibold mb-4">Chọn khung giờ</h3>
-                        <div className={"mb-4"}>
+                    <div className="mb-8">
+                        <h3 className="text-2xl font-semibold text-gray-800 mb-4">Chọn khung giờ</h3>
+                        <div className="flex justify-center mb-6">
                             <div className="flex space-x-4">
                                 <div className="flex items-center space-x-2">
                                     <div className="w-8 h-8 bg-white border border-gray-500"></div>
                                     <span>Sân trống</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <div className="w-8 h-8 bg-gray-300"></div>
+                                    <div className="w-8 h-8 border border-gray-500 bg-gray-300"></div>
                                     <span>Đã đặt</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <div className="w-8 h-8 bg-green-500"></div>
+                                    <div className="w-8 h-8 border border-gray-500 bg-green-500"></div>
                                     <span>Đang chọn</span>
                                 </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
-                            {availableTimes.map((slot, index) => (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            {availableTimes.map((timeSlot, index) => (
                                 <button
                                     key={index}
-                                    disabled={slot.isBooked}
-                                    className={`p-4 rounded-lg text-center shadow-md ${
-                                        slot.isBooked
-                                            ? 'bg-gray-300 text-white cursor-not-allowed'
-                                            : selectedTime === slot.time
-                                                ? 'bg-green-500 text-white'
-                                                : 'bg-gray-100 hover:bg-green-400 hover:text-white transition-all duration-300'
+                                    className={`px-4 py-2 rounded ${timeSlot.isBooked
+                                        ? 'bg-gray-300 text-black cursor-not-allowed'  
+                                        : selectedTime === timeSlot.time
+                                            ? 'bg-green-500 text-white' 
+                                            : 'bg-white text-black border border-gray-500' 
                                     }`}
-                                    onClick={() => !slot.isBooked && handleSelectTime(slot.time)}
+                                    onClick={() => handleSelectTime(timeSlot.time)}
+                                    disabled={timeSlot.isBooked}
                                 >
-                                    {slot.time}
+                                    {timeSlot.time}
                                 </button>
                             ))}
                         </div>
@@ -241,34 +391,42 @@ const RentYardPage = () => {
                 )}
 
                 {/* Thông tin người đặt */}
-                <div className="mb-6">
-                    <h3 className="text-2xl font-semibold mb-4">Thông tin người đặt</h3>
-                    <div className="flex flex-col gap-4">
-                        <div>
+                <div className="mb-6 bg-gray-100 p-6 rounded-lg shadow-lg">
+                    <h3 className="text-2xl font-semibold mb-3 text-gray-800">Thông tin người đặt</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center items-center">
+                        {/* Field: Tên người đặt */}
+                        <div className="w-full">
+                            <label className="block text-lg font-medium text-gray-700">
+                                Tên người đặt
+                            </label>
                             <TextField
                                 autoFocus
                                 margin="dense"
-                                label="Tên người đặt"
                                 type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                fullWidth
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                                className="w-full bg-white border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500"
+                                placeholder="Nhập tên của bạn"
                             />
                             {nameError && <p className="text-red-500 text-sm mt-2">{nameError}</p>}
                         </div>
-                        <div>
-                            <input
+
+                        {/* Field: Số điện thoại */}
+                        <div className="w-full">
+                            <label className="block text-lg font-medium text-gray-700">
+                                Số điện thoại
+                            </label>
+                            <TextField
                                 type="tel"
-                                value={phone}
+                                value={customerPhone}
                                 onChange={(e) => {
-                                    // Chỉ cho phép nhập số
                                     const phoneNumber = e.target.value.replace(/\D/, '');
-                                    setPhone(phoneNumber);
+                                    setCustomerPhone(phoneNumber);
                                 }}
-                                placeholder="Số điện thoại"
-                                className="p-2 border border-gray-300 rounded-lg w-full"
-                                pattern="[0-9]{10,11}"  // Ràng buộc số điện thoại từ 10-11 chữ số
-                                maxLength={11}          // Giới hạn số ký tự là 11
+                                className="w-full bg-white border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-500"
+                                placeholder="Nhập số điện thoại"
+                                pattern="[0-9]{10,11}"
+                                maxLength={11}
                             />
                             {phoneError && <p className="text-red-500 text-sm mt-2">{phoneError}</p>}
                         </div>
@@ -277,30 +435,26 @@ const RentYardPage = () => {
 
                 {/* Thanh toán đặt cọc */}
                 <div className="mb-6">
-                    <h3 className="text-2xl font-semibold mb-4">Thanh toán</h3>
+                    <h3 className="text-2xl font-semibold mb-3">Thanh toán</h3>
                     <p className="text-lg flex flex-col sm:flex-row gap-2">
                         <div>Số tiền cần phải đặt cọc :</div>
                         <div className="font-medium text-green-500">
-                            <span
-                            >{deposit ? deposit.toLocaleString() : 'Chọn loại sân'}
-                            </span> VNĐ
+                            <span>{depositAmount.toLocaleString()} VNĐ</span>
                         </div>
                     </p>
                 </div>
 
-                <div className="flex flex-col items-center">
-                    {/* Hiển thị nút hoặc loader dựa trên trạng thái loading */}
+                {/* Xác nhận đặt sân */}
+                <div className="flex justify-center">
                     {!loading ? (
                         <button
                             onClick={handleSubmit}
-                            className="bg-green-500 text-white px-8 py-4 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300"
+                            className="px-6 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-500 transition-all duration-300"
                         >
                             Xác nhận đặt sân
                         </button>
                     ) : (
-                        <div className="mt-4">
-                            <DotLoader color="#3bd773" size={40}/>
-                        </div>
+                        <DotLoader color="#3bd773" size={40}/>
                     )}
                 </div>
             </div>

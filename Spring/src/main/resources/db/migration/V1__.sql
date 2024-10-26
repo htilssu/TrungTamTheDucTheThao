@@ -8,12 +8,12 @@ CREATE TABLE account
 
 CREATE TABLE booking
 (
-    id           BIGINT NOT NULL,
-    id_user      BIGINT NOT NULL,
+    id           BIGINT                      NOT NULL,
+    id_user      BIGINT                      NOT NULL,
     created_at   TIMESTAMP WITHOUT TIME ZONE,
     booking_from TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     booking_to   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    id_room      BIGINT NOT NULL,
+    id_room      BIGINT                      NOT NULL,
     CONSTRAINT pk_booking PRIMARY KEY (id)
 );
 
@@ -25,17 +25,17 @@ CREATE TABLE coach
 
 CREATE TABLE course
 (
-    id          BIGINT           NOT NULL,
-    name        VARCHAR(255)     NOT NULL,
-    description TEXT             NOT NULL,
-    price       DOUBLE PRECISION NOT NULL,
+    id          BIGINT                 NOT NULL,
+    name        VARCHAR(255)           NOT NULL,
+    description TEXT                   NOT NULL,
+    price       DOUBLE PRECISION       NOT NULL,
     time        time WITHOUT TIME ZONE NOT NULL,
-    start_date  date             NOT NULL,
-    end_date    date             NOT NULL,
-    slot        SMALLINT         NOT NULL,
-    id_coach    BIGINT           NOT NULL,
-    id_room     BIGINT           NOT NULL,
-    thumbnail   VARCHAR(255)     NOT NULL,
+    start_date  date                   NOT NULL,
+    end_date    date                   NOT NULL,
+    slot        SMALLINT               NOT NULL,
+    id_coach    BIGINT                 NOT NULL,
+    id_room     BIGINT                 NOT NULL,
+    thumbnail   VARCHAR(255)           NOT NULL,
     CONSTRAINT pk_course PRIMARY KEY (id)
 );
 
@@ -113,6 +113,59 @@ CREATE TABLE "user"
     gender       BOOLEAN      NOT NULL,
     dob          date         NOT NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
+);
+
+-- Sân Bóng
+CREATE TABLE football_field
+(
+    field_id    BIGSERIAL PRIMARY KEY,
+    field_name  VARCHAR(100) NOT NULL,
+    location    VARCHAR(255) NOT NULL,
+    field_type  VARCHAR(20)  NOT NULL CHECK (field_type IN ('5v5', '7v7', '11v11')),
+    status      VARCHAR(20)  NOT NULL CHECK (status IN ('active', 'maintenance')) DEFAULT 'active',
+    description TEXT,
+    image_url   VARCHAR(255),
+    created_at  TIMESTAMP                                                         DEFAULT CURRENT_TIMESTAMP
+);
+-- Giá thuê sân theo khung giờ
+CREATE TABLE pricefield
+(
+    pricing_id BIGSERIAL PRIMARY KEY,
+    field_id   BIGINT           NOT NULL,
+    start_time TIME             NOT NULL,
+    end_time   TIME             NOT NULL,
+    rate       DOUBLE PRECISION NOT NULL,
+    CHECK (start_time < end_time),
+    FOREIGN KEY (field_id) REFERENCES football_field (field_id) ON DELETE CASCADE
+);
+-- Lịch đặt sân
+CREATE TABLE bookingfield
+(
+    booking_id     BIGSERIAL PRIMARY KEY,
+    field_id       BIGINT           NOT NULL,
+    customer_id    BIGINT           NOT NULL,
+    customer_name  VARCHAR(255)     NOT NULL,
+    customer_phone VARCHAR(10)      NOT NULL,
+    start_time     TIMESTAMP        NOT NULL,
+    end_time       TIMESTAMP        NOT NULL,
+    booking_status VARCHAR(20)      NOT NULL DEFAULT 'PENDING', --CONFIRMED, CANCELLED
+    deposit_amount DOUBLE PRECISION NOT NULL DEFAULT 0.00,
+    total_amount   DOUBLE PRECISION NOT NULL,
+    payment_method VARCHAR(20) CHECK (payment_method IN ('cash', 'bank_transfer')),
+    created_at     TIMESTAMP                 DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (field_id) REFERENCES football_field (field_id) ON DELETE CASCADE,
+    FOREIGN KEY (customer_id) REFERENCES "user" (id) ON DELETE CASCADE,
+    CHECK (start_time < end_time)
+);
+-- Thời gian mặc định của sân
+CREATE TABLE time_slots
+(
+    timeslot_id BIGSERIAL PRIMARY KEY,
+    field_id    BIGINT NOT NULL,
+    start_time  TIME   NOT NULL,
+    end_time    TIME   NOT NULL,
+    FOREIGN KEY (field_id) REFERENCES football_field (field_id) ON DELETE CASCADE,
+    CHECK (start_time < end_time)
 );
 
 ALTER TABLE account

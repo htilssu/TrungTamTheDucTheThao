@@ -17,5 +17,4 @@ public class Coach {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    //TODO [Reverse Engineering] generate columns from DB
 }
