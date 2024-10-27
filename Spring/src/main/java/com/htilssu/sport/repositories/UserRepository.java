@@ -1,4 +1,4 @@
-package com.htilssu.sport.repository;
+package com.htilssu.sport.repositories;
 
 import com.htilssu.sport.data.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
