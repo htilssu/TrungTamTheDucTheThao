@@ -1,14 +1,24 @@
 
 package com.htilssu.sport.controllers;
-import com.htilssu.sport.data.models.User;
-import com.htilssu.sport.repository.UserRepository;
-import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.htilssu.sport.data.models.User;
+import com.htilssu.sport.repositories.UserRepository;
+
+import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -17,7 +27,6 @@ public class UserController {
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
-     
     }
 
     // Hiển thị thông tin người dùng
@@ -28,7 +37,7 @@ public class UserController {
         return ResponseEntity.badRequest().build(); // Xử lý nếu ID không hợp lệ
     }
     return userRepository.findById(id)
-            .map(user -> ResponseEntity.ok(user))
+            .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
 }
     // Sửa thông tin người dùng
