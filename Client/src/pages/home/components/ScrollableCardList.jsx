@@ -71,6 +71,7 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
 const ScrollableCourseList = () => {
     const [courses, setCourses] = useState([]);
+  const [showCourseInfo, setShowCourseInfo] = useState(false);
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -83,7 +84,7 @@ const ScrollableCourseList = () => {
             }
         };
 
-        fetchCourses();
+        fetchCourses().then();
     }, []);
 
     return (
