@@ -31,7 +31,7 @@ const GymLayout = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-center mt-10">
+        <div className="relative min-h-screen w-full bg-gray-100 p-6 flex justify-center items-center mt-10">
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1300px] h-[600px] p-[50px] bg-[#f5f5f5] shadow-[0_30px_50px_rgba(219,219,219,1)] mt-[38px]">
                 <div id="sw-max mt-[50px]" ref={slideRef}>
                     {slides.map((slide, index) => (
