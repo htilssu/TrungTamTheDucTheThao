@@ -1,9 +1,8 @@
 package com.htilssu.sport.controllers;
 
-import com.htilssu.sport.data.dtos.CoachDto; // Import CoachDto
+import com.htilssu.sport.data.dtos.CoachDto;
 import com.htilssu.sport.data.models.Coach;
 import com.htilssu.sport.services.CoachService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

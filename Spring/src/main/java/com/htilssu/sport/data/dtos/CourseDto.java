@@ -10,7 +10,7 @@ import java.time.LocalTime;
  * DTO for {@link com.htilssu.sport.data.models.Course}
  */
 public record CourseDto(Long id, String name, String description, Double price, String time,
-                        LocalDate startDate, LocalDate endDate, Short slot,
+                        String startDate, String endDate, Short slot,
                         CoachDto Coach, RoomDto Room, String thumbnail)
         implements Serializable {
 }
