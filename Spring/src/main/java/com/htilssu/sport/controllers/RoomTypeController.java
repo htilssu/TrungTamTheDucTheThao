@@ -59,9 +59,10 @@ public class RoomTypeController {
     public ResponseEntity<Void> deleteRoomType(@PathVariable("roomTypeId") Long id) {
 
         if (roomTypeService.deleteRoomType(id)) {
-            return ResponseEntity.noContent().build(); 
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build(); 
+            return ResponseEntity.notFound().build();
+        }
     }
 
     private RoomTypeDto convertToDto(RoomType roomType) {

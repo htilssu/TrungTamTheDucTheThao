@@ -53,6 +53,7 @@ public class CoachController {
         coach.setId(id);
         Coach updatedCoach = coachService.save(coach);
         return ResponseEntity.ok(convertToDto(updatedCoach));
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCoach(@PathVariable Long id) {
