@@ -21,15 +21,16 @@ import HomeAdminLayout from "../pages/admin/home-admin/HomeAdminLayout.jsx";
 import PostLayout from "../pages/admin/layout-admin/post-manage/PostLayout.jsx";
 import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
-import RoomLayout from "../pages/admin/layout-admin/gym-manage/RoomLayout.jsx";
+import RoomLayout from "../pages/admin/layout-admin/gym-manage/layout/RoomLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
 import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 import BookingPage from "../modules/core/components/booking/field/BookingFieldList.jsx";
 import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
-import Room from './../pages/admin/layout-admin/gym-manage/Room';
+import Room from '../pages/admin/layout-admin/gym-manage/room/Room.jsx';
 
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 import Sellcourses from '../pages/admin/layout-admin/employee-manage/Sellcourses.jsx'
+import RoomTypes from '../pages/admin/layout-admin/gym-manage/room-types/RoomTypes.jsx';
 export const router = createBrowserRouter([
     {
         path: 'admin',
@@ -47,10 +48,18 @@ export const router = createBrowserRouter([
                 path: 'room-manage',
                 element: <RoomLayout/>,
                 children: [
-                  {
-                      index: true,
-                      element: <Room/>,
-                  },
+                    {
+                        index: true,
+                        element: <Room/>,
+                    },
+                    {
+                        path: 'room-list',
+                        element: <Room/>,
+                    },
+                    {
+                        path: 'room-types',
+                        element: <RoomTypes/>,
+                    },
               ]
             },
             {
