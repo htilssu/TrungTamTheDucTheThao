@@ -37,7 +37,8 @@ public class RoomTypeController {
         RoomType roomType = roomTypeService.getRoomTypeById(id);
         if (roomType != null) {
             return ResponseEntity.ok(convertToDto(roomType));
-        } else {
+        }
+        else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -58,7 +59,8 @@ public class RoomTypeController {
         RoomType updatedRoomType = roomTypeService.updateRoomType(id, roomTypeDetails);
         if (updatedRoomType != null) {
             return ResponseEntity.ok(convertToDto(updatedRoomType));
-        } else {
+        }
+        else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -67,9 +69,10 @@ public class RoomTypeController {
     public ResponseEntity<Void> deleteRoomType(@PathVariable("roomTypeId") Long id) {
 
         if (roomTypeService.deleteRoomType(id)) {
-            return ResponseEntity.noContent().build(); 
-        } else {
-            return ResponseEntity.notFound().build(); 
+            return ResponseEntity.noContent().build();
+        }
+        else {
+            return ResponseEntity.notFound().build();
         }
     }
 

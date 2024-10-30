@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.htilssu.sport.data.dtos.AccountDto;
 import com.htilssu.sport.data.dtos.RegistrationDto;
-import com.htilssu.sport.response.ApiResponse;
+import com.htilssu.sport.response.ApiResponse; 
 import com.htilssu.sport.services.RegistrationService;
 
 @RestController
