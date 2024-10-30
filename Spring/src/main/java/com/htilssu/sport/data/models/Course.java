@@ -48,7 +48,7 @@ public class Course {
     @JoinColumn(name = "id_room", nullable = false)
     private Room idRoom;
 
-    @Column(name = "thumbnail", nullable = false)
+    @Column(name = "thumbnail")
     private String thumbnail;
 
     @OneToMany(mappedBy = "idCourse")

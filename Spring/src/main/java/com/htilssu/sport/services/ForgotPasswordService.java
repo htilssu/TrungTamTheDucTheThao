@@ -1,4 +1,4 @@
-package com.htilssu.sport.service;
+package com.htilssu.sport.services;
 
 import java.util.HashMap;
 import java.util.Map;

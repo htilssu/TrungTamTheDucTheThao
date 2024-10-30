@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "bookingfield")
+@Table(name = "booking_field")
 public class BookingField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

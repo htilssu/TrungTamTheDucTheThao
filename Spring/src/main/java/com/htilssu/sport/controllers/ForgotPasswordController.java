@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.htilssu.sport.data.dtos.ResetPasswordDto;
 import com.htilssu.sport.data.models.Account;
-import com.htilssu.sport.service.ForgotPasswordService;
+import com.htilssu.sport.services.ForgotPasswordService;
 
 @RestController
 @RequestMapping("/api/users")
