@@ -1,4 +1,4 @@
-package com.htilssu.sport.service;
+package com.htilssu.sport.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
