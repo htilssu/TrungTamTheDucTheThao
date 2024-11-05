@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaFacebookF } from "react-icons/fa"; // Import icon Facebook
 import { GoogleLogin } from "@react-oauth/google"; //google sign in
@@ -18,6 +18,7 @@ const SignIn = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const [token, setToken] = useState(null);
     const loginGitHub = () => {
       window.location.assign("https://github.com/login/oauth/authorize?client_id=" + gitAppId);
     }
