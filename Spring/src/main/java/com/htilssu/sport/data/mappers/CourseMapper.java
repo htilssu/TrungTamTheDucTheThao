@@ -7,8 +7,8 @@ import org.mapstruct.*;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CourseMapper {
 
-    @Mapping(source = "room", target = "idRoom")
-    @Mapping(source = "coach", target = "idCoach")
+    @Mapping(source = "Room", target = "idRoom")
+    @Mapping(source = "Coach", target = "idCoach")
     Course toEntity(CourseDto courseDto);
 
     @InheritInverseConfiguration(name = "toEntity")
