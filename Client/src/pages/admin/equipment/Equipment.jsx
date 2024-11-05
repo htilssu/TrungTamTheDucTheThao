@@ -55,20 +55,6 @@ const EquipmentForm = () => {
             setImages((prevImages) => [...prevImages, ...results]);
         });
     };
-
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'Hoạt động':
-                return 'text-green-600 font-bold';
-            case 'Hư Hỏng':
-                return 'text-red-600 font-bold';
-            case 'Bảo trì':
-                return 'text-yellow-600 font-bold';
-            default:
-                return 'text-gray-600';
-        }
-    };
-
     const sliderSettings = {
         dots: true,
         infinite: true,
