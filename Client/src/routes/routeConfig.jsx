@@ -29,6 +29,11 @@ import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
 
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 import Sellcourses from "../pages/admin/layout-admin/courses-manage/Sellcourses.jsx";
+import EquipmentType from "../pages/admin/equipment/EquipmentType.jsx";
+import EquipmentLayout from "../pages/admin/equipment/EquipmentLayout.jsx";
+import Equipment from "../pages/admin/equipment/Equipment.jsx";
+import EquipmentList from "../pages/admin/equipment/EquipmentList.jsx";
+
 
 export const router = createBrowserRouter([
     {
@@ -71,6 +76,23 @@ export const router = createBrowserRouter([
             {
                 path: 'sellcourses',
                 element:<Sellcourses/>,
+            },
+            {
+                path: 'equipmentType',
+                element:<EquipmentType/>,
+            },
+            {
+                path: 'equipment',
+                element:<Equipment/>,
+            },
+
+            {
+                path: 'equipmentlayout',
+                element:<EquipmentLayout/>,
+            },
+            {
+                path: 'equipmentList',
+                element:<EquipmentList/>,
             },
             {
               path: 'soccer-manage',

@@ -20,5 +20,4 @@ public class Equipment {
 
     @Column(name = "status", nullable = false)
     private Double status;
-
 }
