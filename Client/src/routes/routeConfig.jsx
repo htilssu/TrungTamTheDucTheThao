@@ -21,11 +21,12 @@ import HomeAdminLayout from "../pages/admin/home-admin/HomeAdminLayout.jsx";
 import PostLayout from "../pages/admin/layout-admin/post-manage/PostLayout.jsx";
 import RoleLayout from "../pages/admin/layout-admin/role-manage/RoleLayout.jsx";
 import SettingLayout from "../pages/admin/layout-admin/setting-manage/SettingLayout.jsx";
-import GymLayout from "../pages/admin/layout-admin/gym-manage/GymLayout.jsx";
+import RoomLayout from "../pages/admin/layout-admin/gym-manage/RoomLayout.jsx";
 import HomeSoccerPage from "../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx";
 import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 import BookingPage from "../modules/core/components/booking/field/BookingFieldList.jsx";
 import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
+import Room from './../pages/admin/layout-admin/gym-manage/Room';
 
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 import Sellcourses from "../pages/admin/layout-admin/courses-manage/Sellcourses.jsx";
@@ -48,8 +49,14 @@ export const router = createBrowserRouter([
                 element: <PostLayout/>,
             },
             {
-                path: 'gym-manage',
-                element: <GymLayout/>,
+                path: 'room-manage',
+                element: <RoomLayout/>,
+                children: [
+                  {
+                      index: true,
+                      element: <Room/>,
+                  },
+              ]
             },
             {
                 path: 'customer-manage',

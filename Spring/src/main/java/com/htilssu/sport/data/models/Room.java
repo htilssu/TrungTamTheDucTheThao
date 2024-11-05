@@ -12,6 +12,8 @@ public class Room {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "room_id_seq", sequenceName = "room_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "capacity", nullable = false)
@@ -28,6 +30,6 @@ public class Room {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_room_type", nullable = false)
-    private RoomType idRoomType;
+    private RoomType roomType;
 
 }

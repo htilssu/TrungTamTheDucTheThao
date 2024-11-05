@@ -1,15 +1,5 @@
 package com.htilssu.sport.services;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
 import com.htilssu.sport.data.dtos.BookingFieldDTO;
 import com.htilssu.sport.data.models.BookingField;
 import com.htilssu.sport.data.models.FootballField;
@@ -20,8 +10,16 @@ import com.htilssu.sport.repositories.BookingFieldRepository;
 import com.htilssu.sport.repositories.FootballFieldRepository;
 import com.htilssu.sport.repositories.PricingFieldRepository;
 import com.htilssu.sport.repositories.UserRepository;
-
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -33,7 +31,8 @@ public class BookingFieldService {
     private final UserRepository userRepository;
 
     public BookingField createBooking(BookingFieldDTO bookingFieldDTO) {
-        FootballField field = footballFieldRepository.findById(bookingFieldDTO.getFootballField().getFieldId())
+        FootballField field = footballFieldRepository.findById(
+                        bookingFieldDTO.getFootballField().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sân."));
 
         if ("maintenance".equals(field.getStatus())) {
@@ -48,7 +47,8 @@ public class BookingFieldService {
         }
 
         List<BookingField> overlappingBookings = bookingFieldRepository
-                .findByFootballFieldAndStartTimeBetween(field, bookingFieldDTO.getStartTime(), bookingFieldDTO.getEndTime());
+                .findByFootballFieldAndStartTimeBetween(field, bookingFieldDTO.getStartTime(),
+                        bookingFieldDTO.getEndTime());
         if (!overlappingBookings.isEmpty()) {
             throw new IllegalArgumentException("Sân đã được đặt trong khoảng thời gian này.");
         }
@@ -62,13 +62,16 @@ public class BookingFieldService {
         booking.setEndTime(bookingFieldDTO.getEndTime());
         booking.setBookingStatus(BookingStatus.PENDING);
         booking.setDepositAmount(bookingFieldDTO.getDepositAmount());
-        booking.setTotalAmount(calculateTotalAmount(field, bookingFieldDTO.getStartTime(), bookingFieldDTO.getEndTime()));
+        booking.setTotalAmount(calculateTotalAmount(field, bookingFieldDTO.getStartTime(),
+                bookingFieldDTO.getEndTime()));
 
         return bookingFieldRepository.save(booking);
     }
 
     //tính giá tiền sân
-    private Double calculateTotalAmount(FootballField footballField, Timestamp startTime, Timestamp endTime) {
+    private Double calculateTotalAmount(FootballField footballField,
+            Timestamp startTime,
+            Timestamp endTime) {
         List<PricingField> priceFields = pricingFieldRepository.findByFootballField(footballField);
 
         double totalAmount = 0.0;
@@ -78,7 +81,8 @@ public class BookingFieldService {
             LocalTime bookingEndTime = endTime.toLocalDateTime().toLocalTime();
 
             // Sử dụng isBefore() và isAfter() để so sánh LocalTime
-            if (!bookingStartTime.isBefore(priceField.getStartTime()) && !bookingEndTime.isAfter(priceField.getEndTime())) {
+            if (!bookingStartTime.isBefore(priceField.getStartTime()) && !bookingEndTime.isAfter(
+                    priceField.getEndTime())) {
                 long durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
                 totalAmount += durationHours * priceField.getRate();
             }
@@ -113,7 +117,8 @@ public class BookingFieldService {
         Timestamp endOfDay = Timestamp.valueOf(date.plusDays(1).atStartOfDay());
 
         // Lấy danh sách các đặt sân đã có trong ngày
-        List<BookingField> bookings = bookingFieldRepository.findByFootballFieldAndStartTimeBetween(field, startOfDay, endOfDay);
+        List<BookingField> bookings = bookingFieldRepository.findByFootballFieldAndStartTimeBetween(
+                field, startOfDay, endOfDay);
 
         // Tạo danh sách các khung giờ đã đặt
         List<String> bookedTimes = new ArrayList<>();
@@ -160,7 +165,8 @@ public class BookingFieldService {
 
         List<BookingField> bookingsToUpdate = new ArrayList<>();
         for (BookingField booking : bookings) {
-            if (booking.getEndTime().before(currentTime) && BookingStatus.PENDING.equals(booking.getBookingStatus())) {
+            if (booking.getEndTime().before(currentTime) && BookingStatus.PENDING.equals(
+                    booking.getBookingStatus())) {
                 booking.setBookingStatus(BookingStatus.CONFIRMED);
                 bookingsToUpdate.add(booking);
             }
@@ -173,7 +179,7 @@ public class BookingFieldService {
     }
 
     public BookingField updateBooking(Long id, BookingField booking) {
-        booking.setBookingId(id);
+        booking.setId(id);
         return bookingFieldRepository.save(booking);
     }
 

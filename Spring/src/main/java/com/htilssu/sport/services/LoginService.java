@@ -10,6 +10,7 @@ import com.htilssu.sport.data.dtos.LoginDto;
 import com.htilssu.sport.data.models.Account;
 import com.htilssu.sport.data.util.JwtUtil;
 import com.htilssu.sport.repositories.AccountRepository;
+import org.springframework.validation.annotation.Validated;
 
 @Service
 public class LoginService {
@@ -23,15 +24,7 @@ public class LoginService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String login(LoginDto loginDto) {
-        if (loginDto.email() == null || loginDto.email().isEmpty()) {
-            throw new IllegalArgumentException("Email không được để trống");
-        }
-
-        if (loginDto.password() == null || loginDto.password().isEmpty()) {
-            throw new IllegalArgumentException("Mật khẩu không được để trống");
-        }
-
+    public String login(@Validated LoginDto loginDto) {
         Optional<Account> accountOpt = accountRepository.findByEmail(loginDto.email());
 
         if (accountOpt.isPresent()) {

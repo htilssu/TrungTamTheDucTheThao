@@ -10,8 +10,9 @@ import java.time.LocalTime;
 @Table(name = "price_field")
 public class PricingField {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pricingId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "price_field_id_seq", sequenceName = "price_field_id_seq", allocationSize = 1)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "field_id", nullable = false)

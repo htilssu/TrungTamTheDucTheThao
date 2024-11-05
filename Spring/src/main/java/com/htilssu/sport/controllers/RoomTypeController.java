@@ -1,14 +1,22 @@
 package com.htilssu.sport.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.htilssu.sport.data.dtos.RoomTypeDto;
 import com.htilssu.sport.data.models.RoomType;
 import com.htilssu.sport.services.RoomTypeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/room-types")
@@ -29,7 +37,8 @@ public class RoomTypeController {
         RoomType roomType = roomTypeService.getRoomTypeById(id);
         if (roomType != null) {
             return ResponseEntity.ok(convertToDto(roomType));
-        } else {
+        }
+        else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -50,7 +59,8 @@ public class RoomTypeController {
         RoomType updatedRoomType = roomTypeService.updateRoomType(id, roomTypeDetails);
         if (updatedRoomType != null) {
             return ResponseEntity.ok(convertToDto(updatedRoomType));
-        } else {
+        }
+        else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -59,7 +69,7 @@ public class RoomTypeController {
     public ResponseEntity<Void> deleteRoomType(@PathVariable("roomTypeId") Long id) {
 
         if (roomTypeService.deleteRoomType(id)) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); 
         } else {
             return ResponseEntity.notFound().build();
         }
