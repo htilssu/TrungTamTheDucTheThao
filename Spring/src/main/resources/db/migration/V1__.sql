@@ -21,7 +21,7 @@ CREATE TABLE booking
     CONSTRAINT pk_booking PRIMARY KEY (id)
 );
 
-CREATE TABLE bookingfield
+CREATE TABLE booking_field
 (
     booking_id     BIGINT           NOT NULL,
     field_id       BIGINT           NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE bookingfield
     total_amount   DOUBLE PRECISION NOT NULL,
     payment_method VARCHAR(255),
     created_at     TIMESTAMP WITHOUT TIME ZONE,
-    CONSTRAINT pk_bookingfield PRIMARY KEY (booking_id)
+    CONSTRAINT pk_booking_field PRIMARY KEY (booking_id)
 );
 
 CREATE TABLE coach
@@ -105,14 +105,14 @@ CREATE TABLE football_field
     CONSTRAINT pk_football_field PRIMARY KEY (field_id)
 );
 
-CREATE TABLE pricefield
+CREATE TABLE price_field
 (
     pricing_id BIGINT           NOT NULL,
     field_id   BIGINT           NOT NULL,
     start_time time WITHOUT TIME ZONE NOT NULL,
     end_time   time WITHOUT TIME ZONE NOT NULL,
     rate       DOUBLE PRECISION NOT NULL,
-    CONSTRAINT pk_pricefield PRIMARY KEY (pricing_id)
+    CONSTRAINT pk_price_field PRIMARY KEY (pricing_id)
 );
 
 CREATE TABLE role
@@ -166,11 +166,11 @@ ALTER TABLE account
 ALTER TABLE account
     ADD CONSTRAINT FK_ACCOUNT_ON_USER FOREIGN KEY (user_id) REFERENCES "user" (id);
 
-ALTER TABLE bookingfield
-    ADD CONSTRAINT FK_BOOKINGFIELD_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES "user" (id);
+ALTER TABLE booking_field
+    ADD CONSTRAINT FK_booking_field_ON_CUSTOMER FOREIGN KEY (customer_id) REFERENCES "user" (id);
 
-ALTER TABLE bookingfield
-    ADD CONSTRAINT FK_BOOKINGFIELD_ON_FIELD FOREIGN KEY (field_id) REFERENCES football_field (field_id);
+ALTER TABLE booking_field
+    ADD CONSTRAINT FK_booking_field_ON_FIELD FOREIGN KEY (field_id) REFERENCES football_field (field_id);
 
 ALTER TABLE booking
     ADD CONSTRAINT FK_BOOKING_ON_ID_ROOM FOREIGN KEY (id_room) REFERENCES room (id);
