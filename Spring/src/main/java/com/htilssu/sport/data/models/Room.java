@@ -28,6 +28,6 @@ public class Room {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_room_type", nullable = false)
-    private RoomType idRoomType;
+    private RoomType roomType;
 
 }

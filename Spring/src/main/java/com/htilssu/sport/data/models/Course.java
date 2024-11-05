@@ -51,7 +51,7 @@ public class Course {
     @Column(name = "thumbnail")
     private String thumbnail;
 
-    @OneToMany(mappedBy = "idCourse")
+    @OneToMany(mappedBy = "course")
     private Set<CourseMember> courseMembers = new LinkedHashSet<>();
 
 }

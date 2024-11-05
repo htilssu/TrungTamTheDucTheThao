@@ -20,7 +20,7 @@ public class Booking {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
-    private User idUser;
+    private User user;
 
     @Column(name = "created_at")
     private Instant createdAt;

@@ -3,7 +3,7 @@
 
     import java.time.LocalDate;
 
-    import com.htilssu.sport.validation.MinAge;
+    import com.htilssu.sport.validations.MinAge;
 
     import jakarta.persistence.Column;
     import jakarta.persistence.Entity;

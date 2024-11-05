@@ -19,12 +19,12 @@ public class CourseRequest {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_course", nullable = false)
-    private Course idCourse;
+    private Course course;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
-    private User idUser;
+    private User user;
 
     @NotNull
     @Column(name = "status", nullable = false)

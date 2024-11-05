@@ -16,7 +16,7 @@ public class Equipment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_equipment_type", nullable = false)
-    private EquipmentType idEquipmentType;
+    private EquipmentType equipmentType;
 
     @Column(name = "status", nullable = false)
     private Double status;
