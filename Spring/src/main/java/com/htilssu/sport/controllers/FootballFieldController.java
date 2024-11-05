@@ -47,11 +47,6 @@ public class FootballFieldController {
     public ResponseEntity<?> getFieldsByType(@PathVariable String fieldType) {
         List<FootballField> fields = service.getFieldsByType(fieldType);
 
-        if (fields.isEmpty()) {
-            ErrorResponse response = new ErrorResponse("Không tìm thấy sân bóng với loại sân: " + fieldType);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-
         return ResponseEntity.ok(fields);
     }
 

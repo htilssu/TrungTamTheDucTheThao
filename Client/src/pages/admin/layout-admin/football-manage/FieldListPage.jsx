@@ -1,33 +1,33 @@
 import { useState, useEffect } from "react";
-import FieldList from "./FieldList.jsx";
-import AddFieldForm from "./AddFieldForm.jsx";
+import FieldList from "./component/FieldList.jsx";
+import AddFieldForm from "./component/AddFieldForm.jsx";
 import axios from "axios";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+
+// Hàm fetch dữ liệu
+const fetchFields = async () => {
+    const response = await axios.get("http://localhost:8080/v1/fields");
+    return response.data;
+};
 
 const FieldListPage = () => {
-    const [fields, setFields] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const fetchFields = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/v1/fields");
-                setFields(response.data);
-            } catch (err) {
-                console.error("Error fetching fields:", err);
-                setError("Failed to load fields.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchFields();
-    }, []);
+    // Sử dụng useQuery để fetch dữ liệu
+    const { data: fields = [], isLoading, isError, error } = useQuery({
+        queryKey: ['fields'],
+        queryFn: fetchFields,
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
+    });
 
     // Thêm Sân
     const handleAddField = (newField) => {
-        setFields((prevFields) => [...prevFields, { ...newField, id: prevFields.length + 1 }]);
+        queryClient.setQueryData(['fields'], (oldFields) => [
+            ...oldFields,
+            { ...newField, id: oldFields.length + 1 },
+        ]);
     };
 
     // Lọc theo loại sân
@@ -49,7 +49,7 @@ const FieldListPage = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-2xl font-semibold mb-4">Danh Sách Sân Bóng</h3>
 
-                {loading && <p>Đang tải danh sách sân...</p>}
+                {isLoading && <p>Đang tải danh sách sân...</p>}
                 {error && <p className="text-red-500">{error}</p>}
 
                 {/* Sân 5 người */}

@@ -2,8 +2,13 @@ import {useState} from "react";
 import {TiDelete} from "react-icons/ti";
 import axios from "axios";
 import {TextField} from "@mui/material";
+import {toast} from "react-toastify";
+import {queryClient} from "../../../../../modules/cache.js";
+import DotLoader from "react-spinners/DotLoader.js";
 
 const AddFieldForm = ({onAddField, onClose}) => {
+    const [loading, setLoading] = useState(false);
+
     const [newField, setNewField] = useState({
         field_name: "",
         field_type: "5v5",
@@ -69,6 +74,7 @@ const AddFieldForm = ({onAddField, onClose}) => {
 
     // Xử lý thêm sân mới
     const handleAddField = async () => {
+        setLoading(true);
         // Sử dụng hàm validate để kiểm tra dữ liệu
         const formErrors = validateFieldData(newField);
         if (Object.keys(formErrors).length > 0) {
@@ -104,9 +110,19 @@ const AddFieldForm = ({onAddField, onClose}) => {
                     'Content-Type': 'application/json',
                 },
             });
-            console.log("Field added successfully:", response.data);
-            if (onAddField) onAddField(response.data);
-            if (onClose) onClose(); // Đóng form sau khi thêm thành công
+
+            const timeoutId = setTimeout(() => {
+                if (response.status === 201) {
+                    toast.success('Thêm sân thành công!');
+                } else {
+                    toast.error('Có lỗi xảy ra khi thêm sân!');
+                }
+                if (onAddField) onAddField(response.data);
+                queryClient.invalidateQueries({queryKey: ['fields']});
+                setLoading(false);
+            }, 3000);
+
+            return () => clearTimeout(timeoutId);
         } catch (error) {
             console.error("Error adding field:", error);
             alert("Đã xảy ra lỗi khi thêm sân. Vui lòng kiểm tra lại dữ liệu nhập.");
@@ -233,12 +249,19 @@ const AddFieldForm = ({onAddField, onClose}) => {
             </div>
 
             {/* Nút thêm sân */}
-            <button
-                className="bg-green-500 text-white py-2 px-4 rounded"
-                onClick={handleAddField}
-            >
-                Thêm Sân
-            </button>
+            {/* Xác nhận đặt sân */}
+            <div className="flex justify-center">
+                {loading ? (
+                    <DotLoader color="#3bd773" size={40}/>
+                ) : (
+                    <button
+                        className="bg-green-500 text-white py-2 px-4 rounded"
+                        onClick={handleAddField}
+                    >
+                        Thêm Sân
+                    </button>
+                )}
+            </div>
         </div>
     );
 };
