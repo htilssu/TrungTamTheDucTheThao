@@ -1,4 +1,4 @@
-package com.htilssu.sport.ExecptionHandler;
+package com.htilssu.sport.exceptions;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

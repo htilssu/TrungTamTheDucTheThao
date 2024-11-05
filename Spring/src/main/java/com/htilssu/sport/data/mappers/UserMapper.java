@@ -1,21 +1,13 @@
 package com.htilssu.sport.data.mappers;
 
-import org.springframework.stereotype.Component;
-
 import com.htilssu.sport.data.dtos.UserDto;
 import com.htilssu.sport.data.models.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@Component
-public class UserMapper {
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING)public interface UserMapper {
 
-    public UserDto toDto(User user) {
-        return new UserDto(
-            user.getId(),
-            user.getFirstName(),
-            user.getLastName(),
-            user.getPhoneNumber(),
-            user.getGender(),
-            user.getDob().toString()
-        );
-    }
+    UserDto toDto(User user);
 }
