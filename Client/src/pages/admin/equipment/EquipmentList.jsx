@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const EquipmentList = () => {
     // Dữ liệu giả cho thiết bị
-    const equipments = [
+    const [equipments, setEquipments] = useState([
         {
             type: 'Máy chạy bộ',
             status: 'Hoạt động',
@@ -16,14 +16,14 @@ const EquipmentList = () => {
         {
             type: 'Máy đạp xe',
             status: 'Hư Hỏng',
-            images: ['/images/exercise-bike.jpg'], // Đường dẫn đến hình ảnh của máy đạp xe
+            images: ['/gym2.png'], // Đường dẫn đến hình ảnh của máy đạp xe
         },
         {
             type: 'Thảm yoga',
             status: 'Hoạt động',
             images: [], // Không có hình ảnh
         },
-    ];
+    ]);
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -36,6 +36,17 @@ const EquipmentList = () => {
             default:
                 return 'text-gray-600';
         }
+    };
+
+    const handleDelete = (index) => {
+        setEquipments((prevEquipments) =>
+            prevEquipments.filter((_, i) => i !== index)
+        );
+    };
+
+    const handleEdit = (index) => {
+        //viet ham sua vao day
+        alert(`Chỉnh sửa thiết bị: ${equipments[index].type}`);
     };
 
     return (
@@ -65,6 +76,20 @@ const EquipmentList = () => {
                                 <p className={`mt-2 ${getStatusColor(equipment.status)}`}>
                                     Trạng thái: {equipment.status}
                                 </p>
+                            </div>
+                            <div className="flex justify-center items-center space-x-2 mb-4">
+                                <button
+                                    className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
+                                    onClick={() => handleDelete(index)}
+                                >
+                                    Xóa
+                                </button>
+                                <button
+                                    className="py-2 px-5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+                                    onClick={() => handleEdit(index)}
+                                >
+                                    Sửa
+                                </button>
                             </div>
                         </div>
                     ))
