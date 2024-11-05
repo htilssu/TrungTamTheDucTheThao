@@ -80,7 +80,7 @@ const EquipmentForm = () => {
     };
 
     return (
-        <div className="max-w-[800px] mx-auto p-4 bg-white shadow-2xl rounded-md mt-8">
+        <div className="max-w-[800px] mx-auto p-4 bg-white mb-5 shadow-2xl rounded-md mt-8">
             {/* Khối form thêm trang thiết bị */}
             <div className="mb-8 w-full p-4 bg-white border-[1px] text-black rounded-md">
                 <h2 className="text-2xl font-semibold mb-4 flex justify-center">Thêm Trang Thiết Bị</h2>
@@ -169,49 +169,6 @@ const EquipmentForm = () => {
                         Đăng Ký
                     </button>
                 </form>
-            </div>
-
-            {/* Khối danh sách trang thiết bị */}
-            <div className=" w-full p-4 bg-white border-[1px] text-black rounded-md">
-                <h2 className="text-2xl font-semibold mb-4 flex justify-center">Danh Sách Trang Thiết Bị</h2>
-                <div>
-                    {equipments.length > 0 ? (
-                        <ul className="space-y-3">
-                            {equipments.map((equipment, index) => (
-                                <li key={index} className="p-2 rounded-md border border-gray-300">
-                                    <div className="flex  justify-center">
-                                    <div className="mb-2 w-1/4 ">
-                                        {equipment.images.length > 0 ? (
-                                            <ImageSwiper
-                                                images={equipment.images}
-                                                editingMode={false}
-                                                handleDeleteImage={() => {
-                                                }}
-                                                sliderSettings={sliderSettings}
-
-                                            />
-                                        ) : (
-                                            <img
-                                                src="/no-image.png"
-                                                alt="No Image"
-                                                className="w-full h-64 object-contain"
-                                            />
-                                        )}
-                                    </div>
-                                    </div>
-                                    <strong className={"mr-2"}>Loại:</strong> {equipment.type} <br/>
-                                    <strong className={"mr-2"}>Trạng thái:</strong>
-                                    <span className={getStatusColor(equipment.status)}>
-                                        {equipment.status}
-                                    </span>
-                                    <br/>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className={"flex justify-center"}>Chưa có trang thiết bị nào được thêm.</p>
-                    )}
-                </div>
             </div>
         </div>
     );

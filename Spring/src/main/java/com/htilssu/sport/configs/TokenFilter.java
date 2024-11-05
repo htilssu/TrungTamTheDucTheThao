@@ -48,7 +48,6 @@ public class TokenFilter extends OncePerRequestFilter {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Người dùng không tồn tại");
             return;
         }
-
         filterChain.doFilter(request, response);
     }
 

@@ -23,6 +23,89 @@ const EquipmentList = () => {
             status: 'Hoạt động',
             images: [], // Không có hình ảnh
         },
+        {
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },
+        {
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },
+        {
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },{
+            type: 'Thảm yoga',
+            status: 'Hoạt động',
+            images: [], // Không có hình ảnh
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ]);
 
     const getStatusColor = (status) => {
