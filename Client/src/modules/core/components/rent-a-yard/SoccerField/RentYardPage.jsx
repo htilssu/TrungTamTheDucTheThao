@@ -8,6 +8,7 @@ import DotLoader from "react-spinners/DotLoader";
 import {TextField} from "@mui/material";
 import axios from "axios";
 import {MdLocationPin} from "react-icons/md";
+import {queryClient} from "../../../../cache.js";
 
 const RentYardPage = () => {
     const navigate = useNavigate();
@@ -38,7 +39,6 @@ const RentYardPage = () => {
 
     const fetchFields = async (fieldType) => {
         try {
-            setLoading(true);
             const response = await axios.get(`http://localhost:8080/v1/fields/type/${fieldType}`);
             if (response && response.data && response.data.length > 0) {
                 setFields(response.data);
@@ -47,10 +47,9 @@ const RentYardPage = () => {
                 setError("Không có sân nào cho loại này.");
             }
         } catch (err) {
+            setFields([]);
             console.error("Error fetching fields:", err);
-            setError("Failed to load fields.");
-        } finally {
-            setLoading(false);
+            setError("Không có sân nào cho loại này.");
         }
     };
 
@@ -224,7 +223,7 @@ const RentYardPage = () => {
                 customerPhone: customerPhone,
                 startTime: startDateTime.toISOString(),
                 endTime: endDateTime.toISOString(),
-                depositAmount: depositAmount / 100000,
+                depositAmount: depositAmount,
                 totalAmount: totalAmount / 100000,
                 paymentMethod: paymentMethod
             };
@@ -232,19 +231,24 @@ const RentYardPage = () => {
             try {
                 const response = await axios.post('http://localhost:8080/v1/booking-field', bookingData);
 
-                if (response.status === 200) {
-                    toast.success('Đặt sân thành công!');
-                    resetForm();
-                    // navigate('/');
-                } else {
-                    toast.error('Có lỗi xảy ra khi đặt sân!');
-                }
+                const timeoutId = setTimeout(() => {
+                    if (response.status === 200) {
+                        toast.success('Đặt sân thành công!');
+                        resetForm();
+                        // navigate('/');
+                    } else {
+                        toast.error('Có lỗi xảy ra khi đặt sân!');
+                    }
+                    queryClient.invalidateQueries({queryKey: ['fields']});
+                    setLoading(false);
+                }, 3000);
+
+                return () => clearTimeout(timeoutId);
+
             } catch (error) {
+                setLoading(false);
                 console.error('Error creating booking:', error);
                 toast.error('Không thể đặt sân!');
-            } finally {
-                setLoading(false);
-                resetForm();
             }
         }
     };
@@ -446,22 +450,23 @@ const RentYardPage = () => {
 
                 {/* Xác nhận đặt sân */}
                 <div className="flex justify-center">
-                    {!loading ? (
+                    {loading ? (
+                        <DotLoader color="#3bd773" size={40}/>
+                    ) : (
                         <button
                             onClick={handleSubmit}
                             className="px-6 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-500 transition-all duration-300"
                         >
                             Xác nhận đặt sân
                         </button>
-                    ) : (
-                        <DotLoader color="#3bd773" size={40}/>
-                    )}
-                </div>
+                )}
             </div>
-            <ToastContainer stacked/>
-            <ScrollRestoration/>
         </div>
-    );
+    <ToastContainer stacked/>
+    <ScrollRestoration/>
+</div>
+)
+    ;
 };
 
 export default RentYardPage;

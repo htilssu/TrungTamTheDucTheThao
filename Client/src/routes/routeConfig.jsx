@@ -33,8 +33,7 @@ import EquipmentType from "../pages/admin/equipment/EquipmentType.jsx";
 import EquipmentLayout from "../pages/admin/equipment/EquipmentLayout.jsx";
 import Equipment from "../pages/admin/equipment/Equipment.jsx";
 import EquipmentList from "../pages/admin/equipment/EquipmentList.jsx";
-
-
+import HistoryBookingAdmin from "../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx";
 export const router = createBrowserRouter([
     {
         path: 'admin',
@@ -107,8 +106,12 @@ export const router = createBrowserRouter([
                       element: <FieldListPage/>,
                   },
                   {
-                      path: 'lichdat',
+                      path: 'booking',
                       element: <BookingSchedule/>,
+                  },
+                  {
+                      path: 'history',
+                      element: <HistoryBookingAdmin/>,
                   },
                   {
                       path: 'thongke',
