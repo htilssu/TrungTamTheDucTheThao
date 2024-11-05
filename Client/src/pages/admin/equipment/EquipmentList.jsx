@@ -90,22 +90,6 @@ const EquipmentList = () => {
             status: 'Hoạt động',
             images: [], // Không có hình ảnh
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     ]);
 
     const getStatusColor = (status) => {
