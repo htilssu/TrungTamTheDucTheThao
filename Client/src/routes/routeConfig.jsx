@@ -28,7 +28,8 @@ import BookingPage from "../modules/core/components/booking/field/BookingFieldLi
 import ContactPage from "../modules/core/components/contact/ContactPage.jsx";
 
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
-import Sellcourses from '../pages/admin/layout-admin/employee-manage/Sellcourses.jsx'
+import Sellcourses from "../pages/admin/layout-admin/courses-manage/Sellcourses.jsx";
+
 export const router = createBrowserRouter([
     {
         path: 'admin',
@@ -69,7 +70,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'sellcourses',
-                element: <Sellcourses />,
+                element:<Sellcourses/>,
             },
             {
               path: 'soccer-manage',

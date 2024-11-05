@@ -202,6 +202,9 @@ ALTER TABLE equipment
 ALTER TABLE pricefield
     ADD CONSTRAINT FK_PRICEFIELD_ON_FIELD FOREIGN KEY (field_id) REFERENCES football_field (field_id);
 
+ALTER TABLE price_field
+    ADD CONSTRAINT FK_PRICEFIELD_ON_FIELD FOREIGN KEY (field_id) REFERENCES football_field (field_id);
+
 ALTER TABLE role_claim
     ADD CONSTRAINT FK_ROLE_CLAIM_ON_ID_ROLE FOREIGN KEY (id_role) REFERENCES role (id);
 

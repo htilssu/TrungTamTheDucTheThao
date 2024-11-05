@@ -2,9 +2,10 @@
 import  { useState } from "react";
 import {DatePicker} from "antd";
 import dayjs from "dayjs";
-import ImageSwiper from "../employee-manage/ImageSwiper.jsx";
 import axios from "axios";
 import React, { useEffect } from 'react';
+import ImageSwiper from "./ImageSwiper.jsx";
+
 
 
 const Sellcourses = () => {
