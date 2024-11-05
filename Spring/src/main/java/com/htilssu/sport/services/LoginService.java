@@ -1,4 +1,4 @@
-package com.htilssu.sport.service;
+package com.htilssu.sport.services;
 
 import java.util.Optional;
 
@@ -33,14 +33,14 @@ public class LoginService {
         }
 
         Optional<Account> accountOpt = accountRepository.findByEmail(loginDto.email());
-        
+
         if (accountOpt.isPresent()) {
             Account account = accountOpt.get();
-            
+
             if (passwordEncoder.matches(loginDto.password(), account.getPassword())) {
                 return JwtUtil.generateToken(account);
             }
         }
-        return null; 
+        return null;
     }
 }

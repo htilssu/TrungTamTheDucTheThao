@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.htilssu.sport.data.dtos.LoginDto;
 import com.htilssu.sport.response.ApiResponse;
-import com.htilssu.sport.service.LoginService;
+import com.htilssu.sport.services.LoginService;
 
 @RestController
 public class LoginController {

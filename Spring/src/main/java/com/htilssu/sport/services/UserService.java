@@ -1,4 +1,4 @@
-package com.htilssu.sport.service;
+package com.htilssu.sport.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class UserService {
 
     public UserDto getUserById(Long id) {
         return userRepository.findById(id)
-            .map(userMapper::toDto) 
-            .orElse(null); 
+                .map(userMapper::toDto)
+                .orElse(null);
     }
 }

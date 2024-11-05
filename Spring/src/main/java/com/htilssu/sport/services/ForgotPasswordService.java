@@ -1,4 +1,4 @@
-package com.htilssu.sport.service;
+package com.htilssu.sport.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class ForgotPasswordService {
     private final Map<String, String> verificationCodes = new HashMap<>();
     private final Map<String, Long> lastSentTimes = new HashMap<>();
     private static final long RESEND_TIMEOUT = 60000;
-    private static final long CODE_EXPIRY_TIMEOUT = 300000; 
+    private static final long CODE_EXPIRY_TIMEOUT = 300000;
 
     public String sendVerificationCode(String email) {
         if (accountRepository.existsByEmail(email)) {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.htilssu.sport.data.dtos.ResetPasswordDto;
 import com.htilssu.sport.data.models.Account;
-import com.htilssu.sport.service.ForgotPasswordService;
+import com.htilssu.sport.services.ForgotPasswordService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -46,7 +46,8 @@ public class ForgotPasswordController {
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDto request) {
         try {
-            Account account = forgotPasswordService.resetPassword(request.email(), request.code(), request.newPassword());
+            Account account = forgotPasswordService.resetPassword(request.email(), request.code(),
+                    request.newPassword());
             if (account != null) {
                 return ResponseEntity.ok("Mật khẩu đã được cập nhật thành công.");
             } else {
