@@ -12,6 +12,8 @@ public class Room {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "room_id_seq", sequenceName = "room_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "capacity", nullable = false)

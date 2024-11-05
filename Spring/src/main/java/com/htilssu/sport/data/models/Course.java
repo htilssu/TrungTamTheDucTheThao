@@ -17,6 +17,8 @@ public class Course {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "name", nullable = false)

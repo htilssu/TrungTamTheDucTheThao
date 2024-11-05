@@ -14,6 +14,8 @@ public class CourseRequest {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "course_request_id_seq", sequenceName = "course_request_id_seq", allocationSize = 1)
     private Long id;
 
     @NotNull
