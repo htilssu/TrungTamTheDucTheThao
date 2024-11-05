@@ -30,7 +30,7 @@ const CategoryForm = () => {
 
         <div className="flex justify-center items-start space-x-6 p-4 mt-32">
             <div className="max-w-md w-full p-4 bg-white shadow-md rounded-md">
-                <h2 className=" flex justify-center font-semibold mb-4">Đăng Ký Thể Loại trang thiết bị </h2>
+                <h2 className=" flex justify-center font-bold text-2xl mb-5">Đăng Ký Thể Loại trang thiết bị </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="relative">
                         <input
