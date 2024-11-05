@@ -205,7 +205,7 @@ ALTER TABLE course_request
 ALTER TABLE equipment
     ADD CONSTRAINT FK_EQUIPMENT_ON_ID_EQUIPMENT_TYPE FOREIGN KEY (id_equipment_type) REFERENCES equipment_type (id);
 
-ALTER TABLE pricefield
+ALTER TABLE price_field
     ADD CONSTRAINT FK_PRICEFIELD_ON_FIELD FOREIGN KEY (field_id) REFERENCES football_field (field_id);
 
 ALTER TABLE role_claim
