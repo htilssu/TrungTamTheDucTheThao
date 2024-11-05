@@ -97,7 +97,7 @@ CREATE TABLE equipment_type
 
 CREATE TABLE football_field
 (
-    field_id    BIGINT       NOT NULL,
+    field_id    BIGSERIAL    NOT NULL,
     field_name  VARCHAR(100) NOT NULL,
     location    VARCHAR(255) NOT NULL,
     field_type  VARCHAR(255) NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE pricefield
     start_time time WITHOUT TIME ZONE NOT NULL,
     end_time   time WITHOUT TIME ZONE NOT NULL,
     rate       DOUBLE PRECISION       NOT NULL,
-    CONSTRAINT pk_pricefield PRIMARY KEY (pricing_id)
+    CONSTRAINT pk_price_field PRIMARY KEY (pricing_id)
 );
 
 CREATE TABLE role

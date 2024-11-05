@@ -30,6 +30,7 @@ import Room from './../pages/admin/layout-admin/gym-manage/Room';
 
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 import Sellcourses from '../pages/admin/layout-admin/employee-manage/Sellcourses.jsx'
+import HistoryBookingAdmin from "../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx";
 export const router = createBrowserRouter([
     {
         path: 'admin',
@@ -91,8 +92,12 @@ export const router = createBrowserRouter([
                       element: <FieldListPage/>,
                   },
                   {
-                      path: 'lichdat',
+                      path: 'booking',
                       element: <BookingSchedule/>,
+                  },
+                  {
+                      path: 'history',
+                      element: <HistoryBookingAdmin/>,
                   },
                   {
                       path: 'thongke',
