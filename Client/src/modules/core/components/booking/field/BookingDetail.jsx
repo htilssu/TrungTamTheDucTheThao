@@ -31,39 +31,58 @@ const FieldDetailModal = ({ isOpen, onClose, booking }) => {
 
     return (
         isOpen && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60">
                 <div
-                    ref={modalRef} // Đính kèm ref vào modal
-                    className="bg-white rounded-lg px-8 py-4 max-w-lg mx-auto"
+                    ref={modalRef}
+                    className="bg-white rounded-xl shadow-xl p-8 max-w-lg w-full mx-4 transform transition-all duration-300 ease-in-out"
                 >
-                    <p className={"mb-4"}><strong className={"font-semibold text-2xl"}>Chi tiết lịch đặt</strong></p>
+                    {/* Tiêu đề */}
+                    <p className="mb-6">
+                        <strong className="text-2xl font-semibold text-gray-800">Chi tiết lịch đặt</strong>
+                    </p>
+
+                    {/* Ảnh sân bóng */}
                     <img
-                        src={booking.footballField.imageUrl}
+                        src={booking.footballField.imageUrl || '/sanbong2.png'}
                         alt={booking.footballField.fieldName}
-                        className="w-full rounded-md mb-4"
+                        className="w-full rounded-lg mb-6 shadow-md object-cover"
                     />
-                    <p className={"mb-2"}><strong>Tên sân:</strong> {booking.footballField.fieldName}</p>
-                    <p className="mb-2"><strong>Địa điểm:</strong> {booking.footballField.location}</p>
-                    <p className="mb-2">
-                        <strong>Thời gian: </strong>
-                        {new Date(booking.startTime).toLocaleDateString()}, {new Date(booking.startTime).toLocaleTimeString()} - {new Date(booking.endTime).toLocaleTimeString()}
-                    </p>
-                    <p className="mb-2">
-                        <strong>Trạng thái: </strong>
-                        <span
-                            className={`font-semibold ${booking.bookingStatus === 'PENDING' ? 'text-green-500' : 'text-red-500'}`}
-                        >
-                            {booking.bookingStatus}
-                        </span>
-                    </p>
-                    <p className="mb-2 flex flex-row gap-1">
-                        <strong>Số tiền đặt cọc:</strong>
-                        <div className="text-green-500 font-semibold">{formatCurrency(booking.depositAmount)}</div>
-                    </p>
-                    <div className="flex justify-end">
+
+                    {/* Thông tin chi tiết */}
+                    <div className="space-y-3 text-gray-700">
+                        <p>
+                            <strong className="font-medium text-gray-900">Tên sân:</strong> {booking.footballField.fieldName}
+                        </p>
+                        <p>
+                            <strong className="font-medium text-gray-900">Địa điểm:</strong> {booking.footballField.location}
+                        </p>
+                        <p>
+                            <strong className="font-medium text-gray-900">Thời gian: </strong>
+                            {new Date(booking.startTime).toLocaleDateString()}, {new Date(booking.startTime).toLocaleTimeString()} - {new Date(booking.endTime).toLocaleTimeString()}
+                        </p>
+                        <p>
+                            <strong className="font-medium text-gray-900">Trạng thái: </strong>
+                            <span
+                                className={`font-semibold ${
+                                    booking.bookingStatus === 'PENDING' ? 'text-yellow-500' : 'text-red-500'
+                                }`}
+                            >
+                        {booking.bookingStatus}
+                    </span>
+                        </p>
+                        <p className="flex items-center">
+                            <strong className="font-medium text-gray-900">Số tiền đặt cọc:</strong>
+                            <span className="ml-2 text-green-500 font-semibold">
+                        {formatCurrency(booking.depositAmount)}
+                    </span>
+                        </p>
+                    </div>
+
+                    {/* Nút đóng */}
+                    <div className="flex justify-end mt-8">
                         <button
                             onClick={onClose}
-                            className="mt-4 bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 transition"
+                            className="bg-gray-200 text-gray-700 py-2 px-5 rounded-lg shadow-md hover:bg-gray-300 focus:outline-none transition duration-200 ease-in-out"
                         >
                             Đóng
                         </button>

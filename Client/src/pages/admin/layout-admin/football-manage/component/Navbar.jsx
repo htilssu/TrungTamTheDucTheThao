@@ -25,7 +25,7 @@ const Navbar = () => {
                             <span className="hover:underline">Danh Sách Sân</span>
                         </NavLink>
                         <NavLink
-                            to="lichdat"
+                            to="booking"
                             className={({ isActive }) =>
                                 `text-white text-lg transition-colors duration-300 ease-in-out transform hover:scale-110 ${
                                     isActive
@@ -35,6 +35,18 @@ const Navbar = () => {
                             }
                         >
                             <span className="hover:underline">Lịch Đặt</span>
+                        </NavLink>
+                        <NavLink
+                            to="history"
+                            className={({ isActive }) =>
+                                `text-white text-lg transition-colors duration-300 ease-in-out transform hover:scale-110 ${
+                                    isActive
+                                        ? 'text-yellow-300 border-b-4 border-yellow-400'
+                                        : 'hover:text-yellow-300'
+                                }`
+                            }
+                        >
+                            <span className="hover:underline">Lịch Sử Đặt</span>
                         </NavLink>
                         <NavLink
                             to="thongke"

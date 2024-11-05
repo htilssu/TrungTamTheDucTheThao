@@ -7,7 +7,7 @@ import java.time.LocalTime;
 
 @Data
 @Entity
-@Table(name = "pricefield")
+@Table(name = "price_field")
 public class PricingField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
