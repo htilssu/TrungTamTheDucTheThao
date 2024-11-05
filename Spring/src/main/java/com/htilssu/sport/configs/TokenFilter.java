@@ -1,38 +1,34 @@
 package com.htilssu.sport.configs;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.htilssu.sport.data.models.Account;
 import com.htilssu.sport.data.util.JwtUtil;
 import com.htilssu.sport.repositories.AccountRepository;
-import com.mongodb.lang.NonNull;
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @Component
-public class TokenFilter extends OncePerRequestFilter {
+@AllArgsConstructor
+public class TokenFilter implements Filter {
 
     private final AccountRepository accountRepository;
 
-    public TokenFilter(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
-
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    public void doFilter(ServletRequest servletRequest,
+            ServletResponse servletResponse,
+            FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Thiếu hoặc sai Authorization header.");
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -44,17 +40,11 @@ public class TokenFilter extends OncePerRequestFilter {
 
         String email = JwtUtil.getEmailFromToken(token);
         Optional<Account> userOptional = accountRepository.findByEmail(email);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Người dùng không tồn tại");
             return;
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    @Override
-    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
-        String path = request.getRequestURI();
-        return path.startsWith("/api/login") || path.startsWith("/api/register");
     }
 }
