@@ -1,4 +1,4 @@
-package com.htilssu.sport.validation;
+package com.htilssu.sport.validations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

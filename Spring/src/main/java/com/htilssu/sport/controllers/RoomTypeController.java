@@ -69,9 +69,8 @@ public class RoomTypeController {
     public ResponseEntity<Void> deleteRoomType(@PathVariable("roomTypeId") Long id) {
 
         if (roomTypeService.deleteRoomType(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        else {
+            return ResponseEntity.noContent().build(); 
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

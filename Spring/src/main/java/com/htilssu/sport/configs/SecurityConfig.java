@@ -8,17 +8,21 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain secureConfig(HttpSecurity http) throws Exception {
+    public SecurityFilterChain secureConfig(HttpSecurity http, TokenFilter tokenFilter) throws
+                                                                                        Exception {
 
         http.csrf(CsrfConfigurer::disable).authorizeHttpRequests(auth -> {
             auth.anyRequest().permitAll();
         });
+
+        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

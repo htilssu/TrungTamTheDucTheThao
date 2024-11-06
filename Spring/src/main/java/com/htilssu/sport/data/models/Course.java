@@ -17,6 +17,8 @@ public class Course {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -51,7 +53,7 @@ public class Course {
     @Column(name = "thumbnail")
     private String thumbnail;
 
-    @OneToMany(mappedBy = "idCourse")
+    @OneToMany(mappedBy = "course")
     private Set<CourseMember> courseMembers = new LinkedHashSet<>();
 
 }

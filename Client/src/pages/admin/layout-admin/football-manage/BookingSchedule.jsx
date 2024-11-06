@@ -1,4 +1,4 @@
-// src/BookingSchedule.js
+
 import React, {useState} from 'react';
 import {DatePicker} from 'antd';
 
@@ -8,11 +8,11 @@ const BookingSchedule = () => {
 
   // Dữ liệu giả lập cho lịch đặt sân
   const [bookings, setBookings] = useState([
-    {id: 1, date: '2024-09-30', time: '05:00 - 06:30', field: '5-1', name: 'Nguyễn Văn A', phone: '0123456789'},
-    {id: 2, date: '2024-09-30', time: '06:30 - 08:00', field: '5-2', name: 'Trần Thị B', phone: '0987654321'},
-    {id: 3, date: '2024-09-30', time: '08:00 - 09:30', field: '7-1', name: 'Lê Văn C', phone: '0912345678'},
-    {id: 4, date: '2024-09-30', time: '09:30 - 11:00', field: '11-1', name: 'Phạm Thị D', phone: '0934567890'},
-    {id: 5, date: '2024-09-30', time: '15:00 - 16:30', field: '11-1', name: 'Nguyễn Văn E', phone: '0123456788'},
+    {id: 1, date: '2024-10-31', time: '05:00 - 06:30', field: '5-1', name: 'Nguyễn Văn A', phone: '0123456789'},
+    {id: 2, date: '2024-10-31', time: '06:30 - 08:00', field: '5-2', name: 'Trần Thị B', phone: '0987654321'},
+    {id: 3, date: '2024-10-31', time: '08:00 - 09:30', field: '7-1', name: 'Lê Văn C', phone: '0912345678'},
+    {id: 4, date: '2024-10-31', time: '09:30 - 11:00', field: '11-1', name: 'Phạm Thị D', phone: '0934567890'},
+    {id: 5, date: '2024-10-31', time: '15:00 - 16:30', field: '11-1', name: 'Nguyễn Văn E', phone: '0123456788'},
     // Thêm các đặt sân khác ở đây...
   ]);
 

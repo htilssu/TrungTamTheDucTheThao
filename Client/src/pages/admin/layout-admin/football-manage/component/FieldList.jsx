@@ -4,8 +4,9 @@ import axios from "axios";
 import {ScrollRestoration, useNavigate} from "react-router-dom";
 import { Confirm } from "react-admin";
 import {toast, ToastContainer} from "react-toastify";
+import {queryClient} from "../../../../../modules/cache.js";
 
-const FieldList = ({ fields, setFields }) => {
+const FieldList = ({ fields }) => {
     const [editingField, setEditingField] = useState(null);
     const [deleteField, setDeleteField] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,27 +15,18 @@ const FieldList = ({ fields, setFields }) => {
 
     // Hàm hiển thị modal chỉnh sửa
     const handleEditClick = (field) => {
-        setEditingField(field); // Gán sân được chọn vào state để hiển thị modal
+        setEditingField(field);
         console.log(field);
     };
 
     // Đóng modal
     const handleCancelEdit = () => {
-        setEditingField(null); // Đóng modal bằng cách đặt lại giá trị
-    };
-
-    // Cập nhật sân sau khi chỉnh sửa
-    const handleUpdateField = (updatedField) => {
-        // Cập nhật danh sách sân
-        setFields((prevFields) =>
-            prevFields.map((field) => (field.fieldId === updatedField.fieldId ? updatedField : field))
-        );
-        setEditingField(null); // Đóng modal sau khi cập nhật
+        setEditingField(!editingField);
     };
 
     // Hàm xem lịch đặt
     const handleLichDat = () => {
-        navigate("/admin/soccer-manage/lichdat");
+        navigate("/admin/soccer-manage/booking");
     };
 
     const openModal = (field) => {
@@ -61,7 +53,7 @@ const FieldList = ({ fields, setFields }) => {
             const response = await axios.delete(`http://localhost:8080/v1/fields/${fieldId}`);
             if (response.status === 204) {
                 toast.success('Xóa sân thành công!');
-                // setFields((prevFields) => prevFields.filter((field) => field.fieldId !== fieldId));
+                queryClient.invalidateQueries({ queryKey: ['fields'] });
             } else {
                 toast.error('Có lỗi xảy ra khi Xóa sân!');
             }
@@ -149,7 +141,6 @@ const FieldList = ({ fields, setFields }) => {
                 <EditFieldModal
                     field={editingField}
                     onCancel={handleCancelEdit}
-                    onUpdate={handleUpdateField}
                 />
             )}
 

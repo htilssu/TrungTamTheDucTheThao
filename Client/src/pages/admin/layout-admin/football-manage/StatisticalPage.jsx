@@ -1,4 +1,4 @@
-import RevenueChart from "./RevenueChart.jsx";
+import RevenueChart from "./component/RevenueChart.jsx";
 
 const StatisticalPage = () => {
     return (

@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
-import { TiDelete } from "react-icons/ti";
+import {useState, useEffect} from "react";
+import {TiDelete} from "react-icons/ti";
 import axios from "axios";
+import {queryClient} from "../../../../../modules/cache.js";
+import {SyncLoader} from "react-spinners";
 
-const EditFieldModal = ({ field, onCancel, onUpdate }) => {
-    const [updatedField, setUpdatedField] = useState({ ...field });
-    const [newPriceSchedule, setNewPriceSchedule] = useState({ from: "", to: "", price: "" });
+const EditFieldModal = ({field, onCancel}) => {
+    const [updatedField, setUpdatedField] = useState({...field});
+    const [newPriceSchedule, setNewPriceSchedule] = useState({from: "", to: "", price: ""});
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false); // Thêm trạng thái loading
 
@@ -15,8 +17,8 @@ const EditFieldModal = ({ field, onCancel, onUpdate }) => {
     }, [field]);
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setUpdatedField({ ...updatedField, [name]: value });
+        const {name, value} = e.target;
+        setUpdatedField({...updatedField, [name]: value});
     };
 
     const handleAddPriceSchedule = () => {
@@ -25,7 +27,7 @@ const EditFieldModal = ({ field, onCancel, onUpdate }) => {
                 ...prev,
                 priceSchedule: prev.priceSchedule ? [...prev.priceSchedule, newPriceSchedule] : [newPriceSchedule],
             }));
-            setNewPriceSchedule({ from: "", to: "", price: "" });
+            setNewPriceSchedule({from: "", to: "", price: ""});
             setError(""); // Clear error nếu đã điền đúng
         } else {
             setError("Vui lòng điền đầy đủ thông tin khung giờ và giá.");
@@ -34,7 +36,7 @@ const EditFieldModal = ({ field, onCancel, onUpdate }) => {
 
     const handleRemovePriceSchedule = (index) => {
         const updatedPriceSchedule = updatedField.priceSchedule.filter((_, i) => i !== index);
-        setUpdatedField({ ...updatedField, priceSchedule: updatedPriceSchedule });
+        setUpdatedField({...updatedField, priceSchedule: updatedPriceSchedule});
     };
 
     const handleImageUpload = (e) => {
@@ -53,14 +55,14 @@ const EditFieldModal = ({ field, onCancel, onUpdate }) => {
 
     const handleRemoveImage = (index) => {
         const updatedImages = updatedField.images.filter((_, i) => i !== index);
-        setUpdatedField({ ...updatedField, images: updatedImages });
+        setUpdatedField({...updatedField, images: updatedImages});
     };
 
     const handleUpdateField = async () => {
         setLoading(true);
         try {
             // Gửi yêu cầu PUT để cập nhật sân
-            const response = await axios.put(`http://localhost:8080/v1/fields/${updatedField.fieldId}`, {
+            const response = await axios.put(`http://localhost:8080/v1/fields/${updatedField.id}`, {
                 fieldName: updatedField.fieldName,
                 location: updatedField.location,
                 fieldType: updatedField.fieldType,
@@ -70,9 +72,13 @@ const EditFieldModal = ({ field, onCancel, onUpdate }) => {
                 priceSchedule: updatedField.priceSchedule,
             });
 
-            setLoading(false);
-            onUpdate(response.data); // Gọi callback để cập nhật danh sách sân
-            onCancel(); // Đóng modal sau khi cập nhật thành công
+            const timeoutId = setTimeout(() => {
+                onCancel();
+                queryClient.invalidateQueries({queryKey: ['fields']});
+                setLoading(false);
+            }, 3000);
+
+            return () => clearTimeout(timeoutId);
         } catch (error) {
             setLoading(false);
             console.error("Error updating field:", error);
@@ -81,7 +87,8 @@ const EditFieldModal = ({ field, onCancel, onUpdate }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto bg-gray-800 bg-opacity-70 transition-opacity duration-300">
+        <div
+            className="fixed inset-0 flex items-center justify-center z-50 overflow-auto bg-gray-800 bg-opacity-70 transition-opacity duration-300">
             <div
                 className="bg-white rounded-lg p-8 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-fadeIn">
                 <h3 className="text-3xl font-bold mb-6 text-gray-800 border-b pb-4">
@@ -228,20 +235,33 @@ const EditFieldModal = ({ field, onCancel, onUpdate }) => {
                     </div>
                 </div>
 
-                <div className="flex justify-end space-x-4">
-                    <button
-                        className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200"
-                        onClick={onCancel}
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        className={`bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        onClick={handleUpdateField}
-                        disabled={loading}
-                    >
-                        {loading ? "Đang cập nhật..." : "Cập nhật"}
-                    </button>
+                <div>
+                    {loading ?
+                        <div className={"flex justify-center items-center mb-6"}>
+                            <SyncLoader
+                                color="#00ff72"
+                                margin={5}
+                                size={15}
+                                speedMultiplier={1}
+                            />
+                        </div>
+                        : <div className="flex justify-end items-center space-x-4 mt-6">
+                            <button
+                                className="bg-gray-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-gray-600 transition duration-200 transform hover:scale-105"
+                                onClick={onCancel}
+                            >
+                                Hủy
+                            </button>
+
+                            <button
+                                className={`bg-green-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-green-600 transition duration-200 transform hover:scale-105 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                onClick={handleUpdateField}
+                                disabled={loading}
+                            >
+                                Cập nhật
+                            </button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

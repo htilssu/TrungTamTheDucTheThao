@@ -23,15 +23,15 @@ public class Equipment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_seq")
     @SequenceGenerator(name = "equipment_seq", sequenceName = "equipment_sequence", allocationSize = 1)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "equipment_id_seq", sequenceName = "equipment_id_seq", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_equipment_type", nullable = false)
-    private EquipmentType idEquipmentType;
+    private EquipmentType equipmentType;
 
     @Column(name = "status", nullable = false)
     private Double status;
 
-    @Column(name = "image", nullable = false)
-    private String image;
 }

@@ -3,7 +3,7 @@ const BookingItem = ({ booking, openModal, openDetailModal }) => {
         <div className="bg-white shadow-lg rounded-lg p-4 mb-6">
             <div className="flex flex-col md:flex-row items-start gap-6">
                 <img
-                    src={booking.footballField.imageUrl}
+                    src={booking.footballField.imageUrl || "/sanbong1.png"}
                     alt={booking.footballField.fieldName}
                     className="w-full md:w-1/4 rounded-md object-cover"
                 />
@@ -25,11 +25,13 @@ const BookingItem = ({ booking, openModal, openDetailModal }) => {
                             className=" bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition">
                             Xem chi tiết
                         </button>
-                        <button
-                            onClick={() => openModal(booking)}
-                            className=" bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition">
-                            Hủy Lịch
-                        </button>
+                        {booking.bookingStatus === 'PENDING' && (
+                            <button
+                                onClick={() => openModal(booking)}
+                                className=" bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition">
+                                Hủy Lịch
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

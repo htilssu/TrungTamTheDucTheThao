@@ -32,7 +32,6 @@ public class RegistrationService {
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
     private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,18}$";
 
-
     public AccountDto registerUser(RegistrationDto registrationDto) {
         Optional<Account> existingAccount = accountRepository.findByEmail(registrationDto.email());
 
@@ -68,7 +67,8 @@ public class RegistrationService {
         if (registrationDto.password() == null || registrationDto.password().isEmpty()) {
             throw new IllegalArgumentException("Mật khẩu không được để trống");
         } else if (!isValidPassword(registrationDto.password())) {
-            throw new IllegalArgumentException("Mật khẩu phải có ít nhất từ 6 đến 18 kí tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt");
+            throw new IllegalArgumentException(
+                    "Mật khẩu phải có ít nhất từ 6 đến 18 kí tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt");
         }
 
         // RePassword
@@ -107,16 +107,16 @@ public class RegistrationService {
     }
 
     private boolean isValidDob(String dob) {
-        try{
+        try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate birthDate = LocalDate.parse(dob, formatter);
-            
+
             LocalDate currentDate = LocalDate.now();
 
             Period age = Period.between(birthDate, currentDate);
 
             return age.getYears() >= 13;
-        } catch (DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             return false;
         }
     }
