@@ -26,14 +26,14 @@ public class LoginService {
 
     public String login(@Validated LoginDto loginDto) {
         Optional<Account> accountOpt = accountRepository.findByEmail(loginDto.email());
-        
+
         if (accountOpt.isPresent()) {
             Account account = accountOpt.get();
-            
+
             if (passwordEncoder.matches(loginDto.password(), account.getPassword())) {
                 return JwtUtil.generateToken(account);
             }
         }
-        return null; 
+        return null;
     }
 }

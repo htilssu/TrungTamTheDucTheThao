@@ -3,7 +3,7 @@ import {TbBellRingingFilled} from "react-icons/tb";
 import {MdHome, MdSettings, MdAssessment, MdManageAccounts, MdGroups2} from "react-icons/md"; // Import icons
 import {Collapse} from '@material-tailwind/react';
 import {useState} from "react";
-import {SiGoogletagmanager} from "react-icons/si";
+import {SiGoogletagmanager, SiOpenaigym} from "react-icons/si";
 import {BsPersonVcardFill} from "react-icons/bs";
 import {RiFileList3Fill} from "react-icons/ri";
 import {NavLink} from "react-router-dom";
@@ -37,7 +37,8 @@ const Sidebar = ({isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode}) =
         {name: 'Quản lý Khách hàng', link: '/admin/customer-manage', icon: <BsPersonVcardFill/>},
         {name: 'Quản lý Nhân viên', link: '/admin/employee-manage', icon: <MdGroups2/>},
         {name: 'Quản lý khóa học', link: '/admin/courses-manage', icon: <PiBookOpenBold />},
-        {name: 'Bán khóa học', link: '/admin/sellcourses', icon: <PiShoppingCart />}
+        {name: 'Bán khóa học', link: '/admin/sellcourses', icon: <PiShoppingCart />},
+        {name: "Trang thiết bị", link: '/admin/equipmentlayout', icon: <SiOpenaigym/>}
 
     ];
 
