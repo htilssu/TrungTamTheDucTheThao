@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import ImageSwiper from "../layout-admin/courses-manage/ImageSwiper.jsx";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import {useNavigate} from "react-router-dom";
 
 const EquipmentForm = () => {
     const [formData, setFormData] = useState({
@@ -7,8 +9,41 @@ const EquipmentForm = () => {
         status: ''
     });
     const [equipments, setEquipments] = useState([]);
-    const [images, setImages] = useState([]);
+    const [equipmentTypes, setEquipmentTypes] = useState([]);
+    const [image, setImage] = useState(null); // Change to hold a single image
     const [editingMode, setEditingMode] = useState(false);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const fetchEquipments = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/equipment');
+                console.log("Fetched equipments:", response.data);
+                if (Array.isArray(response.data)) {
+                    setEquipments(response.data);
+                } else {
+                    console.error("Dữ liệu không phải là mảng:", response.data);
+                    toast.error("Có lỗi xảy ra khi tải danh sách thiết bị.");
+                }
+            } catch (error) {
+                    console.error("Error fetching equipments:", error);
+                toast.error("Không thể tải danh sách thiết bị.");
+            }
+        };
+
+        const fetchEquipmentTypes = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/equipment-types');
+                console.log(response.data);
+                setEquipmentTypes(response.data);
+            } catch (error) {
+                console.error("Error fetching equipment types:", error);
+                toast.error("Không thể tải danh sách loại thiết bị.");
+            }
+        };
+
+        fetchEquipments();
+        fetchEquipmentTypes();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,98 +53,79 @@ const EquipmentForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const newEquipment = { ...formData, images };
-        console.log('New Equipment:', newEquipment);
-        setEquipments([...equipments, newEquipment]);
-        setFormData({ type: '', status: '' });
-        setImages([]);
+
+        // Tạo đối tượng JSON để gửi
+        const jsonData = {
+            equipmentType: {
+                id: formData.type, // Lấy id từ formData.type
+            },
+            status: formData.status,
+            image: image || null, // Đặt image thành null nếu không có ảnh
+        };
+
+        try {
+            const response = await axios.post('http://localhost:8080/api/equipment', jsonData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            // Cập nhật danh sách thiết bị sau khi thêm thành công
+            setEquipments((prevEquipments) => [...prevEquipments, response.data]);
+            setFormData({ type: '', status: '' });
+            setImage(null);
+            toast.success("Thêm thiết bị thành công!");
+            navigate('/admin/equipmentList')
+
+        } catch (error) {
+            console.error("Error creating equipment:", error);
+            toast.error("Có lỗi xảy ra khi thêm thiết bị.");
+        }
     };
 
-    const handleDeleteImage = (index) => {
-        if (!editingMode) return;
-        const updatedImages = images.filter((_, i) => i !== index);
-        setImages(updatedImages);
-    };
+
 
     const handleImageChange = (e) => {
-        const newImages = [...images];
-        if (newImages.length >= 6) {
-            alert("Bạn chỉ có thể thêm tối đa 6 ảnh!");
-            return;
+        const file = e.target.files[0]; // Only take the first image
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImage(e.target.result); // Set the image as a data URL
+            };
+            reader.readAsDataURL(file);
         }
-
-        const files = Array.from(e.target.files);
-        const promises = files.map((file) => {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    resolve(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        Promise.all(promises).then((results) => {
-            setImages((prevImages) => [...prevImages, ...results]);
-        });
-    };
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 300,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 1000,
     };
 
     return (
         <div className="max-w-[800px] mx-auto p-4 bg-white mb-5 shadow-2xl rounded-md mt-8">
-            {/* Khối form thêm trang thiết bị */}
             <div className="mb-8 w-full p-4 bg-white border-[1px] text-black rounded-md">
                 <h2 className="text-2xl font-semibold mb-4 flex justify-center">Thêm Trang Thiết Bị</h2>
                 <form onSubmit={handleSubmit} className="space-y-6 text-black border-bottom-[1px]">
                     <div className="mb-6 mt-3">
-                        {images.length > 0 ? (
-                            <ImageSwiper
-                                images={images}
-                                editingMode={editingMode}
-                                handleDeleteImage={handleDeleteImage}
-                                sliderSettings={sliderSettings}
-
-                            />
+                        {image ? (
+                            <div className="w-full h-80 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
+                                <img src={image} alt="Equipment" className="object-contain h-full" />
+                            </div>
                         ) : (
                             <div className="w-full h-80 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
-                                <img src="/no-image.png" alt="No Image" className="object-contain h-full"/>
+                                <img src="/no-image.png" alt="No Image" className="object-contain h-full" />
                             </div>
                         )}
                         <input
                             type="file"
                             accept="image/*"
-                            multiple
                             onChange={handleImageChange}
                             className="hidden"
                             id="upload"
                         />
-                    </div>
-
-                    <div className="flex flex-col md:flex-row justify-center gap-4 mb-6">
                         <button
                             type="button"
                             onClick={() => document.getElementById("upload").click()}
-                            className="py-2 px-4 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
+                            className="py-2 px-4 flex justify-center bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
                         >
                             Thêm ảnh
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setEditingMode(!editingMode)}
-                            className="py-2 px-4 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
-                        >
-                            {editingMode ? "Hủy sửa" : "Sửa ảnh"}
                         </button>
                     </div>
 
@@ -124,10 +140,9 @@ const EquipmentForm = () => {
                             required
                         >
                             <option value="">Chọn loại</option>
-                            <option value="Máy chạy bộ">Máy chạy bộ</option>
-                            <option value="Tạ đòn">Tạ đòn</option>
-                            <option value="Máy đạp xe">Máy đạp xe</option>
-                            <option value="Thảm yoga">Thảm yoga</option>
+                            {equipmentTypes.map(equipmentType => (
+                                <option key={equipmentType.id} value={equipmentType.id}>{equipmentType.name}</option>
+                            ))}
                         </select>
                     </div>
 
@@ -150,9 +165,9 @@ const EquipmentForm = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+                        className="w-full py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700"
                     >
-                        Đăng Ký
+                        Thêm thiết bị
                     </button>
                 </form>
             </div>

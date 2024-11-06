@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const CategoryForm = () => {
     const [formData, setFormData] = useState({
@@ -6,6 +7,7 @@ const CategoryForm = () => {
         amount: ''
     });
     const [categories, setCategories] = useState([]);
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -15,23 +17,50 @@ const CategoryForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Reset lỗi
 
-        // Thêm thể loại vào danh sách và reset form
-        setCategories([...categories, formData]);
-        setFormData({
-            name: '',
-            amount: ''
-        });
+        try {
+            // Gọi API để tạo thể loại thiết bị
+            const response = await axios.post('http://localhost:8080/api/equipment-types', {
+                name: formData.name,
+                amount: parseInt(formData.amount, 10) // Chuyển đổi sang số
+            });
+
+            // Nếu thành công, thêm thể loại vào danh sách
+            setCategories((prevCategories) => [...prevCategories, response.data]);
+            setFormData({
+                name: '',
+                amount: ''
+            });
+        } catch (err) {
+            console.error(err);
+            setError('Đã xảy ra lỗi khi tạo thể loại thiết bị.');
+        }
     };
 
-    return (
+    const getCategories = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/equipment-types');
+            setCategories(response.data);
+        } catch (err) {
+            console.error(err);
+            setError('Đã xảy ra lỗi khi lấy danh sách thể loại thiết bị.');
+        }
+    };
 
+    // Gọi hàm getCategories khi component được mount
+    useEffect(() => {
+        getCategories();
+    }, []);
+
+    return (
         <div className="flex justify-center items-start space-x-6 p-4 mt-32">
             <div className="max-w-md w-full p-4 bg-white shadow-md rounded-md">
-                <h2 className=" flex justify-center font-bold text-2xl mb-5">Đăng Ký Thể Loại trang thiết bị </h2>
+                <h2 className="flex justify-center font-bold text-2xl mb-5">Đăng Ký Thể Loại trang thiết bị</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    {error && <p className="text-red-500">{error}</p>}
                     <div className="relative">
                         <input
                             type="text"

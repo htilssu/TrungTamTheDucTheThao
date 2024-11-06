@@ -1,96 +1,23 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {toast} from "react-toastify";
+import axios from "axios";
 
 const EquipmentList = () => {
-    // Dữ liệu giả cho thiết bị
-    const [equipments, setEquipments] = useState([
-        {
-            type: 'Máy chạy bộ',
-            status: 'Hoạt động',
-            images: ['/images/treadmill.jpg'], // Đường dẫn đến hình ảnh của máy chạy bộ
-        },
-        {
-            type: 'Tạ đòn',
-            status: 'Bảo trì',
-            images: ['/images/barbell.jpg'], // Đường dẫn đến hình ảnh của tạ đòn
-        },
-        {
-            type: 'Máy đạp xe',
-            status: 'Hư Hỏng',
-            images: ['/gym2.png'], // Đường dẫn đến hình ảnh của máy đạp xe
-        },
-        {
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },
-        {
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },
-        {
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },
-        {
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },{
-            type: 'Thảm yoga',
-            status: 'Hoạt động',
-            images: [], // Không có hình ảnh
-        },
-    ]);
+    const [equipments, setEquipments] = useState([]);
+
+    useEffect(() => {
+        const fetchEquipments = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/equipment');
+                setEquipments(response.data);
+            } catch (error) {
+                console.error("Error fetching equipment:", error);
+                toast.error("Có lỗi xảy ra khi tải danh sách thiết bị.");
+            }
+        };
+
+        fetchEquipments();
+    }, []);
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -105,41 +32,39 @@ const EquipmentList = () => {
         }
     };
 
-    const handleDelete = (index) => {
-        setEquipments((prevEquipments) =>
-            prevEquipments.filter((_, i) => i !== index)
-        );
+    const handleDelete = async (index, id) => {
+        try {
+            await axios.delete(`http://localhost:8080/api/equipment/${id}`);
+            setEquipments((prevEquipments) => prevEquipments.filter((_, i) => i !== index));
+            toast.success("Xóa thiết bị thành công!");
+        } catch (error) {
+            console.error("Error deleting equipment:", error);
+            toast.error("Có lỗi xảy ra khi xóa thiết bị.");
+        }
     };
 
     const handleEdit = (index) => {
-        //viet ham sua vao day
         alert(`Chỉnh sửa thiết bị: ${equipments[index].type}`);
+        // Bạn có thể thêm hàm sửa thiết bị tại đây
     };
-
     return (
         <div className="max-w-[1200px] mx-auto p-4">
             <h2 className="text-2xl font-semibold mb-4 text-center">Danh Sách Trang Thiết Bị</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {equipments.length > 0 ? (
                     equipments.map((equipment, index) => (
-                        <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div key={equipment.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                             <div className="h-40 flex justify-center items-center">
-                                {equipment.images.length > 0 ? (
+
                                     <img
-                                        src={equipment.images[0]} // Lấy hình ảnh đầu tiên
-                                        alt={equipment.type}
-                                        className="w-full h-full object-cover"
+                                        src={equipment.image||"/maychaybo.png"}
+                                        alt={equipment.equipmentType.name}
+                                        className="w-full h-full object-contain"
                                     />
-                                ) : (
-                                    <img
-                                        src="/no-image.png"
-                                        alt="No Image"
-                                        className="w-full h-full object-cover"
-                                    />
-                                )}
+
                             </div>
                             <div className="p-4">
-                                <h3 className="text-lg font-semibold">{equipment.type}</h3>
+                                <h3 className="text-lg font-semibold">{equipment.equipmentType.name}</h3>
                                 <p className={`mt-2 ${getStatusColor(equipment.status)}`}>
                                     Trạng thái: {equipment.status}
                                 </p>
@@ -147,7 +72,7 @@ const EquipmentList = () => {
                             <div className="flex justify-center items-center space-x-2 mb-4">
                                 <button
                                     className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
-                                    onClick={() => handleDelete(index)}
+                                    onClick={() => handleDelete(index, equipment.id)}
                                 >
                                     Xóa
                                 </button>
@@ -167,5 +92,4 @@ const EquipmentList = () => {
         </div>
     );
 };
-
 export default EquipmentList;
