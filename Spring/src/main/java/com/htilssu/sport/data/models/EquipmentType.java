@@ -22,4 +22,4 @@ public class EquipmentType {
     @Column(name = "amount", nullable = false)
     private Short amount;
 
-}
+}   

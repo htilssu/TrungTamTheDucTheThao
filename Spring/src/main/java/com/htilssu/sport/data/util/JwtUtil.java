@@ -1,15 +1,14 @@
 package com.htilssu.sport.data.util;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.htilssu.sport.data.models.Account;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JwtUtil {
 
@@ -31,10 +30,7 @@ public class JwtUtil {
 
     public static Claims extractClaims(String token) {
         try {
-            return Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
-                    .parseClaimsJws(token)
-                    .getBody();
+            return Jwts.parser().parseClaimsJws(token).getBody();
         } catch (JwtException e) {
             throw new RuntimeException("Token không hợp lệ", e);
         }
@@ -51,5 +47,14 @@ public class JwtUtil {
 
     public static String getEmailFromToken(String token) {
         return extractClaims(token).getSubject();
+    }
+
+    public static boolean verifyToken(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 }

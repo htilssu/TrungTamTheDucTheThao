@@ -46,7 +46,8 @@ public class ForgotPasswordController {
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDto request) {
         try {
-            Account account = forgotPasswordService.resetPassword(request.email(), request.code(), request.newPassword());
+            Account account = forgotPasswordService.resetPassword(request.email(), request.code(),
+                    request.newPassword());
             if (account != null) {
                 return ResponseEntity.ok("Mật khẩu đã được cập nhật thành công.");
             } else {

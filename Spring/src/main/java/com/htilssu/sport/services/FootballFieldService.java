@@ -58,7 +58,7 @@ public class FootballFieldService {
         if (!repository.existsById(id)) {
             throw new RuntimeException("Không tìm thấy sân bóng với id: " + id);
         }
-        field.setFieldId(id); // Cập nhật ID
+        field.setId(id); // Cập nhật ID
         return repository.save(field); // Cập nhật sân bóng
     }
 }

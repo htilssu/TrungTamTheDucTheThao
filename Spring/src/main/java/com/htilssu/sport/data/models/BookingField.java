@@ -2,16 +2,22 @@ package com.htilssu.sport.data.models;
 
 import com.htilssu.sport.enums.BookingStatus;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.sql.Timestamp;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "booking_field")
 public class BookingField {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookingId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "booking_field_seq", sequenceName = "booking_field_sequence", allocationSize = 1)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "field_id", nullable = false)
@@ -45,9 +51,6 @@ public class BookingField {
     private String paymentMethod;
 
     @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private Timestamp createdAt;
-
-    public BookingField() {
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-    }
 }

@@ -15,6 +15,8 @@ public class Booking {
 
     @Id
     @Column(name = "id", nullable = false)
+    @SequenceGenerator(name = "booking_seq", sequenceName = "booking_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "booking_seq")
     private Long id;
 
     @NotNull
