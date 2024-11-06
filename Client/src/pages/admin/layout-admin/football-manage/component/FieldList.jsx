@@ -26,7 +26,7 @@ const FieldList = ({ fields }) => {
 
     // Hàm xem lịch đặt
     const handleLichDat = () => {
-        navigate("/admin/soccer-manage/lichdat");
+        navigate("/admin/soccer-manage/booking");
     };
 
     const openModal = (field) => {
