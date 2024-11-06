@@ -62,7 +62,7 @@ const EditFieldModal = ({field, onCancel}) => {
         setLoading(true);
         try {
             // Gửi yêu cầu PUT để cập nhật sân
-            const response = await axios.put(`http://localhost:8080/v1/fields/${updatedField.fieldId}`, {
+            const response = await axios.put(`http://localhost:8080/v1/fields/${updatedField.id}`, {
                 fieldName: updatedField.fieldName,
                 location: updatedField.location,
                 fieldType: updatedField.fieldType,
