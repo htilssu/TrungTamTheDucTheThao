@@ -1,7 +1,9 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
-import { ToastContainer, toast } from 'react-toastify'; 
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { authFetch } from "../../../../../dev/request";
+
 
 const AddRoomTypes = ({ onAddField }) => {
     const [newRoomType, setNewRoomType] = useState({
@@ -16,12 +18,21 @@ const AddRoomTypes = ({ onAddField }) => {
         return true;
     };
 
-    const handleAddField = () => {
+    const handleAddField = async () => {
         if (validateFields()) {
-            onAddField(newRoomType);
-            setNewRoomType({
-                name: ""
-            });
+            try {
+                const response = await authFetch('/room-types/add', {
+                    method: 'POST',
+                    body: JSON.stringify(newRoomType),
+                });
+                onAddField(response);
+                setNewRoomType({
+                    name: ""
+                });
+                toast.success("Thêm loại phòng thành công", { toastId: "add-success" });
+            } catch {
+                toast.error("Đã xảy ra lỗi khi thêm loại phòng", { toastId: "add-error" });
+            }
         }
     };
 

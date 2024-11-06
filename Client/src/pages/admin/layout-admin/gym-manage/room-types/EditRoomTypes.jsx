@@ -2,26 +2,36 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { authFetch } from './../../../../../dev/request';
+
 
 const EditRoomTypes = ({ field, onCancel, onUpdate }) => {
     const [updatedField, setUpdatedField] = useState(field);
 
     useEffect(() => {
-       setUpdatedField(field);
+        setUpdatedField(field);
     }, [field]);
 
     const handleInputChange = (e) => {
         setUpdatedField({ ...updatedField, name: e.target.value });
     };
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
         if (!updatedField.name) {
             toast.error("Tên phòng không được để trống.");
             return;
         }
-        
-        onUpdate(updatedField);
-        toast.success("Cập nhật thành công!");
+
+        try {
+            const response = await authFetch(`/room-types/update/${updatedField.id}`, {
+                method: 'PUT',
+                body: JSON.stringify(updatedField),
+            });
+            onUpdate(response);
+            toast.success("Cập nhật thành công!");
+        } catch {
+            toast.error("Đã xảy ra lỗi khi cập nhật loại phòng");
+        }
     };
 
     return (
@@ -65,6 +75,7 @@ const EditRoomTypes = ({ field, onCancel, onUpdate }) => {
 
 EditRoomTypes.propTypes = {
     field: PropTypes.shape({
+        id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
     }).isRequired,
     onCancel: PropTypes.func.isRequired,
