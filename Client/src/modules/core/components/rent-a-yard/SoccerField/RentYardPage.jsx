@@ -11,7 +11,6 @@ import {MdLocationPin} from "react-icons/md";
 import {queryClient} from "../../../../cache.js";
 
 const RentYardPage = () => {
-    const navigate = useNavigate();
     const [fields, setFields] = useState([]);
     const [fieldType, setFieldType] = useState(null);
     const [selectedField, setSelectedField] = useState(null);
@@ -70,9 +69,9 @@ const RentYardPage = () => {
     ]);
 
     // Lấy khung giờ đã đặt cho một sân cụ thể vào một ngày cụ thể
-    const fetchBookedTimes = async (fieldId, date) => {
+    const fetchBookedTimes = async (id, date) => {
         try {
-            const response = await axios.get(`http://localhost:8080/v1/booking-field/available-times/${fieldId}?date=${date}`);
+            const response = await axios.get(`http://localhost:8080/v1/booking-field/available-times/${id}?date=${date}`);
             const bookedTimes = response.data.bookedTimes;
 
             // Sử dụng bookedTimes để cập nhật trạng thái "isBooked"
@@ -97,11 +96,11 @@ const RentYardPage = () => {
             fetchBookedTimes(selectedField, date.format('YYYY-MM-DD'));
         }
     };
-    const handleFieldSelection = (fieldId) => {
-        setSelectedField(fieldId);
+    const handleFieldSelection = (id) => {
+        setSelectedField(id);
         if (selectedDate) {
             // Gọi API để lấy các khung giờ đã đặt của sân vào ngày được chọn
-            fetchBookedTimes(fieldId, selectedDate.format('YYYY-MM-DD'));
+            fetchBookedTimes(id, selectedDate.format('YYYY-MM-DD'));
         }
     };
 
@@ -217,7 +216,7 @@ const RentYardPage = () => {
 
             // Tạo object chứa dữ liệu cần gửi
             const bookingData = {
-                footballField: {fieldId: selectedField},
+                footballField: {id: selectedField},
                 customer: {id: 1},
                 customerName: customerName,
                 customerPhone: customerPhone,
@@ -301,13 +300,13 @@ const RentYardPage = () => {
                 {fieldType && (
                     <div className="mb-6">
                         <h3 className="text-2xl font-semibold mb-4">Chọn sân cụ thể</h3>
-                        {fields.length > 0 ? (
+                        {fields?.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                {fields.map((field) => (
+                                {fields?.map((field) => (
                                     <div
-                                        key={field.fieldId}
-                                        className={`transition-transform duration-300 transform hover:scale-105 p-3 rounded-lg shadow-lg text-center ${selectedField === field.fieldId ? 'border-4 border-green-600' : 'border border-green-200'} cursor-pointer hover:border-green-400`}
-                                        onClick={() => handleFieldSelection(field.fieldId)}
+                                        key={field.id}
+                                        className={`transition-transform duration-300 transform hover:scale-105 p-3 rounded-lg shadow-lg text-center ${selectedField === field.id ? 'border-4 border-green-600' : 'border border-green-200'} cursor-pointer hover:border-green-400`}
+                                        onClick={() => handleFieldSelection(field.id)}
                                     >
                                         <img
                                             src={field.imageUrl || "/sanbong2.png"}
