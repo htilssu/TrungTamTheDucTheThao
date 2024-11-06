@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedOriginPatterns("https://*:[*]")
                 .allowedOriginPatterns("http://*:[*]")
+                .allowedHeaders("*")
                 .allowCredentials(true);
         WebMvcConfigurer.super.addCorsMappings(registry);
     }

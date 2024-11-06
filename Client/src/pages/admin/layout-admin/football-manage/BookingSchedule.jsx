@@ -1,4 +1,4 @@
-// src/BookingSchedule.js
+
 import React, {useState} from 'react';
 import {DatePicker} from 'antd';
 
