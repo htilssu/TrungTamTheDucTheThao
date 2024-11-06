@@ -46,7 +46,7 @@ export default function ServiceManagementController() {
 
     const buttonData = [
         { icon: PiCourtBasketballLight, text: 'Quản lý sân bóng', path: '/admin/soccer-manage' },
-        { icon: CgGym, text: 'Quản lý phòng gym', path: '/admin/gym-manage' },
+        { icon: CgGym, text: 'Quản lý phòng tập', path: '/admin/room-manage' },
         { icon: GrYoga, text: 'Quản lý lớp yoga', path: '/admin/yoga-manage' },
     ];
 

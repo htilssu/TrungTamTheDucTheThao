@@ -1,20 +1,22 @@
 package com.htilssu.sport.services;
 
-import com.htilssu.sport.data.models.Room;
-import com.htilssu.sport.repositories.RoomRepository;
-import lombok.AllArgsConstructor;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.htilssu.sport.data.models.Room;
+import com.htilssu.sport.repositories.RoomRepository;
 
-@AllArgsConstructor
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class RoomService {
 
-    private final RoomRepository roomRepository; // Sử dụng final cho các dependency
+    @Autowired
+    private RoomRepository roomRepository;
 
-    // Lấy tất cả các phòng
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }

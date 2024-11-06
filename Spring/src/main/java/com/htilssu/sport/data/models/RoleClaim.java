@@ -16,10 +16,10 @@ public class RoleClaim {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_role", nullable = false)
-    private Role Role;
+    private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
-    private User User;
+    private User user;
 
 }
