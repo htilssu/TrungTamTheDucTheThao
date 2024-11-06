@@ -25,11 +25,13 @@ const BookingItem = ({ booking, openModal, openDetailModal }) => {
                             className=" bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition">
                             Xem chi tiết
                         </button>
-                        <button
-                            onClick={() => openModal(booking)}
-                            className=" bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition">
-                            Hủy Lịch
-                        </button>
+                        {booking.bookingStatus === 'PENDING' && (
+                            <button
+                                onClick={() => openModal(booking)}
+                                className=" bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition">
+                                Hủy Lịch
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
