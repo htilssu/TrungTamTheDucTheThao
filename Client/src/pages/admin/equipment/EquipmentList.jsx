@@ -61,7 +61,6 @@ const EquipmentList = () => {
                                         alt={equipment.equipmentType.name}
                                         className="w-full h-full object-contain"
                                     />
-
                             </div>
                             <div className="p-4">
                                 <h3 className="text-lg font-semibold">{equipment.equipmentType.name}</h3>
