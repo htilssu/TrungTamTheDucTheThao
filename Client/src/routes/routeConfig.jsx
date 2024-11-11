@@ -38,44 +38,44 @@ import EquipmentList from '../pages/admin/equipment/EquipmentList.jsx';
 import HistoryBookingAdmin from '../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx';
 
 export const router = createBrowserRouter([
-  {
-    path: 'admin',
-    element: <AdminDashboard/>,
-    children: [
-      {
-        index: true,
-        element: <HomeAdminLayout/>,
-      },
-      {
-        path: 'post-manage',
-        element: <PostLayout/>,
-      },
-      {
-        path: 'room-manage',
-        element: <RoomLayout/>,
+    {
+        path: 'admin',
+        element: <AdminDashboard/>,
         children: [
-          {
-            index: true,
-            element: <Room/>,
-          },
-        ],
-      },
-      {
-        path: 'customer-manage',
-        element: <CustomerLayout/>,
-      },
-      {
-        path: 'statistic-manage',
-        element: <StatisticalLayout/>,
-      },
-      {
-        path: 'employee-manage',
-        element: <EmployeeLayout/>,
-      },
-      {
-        path: 'courses-manage',
-        element: <CoursesManage/>,
-      },
+            {
+                index: true,
+                element: <HomeAdminLayout/>,
+            },
+            {
+                path: 'post-manage',
+                element: <PostLayout/>,
+            },
+            {
+                path: 'room-manage',
+                element: <RoomLayout/>,
+                children: [
+                  {
+                      index: true,
+                      element: <Room/>,
+                  },
+              ]
+            },
+            {
+                path: 'customer-manage',
+                element: <CustomerLayout/>,
+            },
+            {
+                path: 'statistic-manage',
+                element: <StatisticalLayout/>,
+            },
+            {
+                path: 'employee-manage',
+                element: <EmployeeLayout/>,
+            },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
 
       {
         path: 'courses-manage',
