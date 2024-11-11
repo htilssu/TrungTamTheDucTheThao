@@ -60,7 +60,7 @@ public class BookingFieldService {
         booking.setCustomerPhone(bookingFieldDTO.getCustomerPhone());
         booking.setStartTime(bookingFieldDTO.getStartTime());
         booking.setEndTime(bookingFieldDTO.getEndTime());
-        booking.setBookingStatus(BookingStatus.PENDING);
+        booking.setBookingStatus(BookingStatus.ACTING);
         booking.setDepositAmount(bookingFieldDTO.getDepositAmount());
         booking.setTotalAmount(calculateTotalAmount(field, bookingFieldDTO.getStartTime(),
                 bookingFieldDTO.getEndTime()));
@@ -165,9 +165,9 @@ public class BookingFieldService {
 
         List<BookingField> bookingsToUpdate = new ArrayList<>();
         for (BookingField booking : bookings) {
-            if (booking.getEndTime().before(currentTime) && BookingStatus.PENDING.equals(
+            if (booking.getEndTime().before(currentTime) && BookingStatus.ACTING.equals(
                     booking.getBookingStatus())) {
-                booking.setBookingStatus(BookingStatus.CONFIRMED);
+                booking.setBookingStatus(BookingStatus.COMPLETED);
                 bookingsToUpdate.add(booking);
             }
         }
@@ -185,5 +185,19 @@ public class BookingFieldService {
 
     public void deleteBooking(Long id) {
         bookingFieldRepository.deleteById(id);
+    }
+
+    // Phương thức hủy đặt sân
+    public BookingField cancelBooking(Long bookingId) {
+        BookingField booking = bookingFieldRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lịch đặt sân với ID: " + bookingId));
+
+        if (!BookingStatus.ACTING.equals(booking.getBookingStatus())) {
+            throw new IllegalStateException("Chỉ có thể hủy lịch đặt sân đang hoạt động.");
+        }
+
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+
+        return bookingFieldRepository.save(booking);
     }
 }

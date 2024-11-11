@@ -112,7 +112,7 @@ public class BookingFieldController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<?> updateBooking(@PathVariable Long id, @RequestBody BookingField booking) {
         try {
             BookingField updatedBooking = bookingFieldService.updateBooking(id, booking);
@@ -139,6 +139,17 @@ public class BookingFieldController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    // Endpoint để hủy đặt sân
+    @PostMapping("/{bookingId}/cancel")
+    public ResponseEntity<String> cancelBooking(@PathVariable Long bookingId) {
+        try {
+            BookingField canceledBooking = bookingFieldService.cancelBooking(bookingId);
+            return ResponseEntity.ok("Lịch đặt sân đã được hủy thành công với ID: " + canceledBooking.getId());
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

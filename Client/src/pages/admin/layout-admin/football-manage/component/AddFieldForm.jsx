@@ -93,7 +93,7 @@ const AddFieldForm = ({onAddField, onClose}) => {
                 fieldName: newField.field_name,
                 location: newField.location,
                 fieldType: newField.field_type,
-                status: newField.status === "Đang hoạt động" ? "active" : "maintenance",
+                status: "active",
                 description: newField.description,
                 imageUrl: "/sanbong2.png",
             },

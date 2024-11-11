@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {ScrollRestoration, useNavigate} from "react-router-dom";
+import {Navigate, ScrollRestoration, useNavigate} from "react-router-dom";
 import {DatePicker} from 'antd';
 import dayjs from 'dayjs';
 import {toast, ToastContainer} from "react-toastify";
@@ -27,6 +27,8 @@ const RentYardPage = () => {
     const [paymentMethod, setPaymentMethod] = useState('cash');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    let navigate = useNavigate();
 
     // Thông báo lỗi
     const [fieldTypeError, setFieldTypeError] = useState('');
@@ -217,13 +219,13 @@ const RentYardPage = () => {
             // Tạo object chứa dữ liệu cần gửi
             const bookingData = {
                 footballField: {id: selectedField},
-                customer: {id: 1},
+                customer: {id: 1},  //Id lấy của Khách hàng
                 customerName: customerName,
                 customerPhone: customerPhone,
                 startTime: startDateTime.toISOString(),
                 endTime: endDateTime.toISOString(),
                 depositAmount: depositAmount,
-                totalAmount: totalAmount / 100000,
+                totalAmount: totalAmount ,
                 paymentMethod: paymentMethod
             };
 
@@ -234,7 +236,6 @@ const RentYardPage = () => {
                     if (response.status === 200) {
                         toast.success('Đặt sân thành công!');
                         resetForm();
-                        // navigate('/');
                     } else {
                         toast.error('Có lỗi xảy ra khi đặt sân!');
                     }
@@ -262,6 +263,7 @@ const RentYardPage = () => {
         setDepositAmount(0);
         setTotalAmount(0);
         setPaymentMethod('cash');
+        navigate("/booking");
     };
 
     return (
@@ -376,7 +378,7 @@ const RentYardPage = () => {
                             {availableTimes.map((timeSlot, index) => (
                                 <button
                                     key={index}
-                                    className={`px-4 py-2 rounded ${timeSlot.isBooked
+                                    className={`hover:bg-green-200 px-4 py-2 rounded ${timeSlot.isBooked
                                         ? 'bg-gray-300 text-black cursor-not-allowed'  
                                         : selectedTime === timeSlot.time
                                             ? 'bg-green-500 text-white' 
