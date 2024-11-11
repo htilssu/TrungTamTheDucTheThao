@@ -27,7 +27,6 @@ import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 import BookingPage from '../modules/core/components/booking/field/BookingFieldList.jsx';
 import ContactPage from '../modules/core/components/contact/ContactPage.jsx';
 import Room from './../pages/admin/layout-admin/gym-manage/Room';
-import Room from './../pages/admin/layout-admin/gym-manage/Room';
 
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 import Sellcourses from '../pages/admin/layout-admin/courses-manage/Sellcourses.jsx';
