@@ -12,7 +12,7 @@ import GymPage from '../modules/core/components/gym/GymPage.jsx';
 import FootballLayout from '../pages/admin/layout-admin/football-manage/FootballLayout.jsx';
 import FieldListPage from '../pages/admin/layout-admin/football-manage/FieldListPage.jsx';
 import StatisticalPage from '../pages/admin/layout-admin/football-manage/StatisticalPage.jsx';
-import BookingSchedule from '../pages/admin/layout-admin/football-manage/BookingSchedule.jsx';
+import BookingFieldPage from '../pages/admin/layout-admin/football-manage/booking-field/BookingFieldPage.jsx';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
 import EmployeeLayout from '../pages/admin/layout-admin/employee-manage/EmployeeLayout.jsx';
 import StatisticalLayout from '../pages/admin/layout-admin/statistics-manage/StatisticalLayout.jsx';
@@ -116,7 +116,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'booking',
-            element: <BookingSchedule/>,
+            element: <BookingFieldPage/>,
           },
           {
             path: 'history',
