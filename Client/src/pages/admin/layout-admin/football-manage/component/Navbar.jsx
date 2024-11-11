@@ -34,7 +34,7 @@ const Navbar = () => {
                                 }`
                             }
                         >
-                            <span className="hover:underline">Lịch Đặt</span>
+                            <span className="hover:underline">Đặt Lịch</span>
                         </NavLink>
                         <NavLink
                             to="history"

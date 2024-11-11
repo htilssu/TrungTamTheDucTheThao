@@ -64,7 +64,7 @@ const FieldDetailModal = ({ isOpen, onClose, booking }) => {
                             <strong className="font-medium text-gray-900">Trạng thái: </strong>
                             <span
                                 className={`font-semibold ${
-                                    booking.bookingStatus === 'PENDING' ? 'text-yellow-500' : 'text-red-500'
+                                    booking.bookingStatus === 'ACTING' ? 'text-green-500' : 'text-gray-500'
                                 }`}
                             >
                         {booking.bookingStatus}
