@@ -7,7 +7,7 @@ import {wGet} from "../../../../utils/request.util.js";
 
 const fetchBookings = async () => {
     const response = await wGet('/v1/booking-field');
-    return response.data;
+    return response ?? [];
 };
 
 function HistoryBookingAdmin() {

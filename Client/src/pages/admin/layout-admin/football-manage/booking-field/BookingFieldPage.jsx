@@ -16,7 +16,7 @@ const BookingFieldPage = () => {
         const fetchFields = async () => {
             try {
                 const response = await wGet('/v1/fields');
-                setFields(response.data);
+                setFields(response);
             } catch (error) {
                 console.error('Failed to load fields:', error);
             }

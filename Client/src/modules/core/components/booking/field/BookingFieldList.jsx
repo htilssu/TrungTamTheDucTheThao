@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import BookingList from './BookingList';
 import LoadingSpinner from './LoadingSpinner';
 import ConfirmModal from './ConfirmModal';
 import BookingDetail from './BookingDetail';
 import { toast } from 'react-toastify';
-import {wPost} from "../../../../../utils/request.util.js";
+import {wGet, wPost} from "../../../../../utils/request.util.js";
 
 const BookingFieldList = () => {
     const [customerId] = useState(1); // Mã khách hàng cố định cho phiên này
@@ -24,8 +23,8 @@ const BookingFieldList = () => {
         const fetchBookings = async () => {
             setLoading(true);
             try {
-                const response = await wPost(`/v1/booking-field/user/${customerId}`);
-                setBookings(response.data);
+                const response = await wGet(`/v1/booking-field/user/${customerId}`);
+                setBookings(response);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
             } finally {

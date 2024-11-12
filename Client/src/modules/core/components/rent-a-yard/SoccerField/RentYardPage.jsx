@@ -44,8 +44,8 @@ const RentYardPage = () => {
     const fetchFields = async (fieldType) => {
         try {
             const response = await wGet(`/v1/fields/type/${fieldType}`);
-            if (response && response.data && response.data.length > 0) {
-                setFields(response.data);
+            if (response && response.length > 0) {
+                setFields(response);
             } else {
                 setFields([]);
                 setError("Không có sân nào cho loại này.");
@@ -221,7 +221,7 @@ const RentYardPage = () => {
                 money: totalAmount,
                 serviceName: "SportCenter",
                 items: [
-                    { name: "Đặt sân", amount: 1, unitPrice: totalAmount }
+                    {name: "Đặt sân", amount: 1, unitPrice: totalAmount}
                 ],
                 callback: {
                     successUrl: "https://localhost:8080/order/success",
@@ -230,49 +230,46 @@ const RentYardPage = () => {
             };
 
             //try {
-                // // Tạo đơn hàng thanh toán với WoWoWallet
-                // const orderResponse = await wowoWallet.createOrder(orderProps);
-                //
-                // if (orderResponse && orderResponse.checkoutUrl) {
-                //     // Chuyển hướng người dùng đến checkoutUrl để thanh toán
-                //     window.location.href = orderResponse.checkoutUrl;
-                // } else {
-                //     toast.error('Không thể tạo đơn hàng thanh toán!');
-                //     setLoading(false);
-                // }
+            // // Tạo đơn hàng thanh toán với WoWoWallet
+            // const orderResponse = await wowoWallet.createOrder(orderProps);
+            //
+            // if (orderResponse && orderResponse.checkoutUrl) {
+            //     // Chuyển hướng người dùng đến checkoutUrl để thanh toán
+            //     window.location.href = orderResponse.checkoutUrl;
+            // } else {
+            //     toast.error('Không thể tạo đơn hàng thanh toán!');
+            //     setLoading(false);
+            // }
 
-                // Xử lý sau khi thanh toán thành công từ callback URL
-                // window.addEventListener("message", async (event) => {
-                //     if (event.origin === "https://localhost:8080" && event.data.status === "SUCCESS") {
-                        const bookingData = {
-                            footballField: { id: selectedField },
-                            customer: { id: 1 },
-                            customerName: customerName,
-                            customerPhone: customerPhone,
-                            startTime: startDateTime.toISOString(),
-                            endTime: endDateTime.toISOString(),
-                            depositAmount: depositAmount,
-                            totalAmount: totalAmount,
-                            paymentMethod: paymentMethod
-                        };
+            // Xử lý sau khi thanh toán thành công từ callback URL
+            // window.addEventListener("message", async (event) => {
+            //     if (event.origin === "https://localhost:8080" && event.data.status === "SUCCESS") {
+            const bookingData = {
+                footballField: {id: selectedField},
+                customer: {id: 1},
+                customerName: customerName,
+                customerPhone: customerPhone,
+                startTime: startDateTime.toISOString(),
+                endTime: endDateTime.toISOString(),
+                depositAmount: depositAmount,
+                totalAmount: totalAmount,
+                paymentMethod: paymentMethod
+            };
 
-                        try {
-                            const response = await wPost('http://localhost:8080/v1/booking-field', bookingData);
+            try {
+                const response = await wPost('/v1/booking-field', bookingData);
 
-                            if (response.status === 200) {
-                                toast.success('Đặt sân thành công!');
-                                resetForm();
-                            } else {
-                                toast.error('Có lỗi xảy ra khi đặt sân!');
-                            }
+                toast.success('Đặt sân thành công!');
+                resetForm();
 
-                            queryClient.invalidateQueries({ queryKey: ['fields'] });
-                        } catch (error) {
-                            console.error('Error creating booking:', error);
-                            toast.error('Không thể đặt sân!');
-                        } finally {
-                            setLoading(false);
-                        }
+                queryClient.invalidateQueries({queryKey: ['fields']});
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                toast.error('Không thể đặt sân!');
+                setLoading(false);
+            } finally {
+                setLoading(false);
+            }
             //         }
             //     });
             // } catch (error) {
