@@ -12,7 +12,7 @@ import GymPage from '../modules/core/components/gym/GymPage.jsx';
 import FootballLayout from '../pages/admin/layout-admin/football-manage/FootballLayout.jsx';
 import FieldListPage from '../pages/admin/layout-admin/football-manage/FieldListPage.jsx';
 import StatisticalPage from '../pages/admin/layout-admin/football-manage/StatisticalPage.jsx';
-import BookingSchedule from '../pages/admin/layout-admin/football-manage/BookingSchedule.jsx';
+import BookingFieldPage from '../pages/admin/layout-admin/football-manage/booking-field/BookingFieldPage.jsx';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
 import EmployeeLayout from '../pages/admin/layout-admin/employee-manage/EmployeeLayout.jsx';
 import StatisticalLayout from '../pages/admin/layout-admin/statistics-manage/StatisticalLayout.jsx';
@@ -37,44 +37,44 @@ import EquipmentList from '../pages/admin/equipment/EquipmentList.jsx';
 import HistoryBookingAdmin from '../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx';
 
 export const router = createBrowserRouter([
-  {
-    path: 'admin',
-    element: <AdminDashboard/>,
-    children: [
-      {
-        index: true,
-        element: <HomeAdminLayout/>,
-      },
-      {
-        path: 'post-manage',
-        element: <PostLayout/>,
-      },
-      {
-        path: 'room-manage',
-        element: <RoomLayout/>,
+    {
+        path: 'admin',
+        element: <AdminDashboard/>,
         children: [
-          {
-            index: true,
-            element: <Room/>,
-          },
-        ],
-      },
-      {
-        path: 'customer-manage',
-        element: <CustomerLayout/>,
-      },
-      {
-        path: 'statistic-manage',
-        element: <StatisticalLayout/>,
-      },
-      {
-        path: 'employee-manage',
-        element: <EmployeeLayout/>,
-      },
-      {
-        path: 'courses-manage',
-        element: <CoursesManage/>,
-      },
+            {
+                index: true,
+                element: <HomeAdminLayout/>,
+            },
+            {
+                path: 'post-manage',
+                element: <PostLayout/>,
+            },
+            {
+                path: 'room-manage',
+                element: <RoomLayout/>,
+                children: [
+                  {
+                      index: true,
+                      element: <Room/>,
+                  },
+              ]
+            },
+            {
+                path: 'customer-manage',
+                element: <CustomerLayout/>,
+            },
+            {
+                path: 'statistic-manage',
+                element: <StatisticalLayout/>,
+            },
+            {
+                path: 'employee-manage',
+                element: <EmployeeLayout/>,
+            },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
 
             {
                 path: 'courses-manage',
@@ -115,7 +115,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'booking',
-            element: <BookingSchedule/>,
+            element: <BookingFieldPage/>,
           },
           {
             path: 'history',

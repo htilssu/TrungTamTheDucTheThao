@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FieldList from "./component/FieldList.jsx";
 import AddFieldForm from "./component/AddFieldForm.jsx";
-import axios from "axios";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {wGet} from "../../../../utils/request.util.js";
 
 // Hàm fetch dữ liệu
 const fetchFields = async () => {
-    const response = await axios.get("http://localhost:8080/v1/fields");
-    return response.data;
+    const response = await wGet("/v1/fields");
+    return response ?? [];
 };
 
 const FieldListPage = () => {

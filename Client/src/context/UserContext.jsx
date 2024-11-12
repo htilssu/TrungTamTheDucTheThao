@@ -1,5 +1,5 @@
 import {createContext, useEffect, useState} from 'react';
-import {getToken} from '../utils/token.util.js';
+import {getToken, removeToken} from '../utils/token.util.js';
 import {getUser} from '../utils/user.util.js';
 
 export const UserContext = createContext(null);
@@ -15,6 +15,8 @@ export const UserProvider = ({children}) => {
       getUser().then((data) => {
         setUser(data);
         setIsLoading(false);
+      }).catch(() => {
+        removeToken();
       });
     }
   }, []);

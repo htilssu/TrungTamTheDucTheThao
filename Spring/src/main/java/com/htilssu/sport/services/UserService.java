@@ -4,6 +4,7 @@ import com.htilssu.sport.data.dtos.UserDto;
 import com.htilssu.sport.data.mappers.UserMapper;
 import com.htilssu.sport.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,5 +18,10 @@ public class UserService {
         return userRepository.findById(id)
                 .map(userMapper::toDto)
                 .orElse(null);
+    }
+
+    public UserDto getUser(Authentication authentication) {
+        var userId = ((Long) authentication.getPrincipal());
+        return getUserById(userId);
     }
 }
