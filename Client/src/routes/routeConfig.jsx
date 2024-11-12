@@ -76,33 +76,33 @@ export const router = createBrowserRouter([
                 element: <CoursesManage/>,
             },
 
-      {
-        path: 'courses-manage',
-        element: <CoursesManage/>,
-      },
-      {
-        path: 'sellcourses',
-        element: <Sellcourses/>,
-      },
-      {
-        path: 'equipmentType',
-        element: <EquipmentType/>,
-      },
-      {
-        path: 'equipment',
-        element: <Equipment/>,
-      },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
+            {
+                path: 'sellcourses',
+                element:<Sellcourses/>,
+            },
+            {
+                path: 'equipmentType',
+                element:<EquipmentType/>,
+            },
+            {
+                path: 'equipment',
+                element:<Equipment/>,
+            },
 
-      {
-        path: 'equipmentlayout',
-        element: <EquipmentLayout/>,
-      },
-      {
-        path: 'equipmentList',
-        element: <EquipmentList/>,
-      },
-      {
-        path: 'soccer-manage',
+            {
+                path: 'equipmentlayout',
+                element:<EquipmentLayout/>,
+            },
+            {
+                path: 'equipmentList',
+                element:<EquipmentList/>,
+            },
+            {
+              path: 'soccer-manage',
         element: <FootballLayout/>,
         children: [
           {
