@@ -21,7 +21,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(account.getEmail())
+                .setSubject(account.getUser().getId().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
@@ -30,7 +30,7 @@ public class JwtUtil {
 
     public static Claims extractClaims(String token) {
         try {
-            return Jwts.parser().parseClaimsJws(token).getBody();
+            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
         } catch (JwtException e) {
             throw new RuntimeException("Token không hợp lệ", e);
         }
