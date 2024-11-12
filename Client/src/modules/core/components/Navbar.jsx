@@ -175,7 +175,7 @@ const Navbar = () => {
                        className="absolute right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
                     <div className="px-4 py-3">
                                     <span className="block text-sm font-medium text-gray-900 dark:text-white">
-                                    {user.firstName} {user.lastName}</span>
+                                    {user?.firstName} {user?.lastName}</span>
                       <span className="block text-sm text-gray-500 dark:text-gray-400">
                                     ngokhong@gmail.com</span>
                     </div>

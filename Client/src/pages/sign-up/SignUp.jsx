@@ -10,6 +10,8 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [gender, setGender] = useState(true);
   const [dob, setDob] = useState(null);
+  const [firstName, setFirstName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRepassword] = useState('');
@@ -97,8 +99,10 @@ const SignUp = () => {
                   },
                   body: JSON.stringify({
                       user: {
+                          firstName: firstName || '',
                           lastName: name,
                           gender: gender,
+                          phoneNumber: phoneNumber || "",
                           dob: dob.toISOString().split('T')[0]
                       },
                       email: email,
@@ -109,6 +113,8 @@ const SignUp = () => {
 
               if (response.ok) {
                   toast.success('Đăng ký tài khoản thành công!');
+                  setFirstName('');
+                  setPhoneNumber('');
                   setName('');
                   setGender(true);
                   setDob(null);

@@ -3,6 +3,7 @@ package com.htilssu.sport.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,6 @@ public class LoginController {
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
-
     @PostMapping("/api/login")
     public ResponseEntity<ApiResponse> login(@RequestBody @Validated LoginDto loginDto) {
         String token = loginService.login(loginDto);

@@ -16,30 +16,29 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+    @Getter
+    @Setter
+    @Entity
+    @Table(name = "account", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+    public class Account {
 
-@Getter
-@Setter
-@Entity
-@Table(name = "account", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
-public class Account {
+        @Id
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
+        @SequenceGenerator(name = "account_seq", sequenceName = "account_sequence", allocationSize = 1)
+        @Column(name = "id", nullable = false)
+        private Long id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
-    @SequenceGenerator(name = "account_seq", sequenceName = "account_sequence", allocationSize = 1)
-    @Column(name = "id", nullable = false)
-    private Long id;
+        @MapsId
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "user_id")
+        private User user;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+        @NotBlank(message = "Email không được để trống")
+        @Email(message = "Email không đúng định dạng")
+        @Column(name = "email", nullable = false, unique = true, updatable = false)
+        private String email;
 
-    @NotBlank(message = "Email không được để trống")
-    @Email(message = "Email không đúng định dạng")
-    @Column(name = "email", nullable = false, unique = true, updatable = false)
-    private String email;
-
-    @NotBlank(message = "Mật khẩu không được để trống")
-    @Column(name = "password", nullable = false)
-    private String password;
-}
+        @NotBlank(message = "Mật khẩu không được để trống")
+        @Column(name = "password", nullable = false)
+        private String password;
+    }
