@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { DatePicker } from 'antd';
 import axios from 'axios';
+import {wGet} from "../../../../../../utils/request.util.js";
 
 const BookingSchedule = ({ selectedField, selectedDate, setSelectedDate, onOpenBookingModal }) => {
     const [availableTimes, setAvailableTimes] = useState([]);  // Trạng thái chứa tất cả các khung giờ
@@ -12,8 +13,8 @@ const BookingSchedule = ({ selectedField, selectedDate, setSelectedDate, onOpenB
         const fetchAvailableTimes = async () => {
             if (selectedField && selectedDate) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/v1/booking-field/available-times/${selectedField}?date=${selectedDate}`);
-                    const { availableTimes, bookedTimes } = response.data;
+                    const response = await wGet(`/v1/booking-field/available-times/${selectedField}?date=${selectedDate}`);
+                    const { availableTimes, bookedTimes } = response;
 
                     setAvailableTimes(availableTimes);  // Cập nhật khung giờ trống
                     setBookedTimes(bookedTimes);  // Cập nhật khung giờ đã đặt

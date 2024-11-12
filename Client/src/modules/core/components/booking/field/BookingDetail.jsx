@@ -31,14 +31,15 @@ const FieldDetailModal = ({ isOpen, onClose, booking }) => {
 
     return (
         isOpen && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60">
+            <div className="mb-4">
                 <div
                     ref={modalRef}
-                    className="bg-white rounded-xl shadow-xl p-8 max-w-lg w-full mx-4 transform transition-all duration-300 ease-in-out"
+                    className="bg-white rounded-xl shadow-xl px-8 py-2 w-full mx-4 transform transition-all duration-300 ease-in-out"
+                    style={{ animation: 'fadeIn 0.3s ease-in-out' }}
                 >
                     {/* Tiêu đề */}
                     <p className="mb-6">
-                        <strong className="text-2xl font-semibold text-gray-800">Chi tiết lịch đặt</strong>
+                        <strong className="text-2xl font-semibold text-green-700">Chi tiết lịch đặt</strong>
                     </p>
 
                     {/* Ảnh sân bóng */}
@@ -67,25 +68,15 @@ const FieldDetailModal = ({ isOpen, onClose, booking }) => {
                                     booking.bookingStatus === 'ACTING' ? 'text-green-500' : 'text-gray-500'
                                 }`}
                             >
-                        {booking.bookingStatus}
-                    </span>
+                                {booking.bookingStatus === 'ACTING' ? 'Đang diễn ra' : 'Hoàn thành'}
+                            </span>
                         </p>
                         <p className="flex items-center">
                             <strong className="font-medium text-gray-900">Số tiền đặt cọc:</strong>
-                            <span className="ml-2 text-green-500 font-semibold">
-                        {formatCurrency(booking.depositAmount)}
-                    </span>
+                            <span className="ml-2 text-green-600 font-semibold">
+                                {formatCurrency(booking.depositAmount)}
+                            </span>
                         </p>
-                    </div>
-
-                    {/* Nút đóng */}
-                    <div className="flex justify-end mt-8">
-                        <button
-                            onClick={onClose}
-                            className="bg-gray-200 text-gray-700 py-2 px-5 rounded-lg shadow-md hover:bg-gray-300 focus:outline-none transition duration-200 ease-in-out"
-                        >
-                            Đóng
-                        </button>
                     </div>
                 </div>
             </div>

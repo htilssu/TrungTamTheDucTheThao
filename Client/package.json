@@ -13,7 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@htilssu/wowo": "^1.1.8",
+    "@htilssu/wowo": "^1.1.34",
     "@mantine/charts": "^7.13.1",
     "@mantine/core": "^7.12.2",
     "@mantine/hooks": "^7.12.2",

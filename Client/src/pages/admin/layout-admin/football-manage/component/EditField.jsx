@@ -1,8 +1,8 @@
 import {useState, useEffect} from "react";
 import {TiDelete} from "react-icons/ti";
-import axios from "axios";
 import {queryClient} from "../../../../../modules/cache.js";
 import {SyncLoader} from "react-spinners";
+import {wPut} from "../../../../../utils/request.util.js";
 
 const EditFieldModal = ({field, onCancel}) => {
     const [updatedField, setUpdatedField] = useState({...field});
@@ -62,7 +62,7 @@ const EditFieldModal = ({field, onCancel}) => {
         setLoading(true);
         try {
             // Gửi yêu cầu PUT để cập nhật sân
-            const response = await axios.put(`http://localhost:8080/v1/fields/${updatedField.id}`, {
+            const response = await wPut(`/v1/fields/${updatedField.id}`, {
                 fieldName: updatedField.fieldName,
                 location: updatedField.location,
                 fieldType: updatedField.fieldType,
