@@ -105,7 +105,8 @@ CREATE TABLE equipment
 (
     id                BIGINT           NOT NULL,
     id_equipment_type BIGINT           NOT NULL,
-    status            DOUBLE PRECISION NOT NULL,
+    status            VARCHAR(255) NOT NULL,
+    image             VARCHAR(255) ,
     CONSTRAINT pk_equipment PRIMARY KEY (id)
 );
 
