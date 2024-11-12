@@ -41,7 +41,8 @@ public class User {
 
     @Column(name = "gender", nullable = true)
     private Boolean gender = false;
-    
+
+
     @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
     @MinAge(message = "Người dùng phải từ 16 tuổi trở lên", value = 16)
     @Column(name = "dob", nullable = false)

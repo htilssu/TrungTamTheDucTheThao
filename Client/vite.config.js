@@ -8,4 +8,12 @@ export default defineConfig({
   build: {
     cssCodeSplit: true,
   },
+<<<<<<< HEAD
+=======
+  server: {
+    proxy: {
+      '/api': 'http://localhost:8080',
+    },
+  },
+>>>>>>> a152b99ff4de6320a64651e66125921cfdaf9a93
 });

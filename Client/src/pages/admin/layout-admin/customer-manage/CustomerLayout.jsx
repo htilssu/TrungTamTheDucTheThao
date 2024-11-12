@@ -81,5 +81,4 @@ const CustomerManage = () => {
     );
 };
 
-
 export default CustomerManage;

@@ -4,7 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
+<<<<<<< HEAD
 
+=======
+>>>>>>> a152b99ff4de6320a64651e66125921cfdaf9a93
     "dev": "vite --host --open ",
     "build": "vite build",
     "lint": "eslint .",
