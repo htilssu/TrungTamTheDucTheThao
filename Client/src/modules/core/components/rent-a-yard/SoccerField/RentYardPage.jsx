@@ -6,9 +6,12 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import DotLoader from "react-spinners/DotLoader";
 import {TextField} from "@mui/material";
-import axios from "axios";
 import {MdLocationPin} from "react-icons/md";
 import {queryClient} from "../../../../cache.js";
+import {WoWoWallet} from "@htilssu/wowo";
+import {wGet, wPost} from "../../../../../utils/request.util.js";
+
+const wowoWallet = new WoWoWallet("your_api_key");
 
 const RentYardPage = () => {
     const [fields, setFields] = useState([]);
@@ -28,6 +31,8 @@ const RentYardPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    let navigate = useNavigate();
+
     // Thông báo lỗi
     const [fieldTypeError, setFieldTypeError] = useState('');
     const [selectedFieldError, setSelectedFieldError] = useState('');
@@ -38,9 +43,9 @@ const RentYardPage = () => {
 
     const fetchFields = async (fieldType) => {
         try {
-            const response = await axios.get(`http://localhost:8080/v1/fields/type/${fieldType}`);
-            if (response && response.data && response.data.length > 0) {
-                setFields(response.data);
+            const response = await wGet(`/v1/fields/type/${fieldType}`);
+            if (response && response.length > 0) {
+                setFields(response);
             } else {
                 setFields([]);
                 setError("Không có sân nào cho loại này.");
@@ -71,7 +76,7 @@ const RentYardPage = () => {
     // Lấy khung giờ đã đặt cho một sân cụ thể vào một ngày cụ thể
     const fetchBookedTimes = async (id, date) => {
         try {
-            const response = await axios.get(`http://localhost:8080/v1/booking-field/available-times/${id}?date=${date}`);
+            const response = await wGet(`/v1/booking-field/available-times/${id}?date=${date}`);
             const bookedTimes = response.data.bookedTimes;
 
             // Sử dụng bookedTimes để cập nhật trạng thái "isBooked"
@@ -197,13 +202,11 @@ const RentYardPage = () => {
         return isValid;
     };
 
-    // Xử lý việc đặt sân
     const handleSubmit = async () => {
         const isValid = validateForm();
         if (isValid) {
             setLoading(true);
 
-            // Parse startTime and endTime to a Day.js object
             const startDateTime = dayjs(selectedDate)
                 .hour(parseInt(startTime.split(':')[0]))
                 .minute(parseInt(startTime.split(':')[1]))
@@ -214,7 +217,33 @@ const RentYardPage = () => {
                 .minute(parseInt(endTime.split(':')[1]))
                 .second(0);
 
-            // Tạo object chứa dữ liệu cần gửi
+            const orderProps = {
+                money: totalAmount,
+                serviceName: "SportCenter",
+                items: [
+                    {name: "Đặt sân", amount: 1, unitPrice: totalAmount}
+                ],
+                callback: {
+                    successUrl: "https://localhost:8080/order/success",
+                    returnUrl: "https://localhost:8080/order/test"
+                }
+            };
+
+            //try {
+            // // Tạo đơn hàng thanh toán với WoWoWallet
+            // const orderResponse = await wowoWallet.createOrder(orderProps);
+            //
+            // if (orderResponse && orderResponse.checkoutUrl) {
+            //     // Chuyển hướng người dùng đến checkoutUrl để thanh toán
+            //     window.location.href = orderResponse.checkoutUrl;
+            // } else {
+            //     toast.error('Không thể tạo đơn hàng thanh toán!');
+            //     setLoading(false);
+            // }
+
+            // Xử lý sau khi thanh toán thành công từ callback URL
+            // window.addEventListener("message", async (event) => {
+            //     if (event.origin === "https://localhost:8080" && event.data.status === "SUCCESS") {
             const bookingData = {
                 footballField: {id: selectedField},
                 customer: {id: 1},
@@ -223,32 +252,31 @@ const RentYardPage = () => {
                 startTime: startDateTime.toISOString(),
                 endTime: endDateTime.toISOString(),
                 depositAmount: depositAmount,
-                totalAmount: totalAmount / 100000,
+                totalAmount: totalAmount,
                 paymentMethod: paymentMethod
             };
 
             try {
-                const response = await axios.post('http://localhost:8080/v1/booking-field', bookingData);
+                const response = await wPost('/v1/booking-field', bookingData);
 
-                const timeoutId = setTimeout(() => {
-                    if (response.status === 200) {
-                        toast.success('Đặt sân thành công!');
-                        resetForm();
-                        // navigate('/');
-                    } else {
-                        toast.error('Có lỗi xảy ra khi đặt sân!');
-                    }
-                    queryClient.invalidateQueries({queryKey: ['fields']});
-                    setLoading(false);
-                }, 3000);
+                toast.success('Đặt sân thành công!');
+                resetForm();
 
-                return () => clearTimeout(timeoutId);
-
+                queryClient.invalidateQueries({queryKey: ['fields']});
             } catch (error) {
-                setLoading(false);
                 console.error('Error creating booking:', error);
                 toast.error('Không thể đặt sân!');
+                setLoading(false);
+            } finally {
+                setLoading(false);
             }
+            //         }
+            //     });
+            // } catch (error) {
+            //     console.error('Error creating payment order:', error);
+            //     toast.error('Không thể tạo đơn hàng thanh toán!');
+            //     setLoading(false);
+            // }
         }
     };
 
@@ -262,6 +290,7 @@ const RentYardPage = () => {
         setDepositAmount(0);
         setTotalAmount(0);
         setPaymentMethod('cash');
+        navigate("/booking");
     };
 
     return (
@@ -376,11 +405,11 @@ const RentYardPage = () => {
                             {availableTimes.map((timeSlot, index) => (
                                 <button
                                     key={index}
-                                    className={`px-4 py-2 rounded ${timeSlot.isBooked
-                                        ? 'bg-gray-300 text-black cursor-not-allowed'  
+                                    className={`hover:bg-green-200 px-4 py-2 rounded ${timeSlot.isBooked
+                                        ? 'bg-gray-300 text-black cursor-not-allowed'
                                         : selectedTime === timeSlot.time
-                                            ? 'bg-green-500 text-white' 
-                                            : 'bg-white text-black border border-gray-500' 
+                                            ? 'bg-green-500 text-white'
+                                            : 'bg-white text-black border border-gray-500'
                                     }`}
                                     onClick={() => handleSelectTime(timeSlot.time)}
                                     disabled={timeSlot.isBooked}
@@ -394,8 +423,8 @@ const RentYardPage = () => {
                 )}
 
                 {/* Thông tin người đặt */}
-                <div className="mb-6 bg-gray-100 p-6 rounded-lg shadow-lg">
-                    <h3 className="text-2xl font-semibold mb-3 text-gray-800">Thông tin người đặt</h3>
+                <div className="mb-6 bg-white border-2 border-emerald-400 p-6 rounded-lg shadow-lg">
+                    <h3 className="text-2xl font-semibold mb-3 text-gray-800">Thông tin Liên hệ</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center items-center">
                         {/* Field: Tên người đặt */}
                         <div className="w-full">
@@ -437,15 +466,40 @@ const RentYardPage = () => {
                 </div>
 
                 {/* Thanh toán đặt cọc */}
-                <div className="mb-6">
-                    <h3 className="text-2xl font-semibold mb-3">Thanh toán</h3>
-                    <p className="text-lg flex flex-col sm:flex-row gap-2">
-                        <div>Số tiền cần phải đặt cọc :</div>
-                        <div className="font-medium text-green-500">
-                            <span>{depositAmount.toLocaleString()} VNĐ</span>
-                        </div>
-                    </p>
+                {/* Thanh toán đặt cọc */}
+                <div className="bg-white rounded-xl shadow-xl p-6 mb-8 transform transition-all duration-300 ease-in-out">
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-4">Thanh toán</h3>
+
+                    {/* Tổng Số Tiền */}
+                    <div className="mb-4">
+                        <p className="text-lg flex flex-col sm:flex-row gap-2">
+                            <span className="font-medium text-gray-600">Tổng Số Tiền:</span>
+                            <span className="font-semibold text-green-600">
+                {depositAmount.toLocaleString()} VNĐ
+            </span>
+                        </p>
+                    </div>
+
+                    {/* Số Tiền Cần Đặt Cọc */}
+                    <div className="mb-6">
+                        <p className="text-lg flex flex-col sm:flex-row gap-2">
+                            <span className="font-medium text-gray-600">Số Tiền Cần Phải Đặt Cọc:</span>
+                            <span className="font-semibold text-green-600">
+                {depositAmount.toLocaleString()} VNĐ
+            </span>
+                        </p>
+                    </div>
+
+                    {/* Nút thanh toán */}
+                    <div className="flex justify-center">
+                        <button
+                            className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg transform transition-all duration-200 ease-in-out focus:outline-none"
+                        >
+                            Thanh Toán
+                        </button>
+                    </div>
                 </div>
+
 
                 {/* Xác nhận đặt sân */}
                 <div className="flex justify-center">
@@ -458,14 +512,13 @@ const RentYardPage = () => {
                         >
                             Xác nhận đặt sân
                         </button>
-                )}
+                    )}
+                </div>
             </div>
+            <ToastContainer stacked/>
+            <ScrollRestoration/>
         </div>
-    <ToastContainer stacked/>
-    <ScrollRestoration/>
-</div>
-)
-    ;
+    );
 };
 
 export default RentYardPage;

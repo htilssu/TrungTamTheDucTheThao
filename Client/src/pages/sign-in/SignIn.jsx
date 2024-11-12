@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState } from 'react';
 import {motion} from 'framer-motion';
 import {useNavigate} from 'react-router-dom';
 import {toast, ToastContainer} from 'react-toastify';
@@ -20,7 +20,7 @@ const SignIn = () => {
     const showToast = (message) => {
       const toastId = message;
       if (!toast.isActive(toastId)) {
-        toast.error(message, {toastId});
+          toast.error(message, {toastId});
       }
       return false;
     };
@@ -29,8 +29,7 @@ const SignIn = () => {
     if (!email.trim()) {
       showToast('Email không được để trống.');
       hasError = true;
-    }
-    else if (!emailRegex.test(email)) {
+    } else if (!emailRegex.test(email)) {
       setError('Email không hợp lệ.');
       hasError = true;
     }
@@ -38,11 +37,9 @@ const SignIn = () => {
     if (!password.trim()) {
       showToast('Mật khẩu không được để trống.');
       hasError = true;
-    }
-    else if (password.length < 6 || password.length > 18) {
+    } else if (password.length < 6 || password.length > 18) {
       showToast('Mật khẩu phải từ 6 kí tự đến 18 kí tự.');
-      return true;
-    }
+      return true;}
     if (import.meta.env.DEV) {
       console.log('Signing in with email:', email);
     }

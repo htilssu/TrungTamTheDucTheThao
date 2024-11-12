@@ -1,10 +1,10 @@
 import {useState} from "react";
 import {TiDelete} from "react-icons/ti";
-import axios from "axios";
 import {TextField} from "@mui/material";
 import {toast} from "react-toastify";
 import {queryClient} from "../../../../../modules/cache.js";
 import DotLoader from "react-spinners/DotLoader.js";
+import {wPost} from "../../../../../utils/request.util.js";
 
 const AddFieldForm = ({onAddField, onClose}) => {
     const [loading, setLoading] = useState(false);
@@ -93,7 +93,7 @@ const AddFieldForm = ({onAddField, onClose}) => {
                 fieldName: newField.field_name,
                 location: newField.location,
                 fieldType: newField.field_type,
-                status: newField.status === "Đang hoạt động" ? "active" : "maintenance",
+                status: "active",
                 description: newField.description,
                 imageUrl: "/sanbong2.png",
             },
@@ -105,7 +105,7 @@ const AddFieldForm = ({onAddField, onClose}) => {
         };
 
         try {
-            const response = await axios.post("http://localhost:8080/v1/fields", fieldData, {
+            const response = await wPost("/v1/fields", fieldData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
