@@ -1,5 +1,5 @@
 import {useContext, useEffect, useRef, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../../context/UserContext';
 // Component cho một Menu Item
 // eslint-disable-next-line react/prop-types
