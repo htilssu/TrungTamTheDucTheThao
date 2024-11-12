@@ -2,7 +2,7 @@ import { useState } from "react";
 import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { authFetch } from "../../../../../dev/request";
+import { wPost } from "../../../../../utils/request.util";
 
 
 const AddRoomTypes = ({ onAddField }) => {
@@ -21,10 +21,7 @@ const AddRoomTypes = ({ onAddField }) => {
     const handleAddField = async () => {
         if (validateFields()) {
             try {
-                const response = await authFetch('/room-types/add', {
-                    method: 'POST',
-                    body: JSON.stringify(newRoomType),
-                });
+                const response = await wPost('/api/room-types/add', newRoomType);  
                 onAddField(response);
                 setNewRoomType({
                     name: ""
