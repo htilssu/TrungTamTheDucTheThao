@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.htilssu.sport.data.dtos.EquipmentTypeDto;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +30,26 @@ public class EquipmentTypeService {
     }
 
     public EquipmentType save(EquipmentType equipmentType) {
+        validateEquipmentType(equipmentType);
         return equipmentTypeRepository.save(equipmentType);
+    }
+    // Hàm kiểm tra số lượng
+    private void validateEquipmentType(EquipmentType equipmentType) {
+        if (equipmentType.getAmount() < 0) {
+            throw new IllegalArgumentException("Số lượng không được âm");  // Ném lỗi với thông báo phù hợp
+        }
     }
 
     public Optional<EquipmentType> update(Long id, EquipmentType equipmentType) {
         if (equipmentTypeRepository.existsById(id)) {
-            equipmentType.setId(id); 
+            equipmentType.setId(id);
             return Optional.of(equipmentTypeRepository.save(equipmentType));
         } else {
             return Optional.empty();
         }
     }
+
+
 
     public boolean delete(Long id) {
         if (equipmentTypeRepository.existsById(id)) {

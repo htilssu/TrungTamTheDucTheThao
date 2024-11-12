@@ -3,6 +3,7 @@ package com.htilssu.sport.controllers;
 import java.util.List;
 
 import com.htilssu.sport.data.dtos.EquipmentTypeDto;
+import com.htilssu.sport.data.dtos.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,11 +37,17 @@ public class EquipmentTypeController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     @PostMapping
-    public ResponseEntity<EquipmentTypeDto> createEquipmentType(@RequestBody EquipmentType equipmentType) {
-        EquipmentType createdEquipmentType = equipmentTypeService.save(equipmentType);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new EquipmentTypeDto(createdEquipmentType.getId(), createdEquipmentType.getName(), createdEquipmentType.getAmount()));
+    public ResponseEntity<?> createEquipmentType(@RequestBody EquipmentType equipmentType) {
+        try {
+            EquipmentType createdEquipmentType = equipmentTypeService.save(equipmentType);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new EquipmentTypeDto(createdEquipmentType.getId(), createdEquipmentType.getName(), createdEquipmentType.getAmount()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Số lượng không được âm"));
+        }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<EquipmentTypeDto> updateEquipmentType(@PathVariable Long id, @RequestBody EquipmentType equipmentType) {
@@ -50,10 +57,11 @@ public class EquipmentTypeController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEquipmentType(@PathVariable Long id) {
-        if (equipmentTypeService.delete(id)) {
+        boolean isDeleted = equipmentTypeService.delete(id);
+        if (isDeleted) {
             return ResponseEntity.noContent().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Thông báo lỗi nếu không tìm thấy
         }
     }
 }

@@ -1,47 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import {useNavigate} from "react-router-dom";
+import {wGet} from "../../../utils/request.util.js";
+import {queryClient} from "../../../modules/cache.js";
+import {toast} from "react-toastify";
+import Modal from "./Modal.jsx";
 
-const EquipmentForm = () => {
+
+const EquipmentForm = ({ onAddEquipment }) => {
     const [formData, setFormData] = useState({
         type: '',
         status: ''
     });
-    const [equipments, setEquipments] = useState([]);
     const [equipmentTypes, setEquipmentTypes] = useState([]);
-    const [image, setImage] = useState(null); // Change to hold a single image
-    const [editingMode, setEditingMode] = useState(false);
-    const navigate = useNavigate();
+    const [image, setImage] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+    const [modalMessage, setModalMessage] = useState(""); // Message to show in modal
     useEffect(() => {
-        const fetchEquipments = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/equipment');
-                console.log("Fetched equipments:", response.data);
-                if (Array.isArray(response.data)) {
-                    setEquipments(response.data);
-                } else {
-                    console.error("Dữ liệu không phải là mảng:", response.data);
-                    toast.error("Có lỗi xảy ra khi tải danh sách thiết bị.");
-                }
-            } catch (error) {
-                    console.error("Error fetching equipments:", error);
-                toast.error("Không thể tải danh sách thiết bị.");
-            }
-        };
-
         const fetchEquipmentTypes = async () => {
             try {
                 const response = await axios.get('http://localhost:8080/api/equipment-types');
-                console.log(response.data);
                 setEquipmentTypes(response.data);
             } catch (error) {
-                console.error("Error fetching equipment types:", error);
-                toast.error("Không thể tải danh sách loại thiết bị.");
+                setModalMessage("Không thể tải danh sách loại thiết bị.");
+                setIsModalOpen(true);
             }
         };
 
-        fetchEquipments();
         fetchEquipmentTypes();
     }, []);
 
@@ -56,46 +41,45 @@ const EquipmentForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Tạo đối tượng JSON để gửi
         const jsonData = {
-            equipmentType: {
-                id: formData.type, // Lấy id từ formData.type
-            },
+            equipmentType: { id: formData.type },
             status: formData.status,
-            image: image || null, // Đặt image thành null nếu không có ảnh
+            image: image || null,
         };
 
         try {
             const response = await axios.post('http://localhost:8080/api/equipment', jsonData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
             });
 
-            // Cập nhật danh sách thiết bị sau khi thêm thành công
-            setEquipments((prevEquipments) => [...prevEquipments, response.data]);
+            queryClient.invalidateQueries({queryKey:["equipments"]});
+
+            // After successfully adding, update the equipment list
+            onAddEquipment(response.data);
+
             setFormData({ type: '', status: '' });
             setImage(null);
-            toast.success("Thêm thiết bị thành công!");
-            navigate('/admin/equipmentList')
-
+            setModalMessage("Thêm thiết bị thành công!"); // Set success message
+            setIsModalOpen(true); // Show modal
         } catch (error) {
-            console.error("Error creating equipment:", error);
-            toast.error("Có lỗi xảy ra khi thêm thiết bị.");
+            setModalMessage("Có lỗi xảy ra khi thêm thiết bị."); // Set error message
+            setIsModalOpen(true); // Show modal
         }
     };
 
 
-
     const handleImageChange = (e) => {
-        const file = e.target.files[0]; // Only take the first image
+        const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                setImage(e.target.result); // Set the image as a data URL
+                setImage(e.target.result);
             };
             reader.readAsDataURL(file);
         }
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -170,6 +154,8 @@ const EquipmentForm = () => {
                         Thêm thiết bị
                     </button>
                 </form>
+                {/* Modal component */}
+                <Modal isOpen={isModalOpen} onClose={closeModal} message={modalMessage} />
             </div>
         </div>
     );

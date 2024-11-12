@@ -5,6 +5,7 @@
 
     import com.htilssu.sport.data.dtos.EquipmentDto;
     import com.htilssu.sport.data.dtos.EquipmentTypeDto;
+    import com.htilssu.sport.data.dtos.ErrorResponse;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
@@ -45,16 +46,19 @@
         }
 
         @PostMapping
-        public ResponseEntity<EquipmentDto> createEquipment(@RequestBody Equipment equipment) {
-            Equipment createdEquipment = equipmentService.save(equipment);
-            EquipmentDto equipmentDto = new EquipmentDto(
-                    createdEquipment.getId(),
-                    new EquipmentTypeDto(createdEquipment.getEquipmentType().getId(), createdEquipment.getEquipmentType().getName(), createdEquipment.getEquipmentType().getAmount()),
-                    createdEquipment.getStatus(),
-                    createdEquipment.getImage());
-            return ResponseEntity.status(HttpStatus.CREATED).body(equipmentDto);
+        public ResponseEntity<?> createEquipment(@RequestBody Equipment equipment) {
+            try {
+                Equipment createdEquipment = equipmentService.save(equipment);
+                EquipmentDto equipmentDto = new EquipmentDto(
+                        createdEquipment.getId(),
+                        new EquipmentTypeDto(createdEquipment.getEquipmentType().getId(), createdEquipment.getEquipmentType().getName(), createdEquipment.getEquipmentType().getAmount()),
+                        createdEquipment.getStatus(),
+                        createdEquipment.getImage());
+                return ResponseEntity.status(HttpStatus.CREATED).body(equipmentDto);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+            }
         }
-
         @PutMapping("/{id}")
         public ResponseEntity<EquipmentDto> updateEquipment(@PathVariable Long id, @RequestBody Equipment equipment) {
             return equipmentService.update(id, equipment)
