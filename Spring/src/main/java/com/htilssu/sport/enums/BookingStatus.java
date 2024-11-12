@@ -1,7 +1,7 @@
 package com.htilssu.sport.enums;
 
 public enum BookingStatus {
-    PENDING,
-    CONFIRMED,
+    ACTING,
+    COMPLETED,
     CANCELLED;
 }

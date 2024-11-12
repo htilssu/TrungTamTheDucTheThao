@@ -12,7 +12,7 @@ import GymPage from '../modules/core/components/gym/GymPage.jsx';
 import FootballLayout from '../pages/admin/layout-admin/football-manage/FootballLayout.jsx';
 import FieldListPage from '../pages/admin/layout-admin/football-manage/FieldListPage.jsx';
 import StatisticalPage from '../pages/admin/layout-admin/football-manage/StatisticalPage.jsx';
-import BookingSchedule from '../pages/admin/layout-admin/football-manage/BookingSchedule.jsx';
+import BookingFieldPage from '../pages/admin/layout-admin/football-manage/booking-field/BookingFieldPage.jsx';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
 import EmployeeLayout from '../pages/admin/layout-admin/employee-manage/EmployeeLayout.jsx';
 import StatisticalLayout from '../pages/admin/layout-admin/statistics-manage/StatisticalLayout.jsx';
@@ -39,80 +39,72 @@ import RoomTypes from './../pages/admin/layout-admin/gym-manage/room-types/RoomT
 
 
 export const router = createBrowserRouter([
-  {
-    path: 'admin',
-    element: <AdminDashboard/>,
-    children: [
-      {
-        index: true,
-        element: <HomeAdminLayout/>,
-      },
-      {
-        path: 'post-manage',
-        element: <PostLayout/>,
-      },
-      {
-        path: 'room-manage',
-        element: <RoomLayout/>,
+    {
+        path: 'admin',
+        element: <AdminDashboard/>,
         children: [
-          {
-            index: true,
-            element: <Room/>,
-          },
-          {
-            path: 'room-list',
-            element: <Room/>,
-          },
-          {
-            path: 'room-types',
-            element: <RoomTypes/>,
-          },
-        ],
-      },
-      {
-        path: 'customer-manage',
-        element: <CustomerLayout/>,
-      },
-      {
-        path: 'statistic-manage',
-        element: <StatisticalLayout/>,
-      },
-      {
-        path: 'employee-manage',
-        element: <EmployeeLayout/>,
-      },
-      {
-        path: 'courses-manage',
-        element: <CoursesManage/>,
-      },
+            {
+                index: true,
+                element: <HomeAdminLayout/>,
+            },
+            {
+                path: 'post-manage',
+                element: <PostLayout/>,
+            },
+            {
+                path: 'room-manage',
+                element: <RoomLayout/>,
+                children: [
+                  {
+                      index: true,
+                      element: <Room/>,
+                  },
+              ]
+            },
+            {
+                path: 'customer-manage',
+                element: <CustomerLayout/>,
+            },
+            {
+                path: 'statistic-manage',
+                element: <StatisticalLayout/>,
+            },
+            {
+                path: 'employee-manage',
+                element: <EmployeeLayout/>,
+            },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
 
-      {
-        path: 'courses-manage',
-        element: <CoursesManage/>,
-      },
-      {
-        path: 'sellcourses',
-        element: <Sellcourses/>,
-      },
-      {
-        path: 'equipmentType',
-        element: <EquipmentType/>,
-      },
-      {
-        path: 'equipment',
-        element: <Equipment/>,
-      },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
+            {
+                path: 'sellcourses',
+                element:<Sellcourses/>,
+            },
+            {
+                path: 'equipmentType',
+                element:<EquipmentType/>,
+            },
+            {
+                path: 'equipment',
+                element:<Equipment/>,
+            },
 
-      {
-        path: 'equipmentlayout',
-        element: <EquipmentLayout/>,
-      },
-      {
-        path: 'equipmentList',
-        element: <EquipmentList/>,
-      },
-      {
-        path: 'soccer-manage',
+            {
+                path: 'equipmentlayout',
+                element:<EquipmentLayout/>,
+            },
+            {
+                path: 'equipmentList',
+                element:<EquipmentList/>,
+            },
+            {
+              path: 'soccer-manage',
         element: <FootballLayout/>,
         children: [
           {
@@ -125,7 +117,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'booking',
-            element: <BookingSchedule/>,
+            element: <BookingFieldPage/>,
           },
           {
             path: 'history',

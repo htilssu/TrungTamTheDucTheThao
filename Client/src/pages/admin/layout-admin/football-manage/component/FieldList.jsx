@@ -1,10 +1,10 @@
 import { useState } from "react";
 import EditFieldModal from "./EditField.jsx";
-import axios from "axios";
 import {ScrollRestoration, useNavigate} from "react-router-dom";
 import { Confirm } from "react-admin";
 import {toast, ToastContainer} from "react-toastify";
 import {queryClient} from "../../../../../modules/cache.js";
+import {wDelete} from "../../../../../utils/request.util.js";
 
 const FieldList = ({ fields }) => {
     const [editingField, setEditingField] = useState(null);
@@ -26,7 +26,7 @@ const FieldList = ({ fields }) => {
 
     // Hàm xem lịch đặt
     const handleLichDat = () => {
-        navigate("/admin/soccer-manage/booking");
+        navigate("/admin/soccer-manage/history");
     };
 
     const openModal = (field) => {
@@ -50,7 +50,7 @@ const FieldList = ({ fields }) => {
     const handleDeleteField = async (fieldId) => {
         console.log("Deleting field with ID:", fieldId);
         try {
-            const response = await axios.delete(`http://localhost:8080/v1/fields/${fieldId}`);
+            const response = await wDelete(`/v1/fields/${fieldId}`);
             if (response.status === 204) {
                 toast.success('Xóa sân thành công!');
                 queryClient.invalidateQueries({ queryKey: ['fields'] });

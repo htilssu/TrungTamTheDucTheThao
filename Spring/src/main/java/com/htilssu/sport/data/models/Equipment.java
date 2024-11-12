@@ -32,6 +32,8 @@ public class Equipment {
     private EquipmentType equipmentType;
 
     @Column(name = "status", nullable = false)
-    private Double status;
+    private String status;
 
+    @Column(name = "image")
+    private String image;
 }
