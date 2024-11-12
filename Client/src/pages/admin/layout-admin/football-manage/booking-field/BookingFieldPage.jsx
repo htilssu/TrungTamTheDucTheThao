@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import FieldList from "./component/FieldList.jsx";
 import BookingSchedule from "./component/BookingSchedule.jsx";
 import BookingModal from "./component/BookingModal.jsx";
 import {toast} from "react-toastify";
+import {wGet, wPost} from "../../../../../utils/request.util.js";
 
 const BookingFieldPage = () => {
     const [fields, setFields] = useState([]);
@@ -15,7 +15,7 @@ const BookingFieldPage = () => {
     useEffect(() => {
         const fetchFields = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/v1/fields');
+                const response = await wGet('/v1/fields');
                 setFields(response.data);
             } catch (error) {
                 console.error('Failed to load fields:', error);
@@ -31,7 +31,7 @@ const BookingFieldPage = () => {
 
     const confirmBooking = async (booking) => {
         try {
-            await axios.post('http://localhost:8080/v1/booking-field', booking);
+            await wPost('/v1/booking-field', booking);
             toast.success("Đặt lịch thành công!");
         } catch (error) {
             console.error("Error booking time:", error);

@@ -5,6 +5,7 @@ import LoadingSpinner from './LoadingSpinner';
 import ConfirmModal from './ConfirmModal';
 import BookingDetail from './BookingDetail';
 import { toast } from 'react-toastify';
+import {wPost} from "../../../../../utils/request.util.js";
 
 const BookingFieldList = () => {
     const [customerId] = useState(1); // Mã khách hàng cố định cho phiên này
@@ -16,14 +17,14 @@ const BookingFieldList = () => {
     const [pendingBookings, setPendingBookings] = useState([]);
     const [confirmedBookings, setConfirmedBookings] = useState([]);
     const [cancelledBookings, setCancelledBookings] = useState([]);
-    const [activeStatus, setActiveStatus] = useState('pending'); // Trạng thái đang hiển thị
+    const [activeStatus, setActiveStatus] = useState('pending');
 
     // Fetch dữ liệu bookings từ API
     useEffect(() => {
         const fetchBookings = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:8080/v1/booking-field/user/${customerId}`);
+                const response = await wPost(`/v1/booking-field/user/${customerId}`);
                 setBookings(response.data);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
@@ -44,7 +45,7 @@ const BookingFieldList = () => {
     // Xử lý hủy booking
     const handleCancelBooking = async (bookingId) => {
         try {
-            await axios.post(`http://localhost:8080/v1/booking-field/${bookingId}/cancel`);
+            await wPost(`/v1/booking-field/${bookingId}/cancel`);
             setBookings(prevBookings => prevBookings.filter(booking => booking.id !== bookingId));
             toast.success("Hủy lịch thành công!");
         } catch (error) {

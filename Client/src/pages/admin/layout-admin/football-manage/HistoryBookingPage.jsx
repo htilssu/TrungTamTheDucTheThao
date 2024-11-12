@@ -1,12 +1,12 @@
 // Fetch function
 import BookingItem from "./component/BookingItem.jsx";
 import {TextField} from "@mui/material";
-import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {useState} from "react";
+import {wGet} from "../../../../utils/request.util.js";
 
 const fetchBookings = async () => {
-    const response = await axios.get('http://localhost:8080/v1/booking-field');
+    const response = await wGet('/v1/booking-field');
     return response.data;
 };
 
