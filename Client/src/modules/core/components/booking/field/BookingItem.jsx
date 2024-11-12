@@ -1,6 +1,6 @@
 const BookingItem = ({ booking, openModal, openDetailModal }) => {
     return (
-        <div className="bg-white shadow-lg rounded-lg p-4 mb-6">
+        <div className="bg-white border-2 border-emerald-400 shadow-lg rounded-lg p-4 mb-6">
             <div className="flex flex-col md:flex-row items-start gap-6">
                 <img
                     src={booking.footballField.imageUrl || "/sanbong1.png"}

@@ -423,8 +423,8 @@ const RentYardPage = () => {
                 )}
 
                 {/* Thông tin người đặt */}
-                <div className="mb-6 bg-gray-100 p-6 rounded-lg shadow-lg">
-                    <h3 className="text-2xl font-semibold mb-3 text-gray-800">Thông tin người đặt</h3>
+                <div className="mb-6 bg-white border-2 border-emerald-400 p-6 rounded-lg shadow-lg">
+                    <h3 className="text-2xl font-semibold mb-3 text-gray-800">Thông tin Liên hệ</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center items-center">
                         {/* Field: Tên người đặt */}
                         <div className="w-full">
@@ -466,15 +466,40 @@ const RentYardPage = () => {
                 </div>
 
                 {/* Thanh toán đặt cọc */}
-                <div className="mb-6">
-                    <h3 className="text-2xl font-semibold mb-3">Thanh toán</h3>
-                    <p className="text-lg flex flex-col sm:flex-row gap-2">
-                        <div>Số tiền cần phải đặt cọc :</div>
-                        <div className="font-medium text-green-500">
-                            <span>{depositAmount.toLocaleString()} VNĐ</span>
-                        </div>
-                    </p>
+                {/* Thanh toán đặt cọc */}
+                <div className="bg-white rounded-xl shadow-xl p-6 mb-8 transform transition-all duration-300 ease-in-out">
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-4">Thanh toán</h3>
+
+                    {/* Tổng Số Tiền */}
+                    <div className="mb-4">
+                        <p className="text-lg flex flex-col sm:flex-row gap-2">
+                            <span className="font-medium text-gray-600">Tổng Số Tiền:</span>
+                            <span className="font-semibold text-green-600">
+                {depositAmount.toLocaleString()} VNĐ
+            </span>
+                        </p>
+                    </div>
+
+                    {/* Số Tiền Cần Đặt Cọc */}
+                    <div className="mb-6">
+                        <p className="text-lg flex flex-col sm:flex-row gap-2">
+                            <span className="font-medium text-gray-600">Số Tiền Cần Phải Đặt Cọc:</span>
+                            <span className="font-semibold text-green-600">
+                {depositAmount.toLocaleString()} VNĐ
+            </span>
+                        </p>
+                    </div>
+
+                    {/* Nút thanh toán */}
+                    <div className="flex justify-center">
+                        <button
+                            className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg transform transition-all duration-200 ease-in-out focus:outline-none"
+                        >
+                            Thanh Toán
+                        </button>
+                    </div>
                 </div>
+
 
                 {/* Xác nhận đặt sân */}
                 <div className="flex justify-center">
@@ -493,8 +518,7 @@ const RentYardPage = () => {
             <ToastContainer stacked/>
             <ScrollRestoration/>
         </div>
-    )
-        ;
+    );
 };
 
 export default RentYardPage;
