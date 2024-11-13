@@ -22,9 +22,11 @@ public class Role {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "role", orphanRemoval = true)
+    @OneToMany(mappedBy = "role", orphanRemoval = true, cascade = {CascadeType.ALL})
     private Collection<User> users = new ArrayList<>();
 
-    public void addUsers(User user) {
+    public void setRole(User user) {
+        users.add(user);
+        user.setRole(this);
     }
 }
