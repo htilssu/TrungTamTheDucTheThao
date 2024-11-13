@@ -10,7 +10,7 @@ import java.time.LocalTime;
 @Table(name = "price_field")
 public class PricingField {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "price_field_id_seq")
     @SequenceGenerator(name = "price_field_id_seq", sequenceName = "price_field_id_seq", allocationSize = 1)
     private Long id;
 

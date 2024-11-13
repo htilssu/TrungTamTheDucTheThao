@@ -12,7 +12,7 @@ public class CourseMember {
 
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_member_id_seq")
     @SequenceGenerator(name = "course_member_id_seq", sequenceName = "course_member_id_seq", allocationSize = 1)
     private Long id;
 

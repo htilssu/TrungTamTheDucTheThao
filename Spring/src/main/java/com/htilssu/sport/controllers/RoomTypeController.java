@@ -3,6 +3,7 @@ package com.htilssu.sport.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +20,10 @@ import com.htilssu.sport.data.models.RoomType;
 import com.htilssu.sport.services.RoomTypeService;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/room-types")
 public class RoomTypeController {
 
-    @Autowired
     private RoomTypeService roomTypeService;
 
     @GetMapping

@@ -43,11 +43,12 @@ public class TokenFilter implements Filter {
         if (JwtUtil.verifyToken(token)) {
             var claim = JwtUtil.extractClaims(token);
             final SecurityContext emptyContext =
-                    SecurityContextHolder.getContextHolderStrategy().createEmptyContext();
+                    SecurityContextHolder.getContextHolderStrategy()
+                            .createEmptyContext();
 
             final UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(claim.getSubject(), token,
-                            Collections.singleton(() -> "USER"));
+                            Collections.singleton(() -> "ROLE_" + claim.get("role", String.class)));
             emptyContext.setAuthentication(authenticationToken);
 
             SecurityContextHolder.setContext(emptyContext);
