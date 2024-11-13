@@ -4,6 +4,8 @@ package com.htilssu.sport.controllers;
 import com.htilssu.sport.data.models.User;
 import com.htilssu.sport.repositories.UserRepository;
 import com.htilssu.sport.services.UserService;
+import com.htilssu.sport.validations.IsEmployee;
+import com.htilssu.sport.validations.IsUser;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,10 +24,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/user")
 @AllArgsConstructor
+@IsUser
 public class UserController {
 
     private final UserRepository userRepository;
-    private final UserService userService;
 
     // Hiển thị thông tin người dùng
     @GetMapping("/{id}")
@@ -40,7 +42,6 @@ public class UserController {
                         .build());
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping()
     public ResponseEntity<User> displayUserInfo(Authentication authentication) {
 
