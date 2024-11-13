@@ -9,29 +9,29 @@ const Room = () => {
     const [nextId, setNextId] = useState(1);
     const [showAddForm, setShowAddForm] = useState(false);
 
-    useEffect(() => {
-        fetch('http://localhost:8080/api/roomtypes')
-            .then((response) => response.json())
-            .then((data) => setRoomTypes(data))
-            .catch((error) => console.error('Error fetching room types:', error));
+    // useEffect(() => {
+    //     fetch('http://localhost:8080/api/roomtypes')
+    //         .then((response) => response.json())
+    //         .then((data) => setRoomTypes(data))
+    //         .catch((error) => console.error('Error fetching room types:', error));
 
-        fetch('http://localhost:8080/api/rooms')
-            .then((response) => response.json())
-            .then((data) => {
-                const formattedRooms = data.map((room) => ({
-                    id: room.id,
-                    name: room.name,
-                    type: room.RoomType.name, 
-                    capacity: room.capacity,
-                    floor: room.floor,
-                    building: room.building
-                }));
-                setFields(formattedRooms);
-                const maxId = Math.max(...data.map((room) => room.id), 0);
-                setNextId(maxId + 1);
-            })
-            .catch((error) => console.error('Error fetching rooms:', error));
-    }, []);
+    //     fetch('http://localhost:8080/api/rooms')
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             const formattedRooms = data.map((room) => ({
+    //                 id: room.id,
+    //                 name: room.name,
+    //                 type: room.RoomType.name, 
+    //                 capacity: room.capacity,
+    //                 floor: room.floor,
+    //                 building: room.building
+    //             }));
+    //             setFields(formattedRooms);
+    //             const maxId = Math.max(...data.map((room) => room.id), 0);
+    //             setNextId(maxId + 1);
+    //         })
+    //         .catch((error) => console.error('Error fetching rooms:', error));
+    // }, []);
 
     const handleAddField = (newField) => {
         setFields([...fields, { ...newField, id: nextId }]);
