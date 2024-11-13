@@ -48,4 +48,8 @@ public class User {
 
     @Column(name = "avatar")
     private String avatar = "";
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 }

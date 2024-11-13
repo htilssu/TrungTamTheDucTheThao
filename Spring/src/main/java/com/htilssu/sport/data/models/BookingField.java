@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 public class BookingField {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "booking_field_seq")
     @SequenceGenerator(name = "booking_field_seq", sequenceName = "booking_field_sequence", allocationSize = 1)
     private Long id;
 
