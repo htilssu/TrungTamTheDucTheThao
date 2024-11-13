@@ -35,6 +35,8 @@ import Equipment from '../pages/admin/equipment/Equipment.jsx';
 import EquipmentList from '../pages/admin/equipment/EquipmentList.jsx';
 import HistoryBookingAdmin from '../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx';
 import RoomTypes from './../pages/admin/layout-admin/gym-manage/room-types/RoomTypes';
+import SwimPage from '../pages/swim/SwimPage.jsx';
+import UnAuthorization from '../layouts/UnAuthorization.jsx';
 
 
 
@@ -161,6 +163,10 @@ export const router = createBrowserRouter([
         element: <GymPage/>,
       },
       {
+        path: 'swim',
+        element: <SwimPage/>,
+      },
+      {
         path: 'user/:id',
         element: <UserDisplay/>,
       },
@@ -180,6 +186,9 @@ export const router = createBrowserRouter([
       {
         path: '/contact',
         element: <ContactPage/>,
+      },{
+        path: '/unauth',
+        element: <UnAuthorization/>,
       },
     ],
     errorElement: <PageNotFound/>,
