@@ -27,7 +27,7 @@ const NavbarRoom = () => {
                     {/* Links */}
                     <div className="flex space-x-8">
                         <NavLink
-                            to="ad-room"
+                            to="room-list"
                             className={({ isActive }) =>
                                 `text-white text-lg transition-colors duration-300 ease-in-out transform hover:scale-110 ${
                                     isActive
@@ -39,7 +39,7 @@ const NavbarRoom = () => {
                             <span className="hover:underline">Danh sách phòng tập</span>
                         </NavLink>
                         <NavLink
-                            to="gym-course"
+                            to="room-types"
                             className={({ isActive }) =>
                                 `text-white text-lg transition-colors duration-300 ease-in-out transform hover:scale-110 ${
                                     isActive
@@ -48,7 +48,7 @@ const NavbarRoom = () => {
                                 }`
                             }
                         >
-                            <span className="hover:underline">Danh sách khóa học</span>
+                            <span className="hover:underline">Danh sách loại phòng tập</span>
                         </NavLink>
                         <NavLink
                             to="gym-cost"

@@ -1,18 +1,24 @@
 package com.htilssu.sport.configs;
 
-import com.htilssu.sport.data.util.JwtUtil;
-import com.htilssu.sport.repositories.AccountRepository;
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import java.io.IOException;
+import java.util.Collections;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.Collections;
+import com.htilssu.sport.data.util.JwtUtil;
+import com.htilssu.sport.repositories.AccountRepository;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
@@ -37,11 +43,12 @@ public class TokenFilter implements Filter {
         if (JwtUtil.verifyToken(token)) {
             var claim = JwtUtil.extractClaims(token);
             final SecurityContext emptyContext =
-                    SecurityContextHolder.getContextHolderStrategy().createEmptyContext();
+                    SecurityContextHolder.getContextHolderStrategy()
+                            .createEmptyContext();
 
             final UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(claim.getSubject(), token,
-                            Collections.singleton(() -> "USER"));
+                            Collections.singleton(() -> "ROLE_" + claim.get("role", String.class)));
             emptyContext.setAuthentication(authenticationToken);
 
             SecurityContextHolder.setContext(emptyContext);
