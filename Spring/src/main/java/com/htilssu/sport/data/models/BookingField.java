@@ -50,6 +50,9 @@ public class BookingField {
 
     private String paymentMethod;
 
+    @Column(name = "is_pay", nullable = false)
+    private Boolean isPay = false;
+
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private Timestamp createdAt;

@@ -3,6 +3,7 @@ package com.htilssu.sport.controllers;
 import com.htilssu.sport.data.models.BookingField;
 import com.htilssu.sport.data.dtos.BookingFieldDTO;
 import com.htilssu.sport.data.dtos.ErrorResponse; // Import lớp ErrorResponse
+import com.htilssu.sport.enums.BookingStatus;
 import com.htilssu.sport.services.BookingFieldService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,41 @@ public class BookingFieldController {
             // 500 INTERNAL SERVER ERROR: Lỗi không xác định
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    // Endpoint lấy chi tiết của một booking theo bookingId
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<?> getBookingById(@PathVariable Long bookingId) {
+        try {
+            BookingField booking = bookingFieldService.getBookingById(bookingId);
+            return ResponseEntity.ok(booking);
+        } catch (IllegalArgumentException e) {
+            // 404 NOT FOUND: Không tìm thấy booking với ID đã cho
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Không tìm thấy booking với ID: " + bookingId));
+        } catch (Exception e) {
+            // 500 INTERNAL SERVER ERROR: Lỗi không xác định
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Có lỗi xảy ra. Vui lòng thử lại sau."));
+        }
+    }
+
+    // Endpoint để đặt lại trạng thái của booking
+    @PostMapping("/{bookingId}/status-acting")
+    public ResponseEntity<?> resetBookingStatus(@PathVariable Long bookingId) {
+        try {
+            BookingField updatedBooking = bookingFieldService.setBookingStatus(bookingId, BookingStatus.ACTING);
+            return ResponseEntity.ok("Trạng thái của booking với ID " + updatedBooking.getId() + " đã được cập nhật thành công.");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Có lỗi xảy ra. Vui lòng thử lại sau."));
         }
     }
 
@@ -132,11 +168,8 @@ public class BookingFieldController {
     public ResponseEntity<?> deleteBooking(@PathVariable Long id) {
         try {
             bookingFieldService.deleteBooking(id);
-            return ResponseEntity.noContent().build(); // 204 NO CONTENT
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND) // 404 nếu không tìm thấy booking
-                    .body(new ErrorResponse("Không tìm thấy booking với ID: " + id));
-        } catch (Exception e) {
+            return ResponseEntity.ok("Xóa thành công booking thành công với ID: " + id);
+        }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse(e.getMessage()));
         }
@@ -148,6 +181,26 @@ public class BookingFieldController {
         try {
             BookingField canceledBooking = bookingFieldService.cancelBooking(bookingId);
             return ResponseEntity.ok("Lịch đặt sân đã được hủy thành công với ID: " + canceledBooking.getId());
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    // Endpoint để chấp nhận đặt sân
+    @PostMapping("/{bookingId}/accept")
+    public ResponseEntity<String> acceptBooking(@PathVariable Long bookingId) {
+        try {
+            BookingField acceptBooking = bookingFieldService.acceptBooking(bookingId);
+            return ResponseEntity.ok("Lịch đã được đặt thành công với ID: " + acceptBooking.getId());
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    // Endpoint để cập nhật trạng thái thanh toán của booking
+    @PostMapping("/{bookingId}/is-pay")
+    public ResponseEntity<?> isPay(@PathVariable Long bookingId) {
+        try {
+            bookingFieldService.isPay(bookingId);
+            return ResponseEntity.ok("Đã cập nhật thanh toán thành công với");
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

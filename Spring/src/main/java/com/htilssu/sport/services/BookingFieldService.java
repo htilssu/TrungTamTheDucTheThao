@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -49,7 +50,11 @@ public class BookingFieldService {
         List<BookingField> overlappingBookings = bookingFieldRepository
                 .findByFootballFieldAndStartTimeBetween(field, bookingFieldDTO.getStartTime(),
                         bookingFieldDTO.getEndTime());
-        if (!overlappingBookings.isEmpty()) {
+        // Lọc các booking không có trạng thái "CANCELLED"
+        List<BookingField> activeBookings = overlappingBookings.stream()
+                .filter(booking -> !BookingStatus.CANCELLED.equals(booking.getBookingStatus()))
+                .collect(Collectors.toList());
+        if (!activeBookings.isEmpty()) {
             throw new IllegalArgumentException("Sân đã được đặt trong khoảng thời gian này.");
         }
 
@@ -60,11 +65,27 @@ public class BookingFieldService {
         booking.setCustomerPhone(bookingFieldDTO.getCustomerPhone());
         booking.setStartTime(bookingFieldDTO.getStartTime());
         booking.setEndTime(bookingFieldDTO.getEndTime());
-        booking.setBookingStatus(BookingStatus.ACTING);
+        booking.setBookingStatus(BookingStatus.PENDING);
         booking.setDepositAmount(bookingFieldDTO.getDepositAmount());
-        booking.setTotalAmount(calculateTotalAmount(field, bookingFieldDTO.getStartTime(),
-                bookingFieldDTO.getEndTime()));
+//        booking.setTotalAmount(calculateTotalAmount(field, bookingFieldDTO.getStartTime(),
+//                bookingFieldDTO.getEndTime()));
+        booking.setTotalAmount(bookingFieldDTO.getTotalAmount());
 
+        return bookingFieldRepository.save(booking);
+    }
+
+    public BookingField setBookingStatus(Long bookingId, BookingStatus newStatus) {
+        BookingField booking = bookingFieldRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy booking với ID: " + bookingId));
+
+        if (newStatus == BookingStatus.ACTING && !BookingStatus.PENDING.equals(booking.getBookingStatus())) {
+            throw new IllegalStateException("Chỉ có thể chuyển trạng thái thành ACTING khi trạng thái hiện tại là PENDING.");
+        }
+
+        // Cập nhật trạng thái
+        booking.setBookingStatus(BookingStatus.ACTING);
+        // Cập nhật trạng thái đã thanh toán
+        booking.setIsPay(true);
         return bookingFieldRepository.save(booking);
     }
 
@@ -88,6 +109,12 @@ public class BookingFieldService {
             }
         }
         return totalAmount;
+    }
+
+    //Lấy thông tin booking theo ID
+    public BookingField getBookingById(Long bookingId) {
+        return bookingFieldRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy booking với ID: " + bookingId));
     }
 
     // Phương thức lấy tất cả booking của một sân cụ thể
@@ -116,9 +143,11 @@ public class BookingFieldService {
         Timestamp startOfDay = Timestamp.valueOf(date.atStartOfDay());
         Timestamp endOfDay = Timestamp.valueOf(date.plusDays(1).atStartOfDay());
 
-        // Lấy danh sách các đặt sân đã có trong ngày
+        // Lấy danh sách các đặt sân đã có trong ngày (trừ booking đã hủy)
         List<BookingField> bookings = bookingFieldRepository.findByFootballFieldAndStartTimeBetween(
-                field, startOfDay, endOfDay);
+                field, startOfDay, endOfDay).stream()
+                .filter(booking -> !booking.getBookingStatus().equals(BookingStatus.CANCELLED))
+                .collect(Collectors.toList());
 
         // Tạo danh sách các khung giờ đã đặt
         List<String> bookedTimes = new ArrayList<>();
@@ -183,8 +212,16 @@ public class BookingFieldService {
         return bookingFieldRepository.save(booking);
     }
 
-    public void deleteBooking(Long id) {
-        bookingFieldRepository.deleteById(id);
+    public void deleteBooking(Long bookingId) {
+        BookingField booking = bookingFieldRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lịch đặt sân với ID: " + bookingId));
+
+        // Kiểm tra trạng thái booking trước khi xóa
+        if (!BookingStatus.PENDING.equals(booking.getBookingStatus())) {
+            throw new IllegalStateException("Chỉ có thể xóa lịch đặt sân khi trạng thái là PENDING.");
+        }
+
+        bookingFieldRepository.deleteById(bookingId);
     }
 
     // Phương thức hủy đặt sân
@@ -192,12 +229,43 @@ public class BookingFieldService {
         BookingField booking = bookingFieldRepository.findById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lịch đặt sân với ID: " + bookingId));
 
-        if (!BookingStatus.ACTING.equals(booking.getBookingStatus())) {
-            throw new IllegalStateException("Chỉ có thể hủy lịch đặt sân đang hoạt động.");
+        if (!BookingStatus.ACTING.equals(booking.getBookingStatus())
+                && !BookingStatus.PENDING.equals(booking.getBookingStatus()))
+        {
+            throw new IllegalStateException("Không thể hủy lịch trong trạng thái này.");
         }
 
         booking.setBookingStatus(BookingStatus.CANCELLED);
 
         return bookingFieldRepository.save(booking);
+    }
+
+    // Phương thức chấp nhận đặt sân
+    public BookingField acceptBooking(Long bookingId) {
+        BookingField booking = bookingFieldRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lịch đặt sân với ID: " + bookingId));
+
+        if (!BookingStatus.PENDING.equals(booking.getBookingStatus()))
+        {
+            throw new IllegalStateException("Không thể chấp nhận đặt trong trạng thái này.");
+        }
+
+        booking.setBookingStatus(BookingStatus.ACTING);
+
+        return bookingFieldRepository.save(booking);
+    }
+    // Phương thức cập nhật trạng thái đã thanh toán
+    public void isPay(Long bookingId) {
+        BookingField booking = bookingFieldRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy lịch đặt sân với ID: " + bookingId));
+
+        if (BookingStatus.CANCELLED.equals(booking.getBookingStatus()) || booking.getIsPay())
+        {
+            throw new IllegalStateException("Đã thanh toán hoặc trạng thái booking không hợp lệ.");
+        }
+
+        booking.setIsPay(true);
+
+        bookingFieldRepository.save(booking);
     }
 }

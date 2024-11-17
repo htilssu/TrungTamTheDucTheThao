@@ -1,0 +1,2 @@
+ALTER TABLE booking_field
+    ADD COLUMN is_pay BOOLEAN NOT NULL DEFAULT FALSE;

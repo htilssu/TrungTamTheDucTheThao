@@ -35,6 +35,8 @@ import EquipmentLayout from '../pages/admin/equipment/EquipmentLayout.jsx';
 import Equipment from '../pages/admin/equipment/Equipment.jsx';
 import EquipmentList from '../pages/admin/equipment/EquipmentList.jsx';
 import HistoryBookingAdmin from '../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx';
+import CheckoutPage from "../modules/core/components/check-out/CheckoutPage.jsx";
+import PaymentSuccessPage from "../modules/core/components/check-out/PaymentSuccessPage.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -53,11 +55,11 @@ export const router = createBrowserRouter([
                 path: 'room-manage',
                 element: <RoomLayout/>,
                 children: [
-                  {
-                      index: true,
-                      element: <Room/>,
-                  },
-              ]
+                    {
+                        index: true,
+                        element: <Room/>,
+                    },
+                ]
             },
             {
                 path: 'customer-manage',
@@ -82,117 +84,125 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'sellcourses',
-                element:<Sellcourses/>,
+                element: <Sellcourses/>,
             },
             {
                 path: 'equipmentType',
-                element:<EquipmentType/>,
+                element: <EquipmentType/>,
             },
             {
                 path: 'equipment',
-                element:<Equipment/>,
+                element: <Equipment/>,
             },
 
             {
                 path: 'equipmentlayout',
-                element:<EquipmentLayout/>,
+                element: <EquipmentLayout/>,
             },
             {
                 path: 'equipmentList',
-                element:<EquipmentList/>,
+                element: <EquipmentList/>,
             },
             {
-              path: 'soccer-manage',
-        element: <FootballLayout/>,
-        children: [
-          {
-            index: true,
-            element: <HomeSoccerPage/>,
-          },
-          {
-            path: 'list',
-            element: <FieldListPage/>,
-          },
-          {
-            path: 'booking',
-            element: <BookingFieldPage/>,
-          },
-          {
-            path: 'history',
-            element: <HistoryBookingAdmin/>,
-          },
-          {
-            path: 'thongke',
-            element: <StatisticalPage/>,
-          },
+                path: 'soccer-manage',
+                element: <FootballLayout/>,
+                children: [
+                    {
+                        index: true,
+                        element: <HomeSoccerPage/>,
+                    },
+                    {
+                        path: 'list',
+                        element: <FieldListPage/>,
+                    },
+                    {
+                        path: 'booking',
+                        element: <BookingFieldPage/>,
+                    },
+                    {
+                        path: 'history',
+                        element: <HistoryBookingAdmin/>,
+                    },
+                    {
+                        path: 'thongke',
+                        element: <StatisticalPage/>,
+                    },
+                ],
+            },
+            {
+                path: 'role-manage',
+                element: <RoleLayout/>,
+            },
+            {
+                path: 'setting',
+                element: <SettingLayout/>,
+            },
         ],
-      },
-      {
-        path: 'role-manage',
-        element: <RoleLayout/>,
-      },
-      {
-        path: 'setting',
-        element: <SettingLayout/>,
-      },
-    ],
-    errorElement: <PageNotFound/>,
-  },
-  {
-    path: '',
-    element: <MainLayout/>,
-    children: [
-      {
-        index: true,
-        element: <Home/>,
-      },
-      {
-        path: 'soccer',
-        element: <SoccerFieldInfo/>,
-      },
-      {
-        path: 'soccer/rent-yard',
-        element: <RentYardPage/>,
-      },
-      {
-        path: 'gym',
-        element: <GymPage/>,
-      },
-      {
-        path: 'user/:id',
-        element: <UserDisplay/>,
-      },
-      {
-        path: 'booking',
-        element: <BookingPage/>,
-      }
-      ,
-      {
-        path: '/history-booking',
-        element: <HistoryBooking/>,
-      },
-      {
-        path: '/sellcourses',
-        element: <Sellcourses/>,
-      },
-      {
-        path: '/contact',
-        element: <ContactPage/>,
-      },
-    ],
-    errorElement: <PageNotFound/>,
-  },
-  {
-    path: 'sign-up',
-    element: <SignUp/>,
-  },
-  {
-    path: 'sign-in',
-    element: <SignIn/>,
-  },
-  {
-    path: 'forgot-password',
-    element: <ForgotPassword/>,
-  },
+        errorElement: <PageNotFound/>,
+    },
+    {
+        path: '',
+        element: <MainLayout/>,
+        children: [
+            {
+                index: true,
+                element: <Home/>,
+            },
+            {
+                path: 'soccer',
+                element: <SoccerFieldInfo/>,
+            },
+            {
+                path: 'soccer/rent-yard',
+                element: <RentYardPage/>,
+            },
+            {
+                path: 'gym',
+                element: <GymPage/>,
+            },
+            {
+                path: 'user/:id',
+                element: <UserDisplay/>,
+            },
+            {
+                path: 'booking',
+                element: <BookingPage/>,
+            }
+            ,
+            {
+                path: '/history-booking',
+                element: <HistoryBooking/>,
+            },
+            {
+                path: '/sellcourses',
+                element: <Sellcourses/>,
+            },
+            {
+                path: '/contact',
+                element: <ContactPage/>,
+            },
+            {
+                path: '/checkout',
+                element: <CheckoutPage/>,
+            },
+            {
+                path: '/payment-success/:bookingId',
+                element: <PaymentSuccessPage/>,
+            },
+        ],
+        errorElement: <PageNotFound/>,
+    },
+    {
+        path: 'sign-up',
+        element: <SignUp/>,
+    },
+    {
+        path: 'sign-in',
+        element: <SignIn/>,
+    },
+    {
+        path: 'forgot-password',
+        element: <ForgotPassword/>,
+    },
 
 ]);
