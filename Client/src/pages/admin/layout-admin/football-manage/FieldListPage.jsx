@@ -46,8 +46,8 @@ const FieldListPage = () => {
 
             {showAddForm && <AddFieldForm onAddField={handleAddField} onClose={() => setShowAddForm(false)}/>}
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-2xl font-semibold mb-4">Danh Sách Sân Bóng</h3>
+            <div className="bg-white px-6 py-4 mb-6 rounded-lg shadow-md">
+                <h3 className="text-3xl text-center font-semibold mb-4">Danh Sách Sân Bóng</h3>
 
                 {isLoading && <p>Đang tải danh sách sân...</p>}
                 {error && <p className="text-red-500">{error}</p>}
