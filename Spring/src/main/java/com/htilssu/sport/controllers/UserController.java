@@ -37,6 +37,13 @@ public class UserController {
         return userMapper.toDto(userService.getUserByIdOrThrow(id));
     }
 
+    @GetMapping("/me")
+    public UserDto getAuthenticatorInfo(Authentication authentication) {
+        return userMapper.toDto(
+                userService.getUserByIdOrThrow(Long.parseLong(
+                        (String) authentication.getPrincipal())));
+    }
+
     @GetMapping()
     public ResponseEntity<User> displayUserInfo(Authentication authentication) {
 
