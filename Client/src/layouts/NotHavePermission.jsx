@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-const UnAuthorization = () => {
+const NotHavePermission = () => {
     const navigate = useNavigate();
 
     return (
@@ -113,4 +113,4 @@ const UnAuthorization = () => {
     );
 }
 
-export default UnAuthorization;
+export default NotHavePermission;

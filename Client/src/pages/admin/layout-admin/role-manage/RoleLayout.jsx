@@ -1,4 +1,4 @@
-import RolesController from "./RolesController.jsx";
+import RolesUser from "./RolesUser.jsx";
 
 const RoleLayout = () => {
     return (
@@ -6,7 +6,7 @@ const RoleLayout = () => {
             <div className="min-h-screen bg-gray-100 p-6">
                 <div>
                     {/*Chia nhỏ Component rồi vào đây để dễ quản lý không code quá nhiều trong Layout này.*/}
-                    <RolesController/>
+                    <RolesUser/>
                 </div>
             </div>
         </div>
