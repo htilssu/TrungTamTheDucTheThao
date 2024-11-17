@@ -2,7 +2,7 @@ import {createBrowserRouter} from 'react-router-dom';
 import {MainLayout} from '../layouts/MainLayout.jsx';
 import {PageNotFound} from '../pages/PageNotFound.jsx';
 import SignUp from '../pages/sign-up/SignUp.jsx';
-import ForgotPassword from '../pages/forgot-password/ForgotPassword.jsx';
+import ForgotPassword from './../pages/admin/forgot-password/ForgotPassword';
 import Home from '../pages/home/HomePage.jsx';
 import RentYardPage from '../modules/core/components/rent-a-yard/SoccerField/RentYardPage.jsx';
 import SoccerFieldInfo from '../modules/core/components/rent-a-yard/SoccerField/SoccerFieldInfo.jsx';
@@ -21,13 +21,12 @@ import HomeAdminLayout from '../pages/admin/home-admin/HomeAdminLayout.jsx';
 import PostLayout from '../pages/admin/layout-admin/post-manage/PostLayout.jsx';
 import RoleLayout from '../pages/admin/layout-admin/role-manage/RoleLayout.jsx';
 import SettingLayout from '../pages/admin/layout-admin/setting-manage/SettingLayout.jsx';
-import RoomLayout from '../pages/admin/layout-admin/gym-manage/RoomLayout.jsx';
+import RoomLayout from './../pages/admin/layout-admin/gym-manage/layout/RoomLayout';
 import HomeSoccerPage from '../pages/admin/layout-admin/football-manage/HomeSoccerLayout.jsx';
 import UserDisplay from '../pages/UserDisplay/UserDisplay.jsx';
 import BookingPage from '../modules/core/components/booking/field/BookingFieldList.jsx';
 import ContactPage from '../modules/core/components/contact/ContactPage.jsx';
-import Room from './../pages/admin/layout-admin/gym-manage/Room';
-
+import Room from './../pages/admin/layout-admin/gym-manage/room/Room';
 import CoursesManage from '../pages/admin/CoursesManage/CoursesManage.jsx';
 import Sellcourses from '../pages/admin/layout-admin/courses-manage/Sellcourses.jsx';
 import EquipmentType from '../pages/admin/equipment/EquipmentType.jsx';
@@ -35,6 +34,11 @@ import EquipmentLayout from '../pages/admin/equipment/EquipmentLayout.jsx';
 import Equipment from '../pages/admin/equipment/Equipment.jsx';
 import EquipmentList from '../pages/admin/equipment/EquipmentList.jsx';
 import HistoryBookingAdmin from '../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx';
+import RoomTypes from './../pages/admin/layout-admin/gym-manage/room-types/RoomTypes';
+import SwimPage from '../pages/swim/SwimPage.jsx';
+import UnAuthorization from '../layouts/UnAuthorization.jsx';
+
+
 import CheckoutPage from "../modules/core/components/check-out/CheckoutPage.jsx";
 import PaymentSuccessPage from "../modules/core/components/check-out/PaymentSuccessPage.jsx";
 
@@ -161,7 +165,11 @@ export const router = createBrowserRouter([
                 element: <GymPage/>,
             },
             {
-                path: 'user/:id',
+                path: 'swim',
+        element: <SwimPage/>,
+      },
+      {
+        path: 'user/:id',
                 element: <UserDisplay/>,
             },
             {
@@ -180,6 +188,9 @@ export const router = createBrowserRouter([
             {
                 path: '/contact',
                 element: <ContactPage/>,
+      },{
+        path: '/unauth',
+        element: <UnAuthorization/>,
             },
             {
                 path: '/checkout',

@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class FootballField {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "football_field_id_seq")
     @SequenceGenerator(name = "football_field_id_seq", sequenceName = "football_field_id_seq", allocationSize = 1)
     private Long id;
 

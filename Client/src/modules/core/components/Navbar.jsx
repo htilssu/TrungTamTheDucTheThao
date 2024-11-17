@@ -27,9 +27,9 @@ const MegaMenu = () => {
       link: '/soccer',
     },
     {
-      title: 'SÂN BÓNG RỔ',
+      title: 'HỒ BƠI',
       description: 'Manage your customer relationships effectively.',
-      link: '/marketing-crm',
+      link: '/swim',
     },
     {
       title: 'SÂN TENNIS',

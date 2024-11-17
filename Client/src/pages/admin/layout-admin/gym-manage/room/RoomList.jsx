@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TiDelete, TiEdit } from "react-icons/ti"; // Import icon
-import EditRoom from './EditRoom';
+import EditRoom from "./EditRoom";
 
 const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
     const [editingField, setEditingField] = useState(null);
