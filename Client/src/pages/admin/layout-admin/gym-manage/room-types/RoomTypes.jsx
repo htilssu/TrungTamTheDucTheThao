@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import AddRoomTypes from './AddRoomTypes';
 import RoomTypesList from './RoomTypesList';
-import { authFetch } from '../../../../../dev/request';
+import { wDelete, wGet, wPost, wPut } from '../../../../../utils/request.util';
+import ConfirmDeleteModal from './../layout/ConfirmDeleteModal';
+import { ToastContainer, toast } from 'react-toastify';
 
 const RoomTypes = () => {
     const [roomTypes, setRoomTypes] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    const [fieldToDelete, setFieldToDelete] = useState(null); 
 
     useEffect(() => {
         fetchRoomTypes();
@@ -13,8 +17,8 @@ const RoomTypes = () => {
 
     const fetchRoomTypes = async () => {
         try {
-            const response = await authFetch('/room-types');
-            setRoomTypes(response);
+            const response = await wGet('/api/room-types');
+            setRoomTypes(response); 
         } catch (error) {
             console.error('Error fetching room types:', error);
         }
@@ -22,39 +26,50 @@ const RoomTypes = () => {
 
     const handleAddField = async (newField) => {
         try {
-            const addedField = await authFetch('/room-types/add', {
-                method: 'POST',
-                body: JSON.stringify(newField),
-            });
-            setRoomTypes([...roomTypes, addedField]);
+            const addedField = await wPost('/api/room-types/add', newField);
+            setRoomTypes((prev) => [...prev, addedField]); 
         } catch (error) {
             console.error('Error adding room type:', error);
+        }finally {
+            toast.success("Thêm thành công", { toastId: "add-success" });
         }
     };
 
     const handleUpdateField = async (updatedField) => {
         try {
-            const response = await authFetch(`/room-types/update/${updatedField.id}`, {
-                method: 'PUT',
-                body: JSON.stringify(updatedField),
-            });
-            setRoomTypes(roomTypes.map((field) => (field.id === updatedField.id ? response : field)));
+            const response = await wPut(`/api/room-types/update/${updatedField.id}`, updatedField);
+            setRoomTypes((prev) =>
+                prev.map((field) => (field.id === updatedField.id ? response : field))
+            ); 
         } catch (error) {
             console.error('Error updating room type:', error);
+        }finally {  
+            toast.success("Cập nhật thành công", { toastId: "update-success" });
         }
     };
 
-    const handleDeleteField = async (id) => {
-        try {
-            const response = await authFetch(`/room-types/delete/${id}`, {
-                method: 'DELETE',
-            });
-            if (response) {
-                setRoomTypes(roomTypes.filter((field) => field.id !== id));
+    const handleDeleteField = (id) => {
+        setFieldToDelete(id); 
+        setDeleteModalOpen(true); 
+    };
+
+    const confirmDelete = async () => {
+        if (fieldToDelete) {
+            try {
+                await wDelete(`/api/room-types/delete/${fieldToDelete}`);
+                setRoomTypes((prev) => prev.filter((field) => field.id !== fieldToDelete));
+                setDeleteModalOpen(false); 
+            } catch (error) {
+                console.error('Error deleting room type:', error);
+            } finally {
+                setDeleteModalOpen(false);
+                toast.success("Xóa thành công", { toastId: "delete-success" });
             }
-        } catch (error) {
-            console.error('Error deleting room type:', error);
         }
+    };
+
+    const cancelDelete = () => {
+        setDeleteModalOpen(false); 
     };
 
     return (
@@ -63,25 +78,28 @@ const RoomTypes = () => {
                 className="bg-blue-500 text-white py-2 px-4 rounded mb-6"
                 onClick={() => setShowAddForm(!showAddForm)}
             >
-                {showAddForm ? "Hủy Thêm Phòng Tập" : "Thêm Phòng Tập"}
+                {showAddForm ? "Hủy Thêm Loại Phòng Tập" : "Thêm Loại Phòng Tập"}
             </button>
 
-            {showAddForm && <AddRoomTypes onAddField={handleAddField} />}
+            {showAddForm && <AddRoomTypes onAddField={handleAddField} />} 
 
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-2xl font-semibold mb-4">Danh Sách Loại Phòng Tập</h3>
 
-                {roomTypes.map((type) => (
-                    <div key={type.id}>
-                        <h4 className="text-xl font-semibold mb-4 mt-5">{`Phòng Tập ${type.name}`}</h4>
-                        <RoomTypesList
-                            fields={type.fields || []}
-                            onUpdateField={handleUpdateField}
-                            onDeleteField={handleDeleteField}
-                        />
-                    </div>
-                ))}
+                <RoomTypesList
+                    fields={roomTypes}
+                    onUpdateField={handleUpdateField}
+                    onDeleteField={handleDeleteField}
+                />
             </div>
+
+            <ConfirmDeleteModal
+                isOpen={isDeleteModalOpen}
+                onDelete={confirmDelete}
+                onCancel={cancelDelete}
+            />
+
+            <ToastContainer />
         </div>
     );
 };

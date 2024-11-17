@@ -37,6 +37,8 @@ import HistoryBookingAdmin from '../pages/admin/layout-admin/football-manage/His
 import RoomTypes from './../pages/admin/layout-admin/gym-manage/room-types/RoomTypes';
 import SwimPage from '../pages/swim/SwimPage.jsx';
 import UnAuthorization from '../layouts/UnAuthorization.jsx';
+import BookingSwim from '../pages/swim/booking/BookingSwim.jsx';
+import BookingDetail from '../pages/swim/booking/BookinngDetail.jsx';
 
 
 
@@ -60,7 +62,13 @@ export const router = createBrowserRouter([
                   {
                       index: true,
                       element: <Room/>,
-                  },
+                  },{
+                    path: 'room-types',
+                    element: <RoomTypes/>,
+                  },{
+                    path: 'room-list',
+                    element: <Room/>,
+                },
               ]
             },
             {
@@ -165,6 +173,14 @@ export const router = createBrowserRouter([
       {
         path: 'swim',
         element: <SwimPage/>,
+      },
+      {
+        path: 'booking-swim',
+        element: <BookingSwim/>,
+      },
+      {
+        path: 'booking-detail',
+        element: <BookingDetail/>,
       },
       {
         path: 'user/:id',

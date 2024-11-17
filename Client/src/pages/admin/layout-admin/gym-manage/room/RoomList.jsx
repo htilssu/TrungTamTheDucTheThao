@@ -1,27 +1,22 @@
 import { useState } from "react";
-import { TiDelete, TiEdit } from "react-icons/ti"; // Import icon
+import { TiDelete, TiEdit } from "react-icons/ti";
 import EditRoom from "./EditRoom";
+import PropTypes from "prop-types";
 
 const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
-    const [editingField, setEditingField] = useState(null);
+    const [editingField, setEditingField] = useState(null); // Trạng thái phòng đang được chỉnh sửa
 
     const handleEditClick = (field) => {
-        setEditingField(field);
+        setEditingField(field); // Lưu phòng cần chỉnh sửa
     };
 
     const handleCancelEdit = () => {
-        setEditingField(null);
+        setEditingField(null); // Hủy chỉnh sửa
     };
 
     const handleUpdateField = (updatedField) => {
-        onUpdateField(updatedField);
-        setEditingField(null);
-    };
-
-    const handleDelete = (id) => {
-        if (window.confirm("Bạn có chắc muốn xóa phòng này không?")) {
-            onDeleteField(id);
-        }
+        onUpdateField(updatedField); // Cập nhật thông tin phòng
+        setEditingField(null); // Đóng form chỉnh sửa
     };
 
     return (
@@ -50,32 +45,27 @@ const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
                         <div className="p-4">
                             <h3 className="text-xl font-semibold mb-2">{field.name}</h3>
                             <p className="text-sm text-gray-600 mb-1">
-                                <strong>Địa chỉ:</strong> {field.location}
+                                <strong>Sức chứa:</strong> {field.capacity}
                             </p>
                             <p className="text-sm text-gray-600 mb-1">
-                                <strong>Tình trạng:</strong> {field.status}
+                                <strong>Tầng:</strong> {field.floor}
+                            </p>
+                            <p className="text-sm text-gray-600 mb-1">
+                                <strong>Tòa nhà:</strong> {field.building}
                             </p>
                         </div>
                     </div>
-
                     <div>
                         <div className="p-4 flex justify-between">
                             <button
                                 className="flex items-center bg-blue-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-blue-600"
-                                onClick={() => handleEditClick(field)}
+                                onClick={() => handleEditClick(field)} // Bắt đầu chỉnh sửa
                             >
                                 <TiEdit className="mr-1" /> Chỉnh sửa
                             </button>
                             <button
-                                className="flex items-center bg-yellow-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-yellow-600"
-                                disabled
-                                title="Chức năng này đang phát triển"
-                            >
-                                <span>Lịch đặt</span>
-                            </button>
-                            <button
                                 className="flex items-center bg-red-500 text-white py-0.5 px-1 text-xs rounded transition-colors hover:bg-red-600"
-                                onClick={() => handleDelete(field.id)}
+                                onClick={() => onDeleteField(field.id)} // Xóa phòng
                             >
                                 <TiDelete className="mr-1" /> Xóa phòng
                             </button>
@@ -84,6 +74,7 @@ const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
                 </div>
             ))}
 
+            {/* Hiển thị form chỉnh sửa nếu đang chỉnh sửa */}
             {editingField && (
                 <EditRoom
                     field={editingField}
@@ -93,6 +84,21 @@ const RoomList = ({ fields, onUpdateField, onDeleteField }) => {
             )}
         </div>
     );
+};
+
+RoomList.propTypes = {
+    fields: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            name: PropTypes.string.isRequired,
+            capacity: PropTypes.number.isRequired,
+            floor: PropTypes.number.isRequired,
+            building: PropTypes.string.isRequired,
+            images: PropTypes.arrayOf(PropTypes.string),
+        })
+    ).isRequired,
+    onUpdateField: PropTypes.func.isRequired,
+    onDeleteField: PropTypes.func.isRequired,
 };
 
 export default RoomList;

@@ -20,8 +20,6 @@ import lombok.Setter;
 public class Equipment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_seq")
-    @SequenceGenerator(name = "equipment_seq", sequenceName = "equipment_sequence", allocationSize = 1)
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_id_seq")
     @SequenceGenerator(name = "equipment_id_seq", sequenceName = "equipment_id_seq", allocationSize = 1)
