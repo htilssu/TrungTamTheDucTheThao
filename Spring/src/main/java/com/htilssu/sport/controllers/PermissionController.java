@@ -6,6 +6,8 @@ import com.htilssu.sport.data.mappers.RoleMapper;
 import com.htilssu.sport.data.models.Role;
 import com.htilssu.sport.data.models.RoleDto;
 import com.htilssu.sport.services.RoleService;
+import com.htilssu.sport.validations.IsAdmin;
+import com.htilssu.sport.validations.IsAuthenticated;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/permission")
 @Tag(name = "Permission", description = "Permission API")
 @RestController
+@IsAdmin
 @AllArgsConstructor
 public class PermissionController {
 
