@@ -1,14 +1,14 @@
-import {createContext, useEffect, useState} from 'react';
+import {createContext, useContext, useEffect, useState} from 'react';
 import {getToken, removeToken} from '../utils/token.util.js';
 import {getUser} from '../utils/user.util.js';
 
 export const UserContext = createContext(null);
+export const useAuth = () => useContext(UserContext);
 
 // eslint-disable-next-line react/prop-types
 export const UserProvider = ({children}) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const token = getToken();
     if (token) {

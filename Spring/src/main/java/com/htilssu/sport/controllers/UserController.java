@@ -1,10 +1,11 @@
 
 package com.htilssu.sport.controllers;
 
+import com.htilssu.sport.data.dtos.UserDto;
+import com.htilssu.sport.data.mappers.UserMapper;
 import com.htilssu.sport.data.models.User;
 import com.htilssu.sport.repositories.UserRepository;
 import com.htilssu.sport.services.UserService;
-import com.htilssu.sport.validations.IsEmployee;
 import com.htilssu.sport.validations.IsUser;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,18 +28,13 @@ import java.util.Map;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     // Hiển thị thông tin người dùng
     @GetMapping("/{id}")
-    public ResponseEntity<User> displayUserInfo(@PathVariable("id") Long id) {
-        if (id == null || id <= 0) {
-            return ResponseEntity.badRequest()
-                    .build(); // Xử lý nếu ID không hợp lệ
-        }
-        return userRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound()
-                        .build());
+    public UserDto displayUserInfo(@PathVariable("id") Long id) {
+        return userMapper.toDto(userService.getUserByIdOrThrow(id));
     }
 
     @GetMapping()
