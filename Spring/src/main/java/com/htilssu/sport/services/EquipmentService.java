@@ -3,13 +3,13 @@ package com.htilssu.sport.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.htilssu.sport.data.models.EquipmentType;
-import com.htilssu.sport.repositories.EquipmentTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.htilssu.sport.data.models.Equipment;
+import com.htilssu.sport.data.models.EquipmentType;
 import com.htilssu.sport.repositories.EquipmentRepository;
+import com.htilssu.sport.repositories.EquipmentTypeRepository;
 
 @Service
 public class EquipmentService {
@@ -17,11 +17,12 @@ public class EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;
 
+    @Autowired
+    private EquipmentTypeRepository equipmentTypeRepository;
+
     public List<Equipment> findAll() {
         return equipmentRepository.findAll();
     }
-    @Autowired
-    private EquipmentTypeRepository equipmentTypeRepository;
 
     public Optional<Equipment> findById(Long id) {
         return equipmentRepository.findById(id);
@@ -30,13 +31,6 @@ public class EquipmentService {
     public Equipment save(Equipment equipment) {
         EquipmentType equipmentType = equipmentTypeRepository.findById(equipment.getEquipmentType().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Loại thiết bị không tồn tại"));
-
-        long currentCount = equipmentRepository.countByEquipmentType(equipmentType);
-
-        if (currentCount >= equipmentType.getAmount()) {
-            throw new IllegalArgumentException("Số lượng thiết bị không được vượt quá số lượng loại thiết bị đã tạo");
-        }
-
         return equipmentRepository.save(equipment);
     }
 

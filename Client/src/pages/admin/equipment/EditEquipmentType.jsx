@@ -1,26 +1,23 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { wPut } from '../../../utils/request.util';
 
 const EditCategoryForm = ({ category, onCancel, onUpdate }) => {
     const [formData, setFormData] = useState({
         name: category.name,
-        amount: category.amount
     });
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // Reset lỗi
+        setError(''); 
 
         try {
-            const response = await axios.put(`http://localhost:8080/api/equipment-types/${category.id}`, {
+            const response = await wPut(`/api/equipment-types/${category.id}`, {
                 name: formData.name,
-                amount: parseInt(formData.amount, 10)
             });
-
-            // Ensure onUpdate is a function and is called after a successful update
             if (typeof onUpdate === 'function') {
-                onUpdate(response.data);
+                onUpdate(response);
             } else {
                 console.error('onUpdate is not a function');
             }
@@ -54,25 +51,6 @@ const EditCategoryForm = ({ category, onCancel, onUpdate }) => {
                     </label>
                 </div>
 
-                <div className="relative">
-                    <input
-                        type="number"
-                        id="amount"
-                        name="amount"
-                        value={formData.amount}
-                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                        className="peer placeholder-transparent w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
-                        placeholder="Số Lượng"
-                        required
-                    />
-                    <label
-                        htmlFor="amount"
-                        className="absolute -top-3 left-3 bg-white px-1 text-gray-500 transition-all duration-300 transform peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-500"
-                    >
-                        Số Lượng
-                    </label>
-                </div>
-
                 <div className="flex space-x-4">
                     <button
                         type="submit"
@@ -93,5 +71,13 @@ const EditCategoryForm = ({ category, onCancel, onUpdate }) => {
     );
 };
 
+EditCategoryForm.propTypes = {
+    category: PropTypes.shape({
+        id: PropTypes.number.isRequired, 
+        name: PropTypes.string.isRequired, 
+    }).isRequired,
+    onCancel: PropTypes.func.isRequired, 
+    onUpdate: PropTypes.func.isRequired, 
+};
 
 export default EditCategoryForm;
