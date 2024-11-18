@@ -45,8 +45,9 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-                <label className="block">Loại thiết bị:</label>
+                <label htmlFor="equipmentType" className="block">Loại thiết bị:</label>
                 <select
+                    id="equipmentType"
                     name="equipmentType"
                     value={editedEquipment.equipmentType?.id || ''}
                     onChange={(e) =>
@@ -68,8 +69,9 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
                 </select>
             </div>
             <div>
-                <label className="block">Trạng thái:</label>
+                <label htmlFor="status" className="block">Trạng thái:</label>
                 <select
+                    id="status"
                     name="status"
                     value={editedEquipment.status}
                     onChange={handleChange}
@@ -81,8 +83,9 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
                 </select>
             </div>
             <div>
-                <label className="block">Giá:</label>
+                <label htmlFor="price" className="block">Giá:</label>
                 <input
+                    id="price"
                     type="number"
                     name="price"
                     value={editedEquipment.price || ''}
@@ -92,8 +95,9 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
                 />
             </div>
             <div>
-                <label className="block">Số lượng:</label>
+                <label htmlFor="amount" className="block">Số lượng:</label>
                 <input
+                    id="amount"
                     type="number"
                     name="amount"
                     value={editedEquipment.amount || ''}

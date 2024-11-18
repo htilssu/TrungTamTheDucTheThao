@@ -105,7 +105,7 @@ const BookingSwim = () => {
             totalCost
         }
     });
-    };
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-8 bg-gradient-to-r from-blue-100 to-gray-100 rounded-xl shadow-2xl mt-10">
@@ -154,6 +154,7 @@ const BookingSwim = () => {
                   selectedSlots.includes(slot) ? 'border-blue-600 bg-blue-50' : 'border-gray-300'
                 }`}
                 onClick={() => handleSlotChange(slot)}
+                role="button"
               >
                 <FaClock className="mr-2 text-blue-500" />
                 {slot}
@@ -180,9 +181,10 @@ const BookingSwim = () => {
         </div>
 
         <div className="mb-8">
-          <label className="block mb-4 text-lg font-semibold text-gray-700">Tên Người Đặt:</label>
+          <label htmlFor="name" className="block mb-4 text-lg font-semibold text-gray-700">Tên Người Đặt:</label>
           <input
             type="text"
+            id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full p-4 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -190,9 +192,10 @@ const BookingSwim = () => {
           />
         </div>
         <div className="mb-8">
-          <label className="block mb-4 text-lg font-semibold text-gray-700">Số Điện Thoại:</label>
+          <label htmlFor="phone" className="block mb-4 text-lg font-semibold text-gray-700">Số Điện Thoại:</label>
           <input
             type="tel"
+            id="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             className="w-full p-4 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"

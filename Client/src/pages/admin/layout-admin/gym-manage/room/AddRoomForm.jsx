@@ -12,18 +12,18 @@ const AddRoomTypes = ({ onAddField }) => {
         floor: "",
         building: ""
     });
-    const [roomTypes, setRoomTypes] = useState([]); // Danh sách loại phòng tập
+    const [roomTypes, setRoomTypes] = useState([]); 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const inputRef = useRef(null);
 
     useEffect(() => {
-        fetchRoomTypes(); // Lấy danh sách loại phòng tập khi component được mount
+        fetchRoomTypes();
     }, []);
 
     const fetchRoomTypes = async () => {
         try {
-            const response = await wGet('/api/room-types'); // Gọi API để lấy loại phòng
+            const response = await wGet('/api/room-types'); 
             setRoomTypes(response);
         } catch (error) {
             console.error('Error fetching room types:', error);
@@ -39,7 +39,7 @@ const AddRoomTypes = ({ onAddField }) => {
             setError("Bạn cần chọn loại phòng");
             return false;
         }
-        setError(""); // Reset lỗi nếu tất cả đều hợp lệ
+        setError(""); 
         return true;
     };
 
@@ -48,10 +48,9 @@ const AddRoomTypes = ({ onAddField }) => {
             setIsLoading(true);
             try {
                 console.log("Sending data: ", newRoom);  
-                const response = await wPost('/api/rooms/add', newRoom); // Gửi yêu cầu thêm phòng
+                const response = await wPost('/api/rooms/add', newRoom); 
                 console.log("Response: ", response);  
-                onAddField(response); // Truyền dữ liệu về component cha
-                // Reset form
+                onAddField(response); 
                 setNewRoom({ name: "", roomType: { id: null }, capacity: "", floor: "", building: "" });
                 inputRef.current.blur();
                 toast.success("Thêm phòng thành công", { toastId: "add-success" });
@@ -70,22 +69,24 @@ const AddRoomTypes = ({ onAddField }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewRoom({ ...newRoom, [name]: value }); // Cập nhật giá trị tương ứng
+        setNewRoom({ ...newRoom, [name]: value }); 
     };
 
     const handleRoomTypeChange = (e) => {
-        setNewRoom({ ...newRoom, roomType: { id: e.target.value } }); // Cập nhật đối tượng roomType với ID
+        setNewRoom({ ...newRoom, roomType: { id: e.target.value } }); 
     };
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
             <h3 className="text-2xl font-semibold mb-4">Thêm phòng tập</h3>
             <div className="mb-4">
+                <label htmlFor="roomName" className="block mb-2 text-lg font-semibold text-gray-700">Tên phòng:</label>
                 <input
                     ref={inputRef}
                     className="p-2 border rounded w-full mb-2"
                     type="text"
                     name="name"
+                    id="roomName" // Thêm thuộc tính id
                     placeholder="Tên phòng tập"
                     value={newRoom.name}
                     onChange={handleInputChange}
@@ -94,9 +95,10 @@ const AddRoomTypes = ({ onAddField }) => {
             </div>
 
             <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Chọn loại phòng:</label>
+                <label htmlFor="roomType" className="block mb-2 text-lg font-semibold text-gray-700">Chọn loại phòng:</label>
                 <select
                     name="roomTypeId"
+                    id="roomType" // Thêm thuộc tính id
                     className="p-2 border rounded w-full"
                     value={newRoom.roomType.id || ""}
                     onChange={handleRoomTypeChange}
@@ -109,7 +111,9 @@ const AddRoomTypes = ({ onAddField }) => {
             </div>
 
             <div className="mb-4">
+                <label htmlFor="capacity" className="block mb-2 text-lg font-semibold text-gray-700">Sức chứa:</label>
                 <input
+                    id="capacity" // Thêm thuộc tính id
                     className="p-2 border rounded w-full"
                     type="number"
                     name="capacity"
@@ -121,7 +125,9 @@ const AddRoomTypes = ({ onAddField }) => {
             </div>
 
             <div className="mb-4">
+                <label htmlFor="floor" className="block mb-2 text-lg font-semibold text-gray-700">Tầng:</label>
                 <input
+                    id="floor" // Thêm thuộc tính id
                     className="p-2 border rounded w-full"
                     type="number"
                     name="floor"
@@ -133,7 +139,9 @@ const AddRoomTypes = ({ onAddField }) => {
             </div>
 
             <div className="mb-4">
+                <label htmlFor="building" className="block mb-2 text-lg font-semibold text-gray-700">Tòa nhà:</label>
                 <input
+                    id="building" // Thêm thuộc tính id
                     className="p-2 border rounded w-full"
                     type="text"
                     name="building"

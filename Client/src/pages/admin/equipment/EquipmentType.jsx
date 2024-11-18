@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { wDelete, wGet, wPost, wPut } from '../../../utils/request.util';
 
 const API_URL = '/api/equipment-types';
@@ -50,12 +50,12 @@ const CategoryForm = () => {
             setError('Đã xảy ra lỗi khi tạo/sửa thể loại thiết bị.');
         }
     };
+
     const getCategories = async () => {
         try {
             const response = await wGet(API_URL);
             if (Array.isArray(response)) {
                 setCategories(response);
-                
             } else {
                 setError('Dữ liệu không hợp lệ');
             }
@@ -68,7 +68,7 @@ const CategoryForm = () => {
     const handleEdit = (category) => {
         setEditingCategory(category);
         setFormData({
-            name: category.name || ''
+            name: category?.name || '' // Optional chaining được sử dụng ở đây
         });
     };
 
