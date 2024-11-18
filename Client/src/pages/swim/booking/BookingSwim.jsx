@@ -115,8 +115,9 @@ const BookingSwim = () => {
           <label className="block mb-4 text-lg font-semibold text-gray-700">Chọn Loại Hồ Bơi:</label>
           <div className="flex flex-col space-y-4">
             {Object.entries(swimOptions).map(([key, { label, description, dimensions }]) => (
-              <div
+              <button
                 key={key}
+                type="button"
                 className={`p-4 border-2 rounded-lg cursor-pointer transition ${
                   swimType === key ? 'border-blue-600 bg-blue-50' : 'border-gray-300'
                 }`}
@@ -138,7 +139,7 @@ const BookingSwim = () => {
                     <span>{`Độ sâu: ${dimensions.depth}`}</span>
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -154,7 +155,6 @@ const BookingSwim = () => {
                   selectedSlots.includes(slot) ? 'border-blue-600 bg-blue-50' : 'border-gray-300'
                 }`}
                 onClick={() => handleSlotChange(slot)}
-                role="button"
               >
                 <FaClock className="mr-2 text-blue-500" />
                 {slot}

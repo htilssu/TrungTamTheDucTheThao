@@ -22,14 +22,14 @@ const CategoryForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-    
+
         try {
             let response;
             if (editingCategory) {
                 response = await wPut(`/api/equipment-types/${editingCategory.id}`, {
                     name: formData.name
                 });
-    
+
                 setCategories((prevCategories) => prevCategories.map((category) =>
                     category.id === editingCategory.id ? response : category 
                 ));
@@ -41,7 +41,7 @@ const CategoryForm = () => {
 
                 setCategories((prevCategories) => [...prevCategories, response]);
             }
-    
+
             setFormData({
                 name: ''
             });
@@ -68,7 +68,7 @@ const CategoryForm = () => {
     const handleEdit = (category) => {
         setEditingCategory(category);
         setFormData({
-            name: category?.name || '' // Optional chaining được sử dụng ở đây
+            name: category?.name || ''
         });
     };
 
@@ -144,7 +144,7 @@ const CategoryForm = () => {
                 {categories.length > 0 ? (
                     <ul className="space-y-2">
                         {categories.map((category) => (
-                            category && category.name ? ( 
+                            category?.name ? ( // Sử dụng optional chaining
                                 <li key={category.id} className="p-2 bg-gray-100 rounded-md shadow-sm">
                                     <strong>Tên loại thiết bị :</strong> {category.name}
                                     <div className="mt-2 flex space-x-2">
