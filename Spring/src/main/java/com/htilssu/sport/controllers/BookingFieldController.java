@@ -1,5 +1,6 @@
 package com.htilssu.sport.controllers;
 
+import com.htilssu.sport.data.dtos.BookingStatisticsDTO;
 import com.htilssu.sport.data.models.BookingField;
 import com.htilssu.sport.data.dtos.BookingFieldDTO;
 import com.htilssu.sport.data.dtos.ErrorResponse; // Import lớp ErrorResponse
@@ -204,5 +205,18 @@ public class BookingFieldController {
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    //Thống kê
+    @GetMapping("/statistics")
+    public ResponseEntity<List<BookingStatisticsDTO>> getBookingStatistics() {
+        List<BookingStatisticsDTO> stats = bookingFieldService.getBookingStatistics();
+        return ResponseEntity.ok(stats);
+    }
+    //Thống kế doanh thu 7 ngày gần nhất
+    @GetMapping("/statistics/last7days")
+    public ResponseEntity<List<BookingField>> getRevenueForLast7Days(@RequestParam("status") BookingStatus status) {
+        List<BookingField> bookings = bookingFieldService.getRevenueForLast7Days(status);
+        return ResponseEntity.ok(bookings);
     }
 }

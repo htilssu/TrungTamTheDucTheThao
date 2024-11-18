@@ -1,6 +1,7 @@
 package com.htilssu.sport.services;
 
 import com.htilssu.sport.data.dtos.BookingFieldDTO;
+import com.htilssu.sport.data.dtos.BookingStatisticsDTO;
 import com.htilssu.sport.data.models.BookingField;
 import com.htilssu.sport.data.models.FootballField;
 import com.htilssu.sport.data.models.PricingField;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -267,5 +269,50 @@ public class BookingFieldService {
         booking.setIsPay(true);
 
         bookingFieldRepository.save(booking);
+    }
+
+    //Thống kê
+    public List<BookingStatisticsDTO> getBookingStatistics() {
+        List<BookingStatisticsDTO> stats = new ArrayList<>();
+
+        // Tổng số lượt đặt sân theo trạng thái
+        List<Object[]> statusStats = bookingFieldRepository.countBookingsByStatus();
+        for (Object[] row : statusStats) {
+            BookingStatisticsDTO dto = new BookingStatisticsDTO();
+            dto.setStatus(row[0].toString());
+            dto.setCount((Long) row[1]);
+            stats.add(dto);
+        }
+
+        // Doanh thu
+        List<Object[]> revenueStats = bookingFieldRepository.calculateRevenue();
+        if (!revenueStats.isEmpty()) {
+            Object[] row = revenueStats.get(0);
+            Double paidRevenue = row[0] != null ? ((Number) row[0]).doubleValue() : 0.0;
+            Double unpaidRevenue = row[1] != null ? ((Number) row[1]).doubleValue() : 0.0;
+
+            BookingStatisticsDTO revenueDto = new BookingStatisticsDTO();
+            revenueDto.setPaidRevenue(paidRevenue);
+            revenueDto.setUnpaidRevenue(unpaidRevenue);
+            stats.add(revenueDto);
+        }
+
+        // Số lượng đặt sân và doanh thu theo sân bóng
+        List<Object[]> fieldStats = bookingFieldRepository.countBookingsAndRevenueByField();
+        for (Object[] row : fieldStats) {
+            BookingStatisticsDTO dto = new BookingStatisticsDTO();
+            dto.setFieldId((Long) row[0]);
+            dto.setFieldBookingCount((Long) row[1]);
+            dto.setFieldRevenue((Double) row[2]);
+            stats.add(dto);
+        }
+
+        return stats;
+    }
+
+    //Thống kê doanh thu 7 ngày gần nhất
+    public List<BookingField> getRevenueForLast7Days(BookingStatus status) {
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+        return bookingFieldRepository.findRevenueForLast7Days(sevenDaysAgo, status);
     }
 }
