@@ -4,7 +4,8 @@ import {useQuery} from '@tanstack/react-query';
 
 const fetchBookingData = async (bookingId) => {
     const response = await wGet(`/v1/booking-field/${bookingId}`);
-    return response.json();
+    const responseJson = await response.json() || [];
+    return responseJson;
 }
 
 function PaymentSuccessPage() {

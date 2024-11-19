@@ -8,7 +8,8 @@ import StatusToggleButtons from "./component/StatusToggleButtons.jsx";
 
 const fetchBookings = async () => {
     const response = await wGet('/v1/booking-field');
-    return response.json() ?? [];
+    const responseJson = await response.json() || [];
+    return responseJson;
 };
 
 function HistoryBookingAdmin() {
