@@ -29,18 +29,12 @@ public class Equipment {
     @JoinColumn(name = "id_equipment_type", nullable = false)
     private EquipmentType equipmentType;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "amount", nullable = false)
-    private Integer amount;
-
-    @Column(name = "price", nullable = true)
-    private Double price;
-
     @Column(name = "status", nullable = false)
     private String status;
 
     @Column(name = "image")
     private String image;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_room", nullable = false)
+    private Room room;
 }

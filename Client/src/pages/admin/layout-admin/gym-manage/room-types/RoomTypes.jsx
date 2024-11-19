@@ -18,7 +18,8 @@ const RoomTypes = () => {
     const fetchRoomTypes = async () => {
         try {
             const response = await wGet('/api/room-types');
-            setRoomTypes(response); 
+            const data = await response.json()
+            setRoomTypes(data);
         } catch (error) {
             console.error('Error fetching room types:', error);
         }
@@ -39,8 +40,9 @@ const RoomTypes = () => {
     const handleUpdateField = async (updatedField) => {
         try {
             const response = await wPut(`/api/room-types/update/${updatedField.id}`, updatedField);
+            const data = await response.json()
             setRoomTypes((prev) =>
-                prev.map((field) => (field.id === updatedField.id ? response : field))
+                prev.map((field) => (field.id === updatedField.id ? data : field))
             ); 
         } catch (error) {
             console.error('Error updating room type:', error);

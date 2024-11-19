@@ -24,4 +24,6 @@ public class EquipmentType {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+    @Column(name = "amount", nullable = false, unique = true)
+    private int amount;
 }   
