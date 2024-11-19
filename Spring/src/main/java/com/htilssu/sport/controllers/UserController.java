@@ -118,8 +118,7 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<UserDto> userPage = userRepository.findAll(pageable)
                 .map(userMapper::toDto);
-        Page<UserDto> userDtoPage = userPage.map(userMapper::toDto);
-        return ResponseEntity.ok(userDtoPage);
+        return ResponseEntity.ok(userPage);
     }
 
     @DeleteMapping("/{id}")
