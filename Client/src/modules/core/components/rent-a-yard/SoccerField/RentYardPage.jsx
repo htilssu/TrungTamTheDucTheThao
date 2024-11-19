@@ -47,7 +47,7 @@ const RentYardPage = () => {
     // Fetch fields từ server khi thay đổi fieldType
     const fetchFields = async (fieldType) => {
         const response = await wGet(`/v1/fields/type/${fieldType}`);
-        return response; // Trả về danh sách sân cho loại sân đã chọn
+        return response.json(); // Trả về danh sách sân cho loại sân đã chọn
     };
     const {data: fields, error, isLoading} = useQuery({
         queryKey: ['fields', fieldType],
@@ -78,7 +78,8 @@ const RentYardPage = () => {
     const fetchBookedTimes = async (id, date) => {
         try {
             const response = await wGet(`/v1/booking-field/available-times/${id}?date=${date}`);
-            const bookedTimes = response.bookedTimes;
+            const responseJson = await response.json();
+            const bookedTimes = responseJson.bookedTimes;
 
             // Sử dụng bookedTimes để cập nhật trạng thái "isBooked"
             setAvailableTimes(prevAvailableTimes => prevAvailableTimes.map((timeSlot) => {

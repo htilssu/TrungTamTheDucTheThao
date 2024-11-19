@@ -10,7 +10,8 @@ import AdminDeleteModal from "./components/AdminDeleteModal.jsx";
 
 const fetchAdmins = async () => {
     const response = await wGet('/v1/permission/roles/3');
-    return response?.users || [];
+    const responseJson = await response.json();
+    return responseJson?.users || [];
 };
 
 const updateAdminRole = async (userId, roleId) => {
