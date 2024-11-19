@@ -18,7 +18,8 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
         const fetchEquipmentTypes = async () => {
             try {
                 const response = await wGet('/api/equipment-types');
-                setEquipmentTypes(response);
+                const data = await response.json()
+                setEquipmentTypes(data);
             } catch (error) {
                 console.error("Error fetching equipment types:", error);
                 toast.error("Không thể tải danh sách loại thiết bị.");
@@ -28,7 +29,9 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
         const fetchRooms = async () => {
             try {
                 const response = await wGet('/api/rooms');
-                setRooms(response);
+                const data = await response.json()
+
+                setRooms(data);
             } catch (error) {
                 console.error("Error fetching rooms:", error);
                 toast.error("Không thể tải danh sách phòng.");
