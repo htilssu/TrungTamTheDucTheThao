@@ -19,7 +19,8 @@ const fetchAdmins = async () => {
 // Fetch danh sách roles
 const fetchRoles = async () => {
     const response = await wGet('/v1/permission/roles');
-    return response.json() || [];
+    const responseJson = await response.json() || [];
+    return responseJson;
 };
 
 // Cập nhật quyền admin

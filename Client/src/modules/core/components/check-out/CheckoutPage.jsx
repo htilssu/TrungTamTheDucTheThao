@@ -3,7 +3,7 @@ import {toast, ToastContainer} from 'react-toastify';
 import {useEffect, useState} from "react";
 import {WoWoWallet} from "@htilssu/wowo";
 import Modal from "./components/Modal.jsx";
-import {wDelete, wPost} from "../../../../utils/request.util.js";
+import {wDelete} from "../../../../utils/request.util.js";
 
 function CheckoutPage() {
     const location = useLocation();
