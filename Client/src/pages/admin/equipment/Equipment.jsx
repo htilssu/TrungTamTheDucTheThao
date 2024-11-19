@@ -55,8 +55,9 @@ const EquipmentForm = ({ onAddEquipment }) => {
             const response = await wPost('/api/equipment', jsonData, {
                 headers: { 'Content-Type': 'application/json' },
             });
+            const data = await response.json();
             queryClient.invalidateQueries({ queryKey: ["equipments"] });
-            onAddEquipment(response.data);
+            onAddEquipment(data);
 
             setFormData({ name: '', amount: '', price: '', status: '', type: '' });
             setImage(null);

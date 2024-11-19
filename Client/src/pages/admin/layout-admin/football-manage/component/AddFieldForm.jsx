@@ -107,11 +107,11 @@ const AddFieldForm = ({onAddField, onClose}) => {
 
         try {
             const response = await wPost("/v1/fields", fieldData);
-
+            const data = await response.json();
             const timeoutId = setTimeout(() => {
 
                 toast.success('Thêm sân thành công!');
-                if (onAddField) onAddField(response.data);
+                if (onAddField) onAddField(data);
                 queryClient.invalidateQueries({queryKey: ['fields']});
                 setLoading(false);
             }, 3000);
