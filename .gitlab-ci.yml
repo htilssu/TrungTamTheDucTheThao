@@ -43,5 +43,5 @@ pull-image:
       sudo docker pull htilssu/trungtamthethao:latest &&
       sudo docker ps -aq | xargs -r sudo docker stop &&
       sudo docker ps -aq | xargs -r sudo docker rm &&
-      sudo docker run --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p ${POST}:8080 htilssu/trungtamthethao:latest
+      sudo docker run --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p $POST:8080 htilssu/trungtamthethao:latest
       "
