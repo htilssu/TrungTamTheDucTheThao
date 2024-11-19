@@ -11,7 +11,7 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
             {/* Input Field */}
             <input
                 type="text"
-                placeholder="Tìm kiếm Admin theo tên..."
+                placeholder="Tìm kiếm theo Tên..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full p-4 pl-10 pr-4 border-0 focus:outline-none focus:ring-0"

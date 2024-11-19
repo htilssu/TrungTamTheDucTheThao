@@ -40,6 +40,8 @@ import NotHavePermission from '../layouts/NotHavePermission.jsx';
 import AuthorizedView from '../layouts/AuthorizedView.jsx';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
 import RoomTypes from './../pages/admin/layout-admin/gym-manage/room-types/RoomTypes';
+import CheckoutPage from "../modules/core/components/check-out/CheckoutPage.jsx";
+import PaymentSuccessPage from "../modules/core/components/check-out/PaymentSuccessPage.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -249,7 +251,15 @@ export const router = createBrowserRouter([
       {
         path: '/contact',
         element: <ContactPage/>,
-      }
+      },
+      {
+        path: '/checkout',
+        element: <CheckoutPage/>,
+      },
+      {
+        path: '/payment-success/:bookingId',
+        element: <PaymentSuccessPage/>,
+      },
     ],
     errorElement: <PageNotFound/>,
   },
