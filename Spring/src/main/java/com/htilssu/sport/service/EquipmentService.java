@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.htilssu.sport.data.models.Room;
-import com.htilssu.sport.repositories.RoomRepository;
+import com.htilssu.sport.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

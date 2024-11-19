@@ -1,5 +1,6 @@
     package com.htilssu.sport.data.dtos;
 
+
     import java.io.Serializable;
 
     /**

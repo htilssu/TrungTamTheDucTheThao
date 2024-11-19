@@ -14,7 +14,9 @@ const CategoryForm = () => {
     const getCategories = async () => {
         try {
             const response = await wGet('/api/equipment-types');
-            setCategories(response);
+
+            const data = await response.json()
+            setCategories(data);
         } catch (err) {
             console.error(err);
             setError('Đã xảy ra lỗi khi lấy danh sách thể loại thiết bị.');
@@ -45,13 +47,16 @@ const CategoryForm = () => {
         }
 
         try {
-            const response = await wPost('/api/equipment-types', {
+            const response = await wPost('/api/equipment-types',
+
+                {
                 name: formData.name,
                 amount: parseInt(formData.amount, 10),
-            });
+            })
+            const data = await response.json();
 
             // Update the category list with the newly created category
-            setCategories(prevCategories => [...prevCategories, response]);
+            setCategories(prevCategories => [...prevCategories, data]);
 
             // Reset form data after submission
             setFormData({ name: '', amount: '' });
@@ -90,6 +95,7 @@ const CategoryForm = () => {
                 amount: updatedCategory.amount
             });
             getCategories();
+            setEditingCategory(null);
             setEditingCategory(null);
             toast.success('Cập nhật thể loại thành công!');
         } catch (error) {

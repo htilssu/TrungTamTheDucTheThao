@@ -21,8 +21,9 @@ const EquipmentForm = ({ onAddEquipment }) => {
         const fetchEquipmentTypes = async () => {
             try {
                 const response = await wGet('/api/equipment-types');
+                const data = await response.json()
                 console.log('Fetched Equipment Types:', response); // Log response
-                setEquipmentTypes(response);
+                setEquipmentTypes(data);
             } catch (error) {
                 console.error('Error fetching equipment types:', error); // Log error
                 setModalMessage("Không thể tải danh sách loại thiết bị.");
@@ -37,8 +38,9 @@ const EquipmentForm = ({ onAddEquipment }) => {
         const fetchRoom = async () => {
             try {
                 const response = await wGet('/api/rooms');
+                const data = await response.json()
                 console.log('Fetched Rooms:', response); // Log response
-                setRoom(response);
+                setRoom(data);
             } catch (error) {
                 console.error('Error fetching rooms:', error); // Log error
                 setModalMessage("Không thể tải danh sách phòng.");
@@ -69,8 +71,9 @@ const EquipmentForm = ({ onAddEquipment }) => {
         try {
             const response = await wPost('/api/equipment', jsonData, {
                 headers: { 'Content-Type': 'application/json' },
-            });
-            console.log('Post response:', response); // Log response
+            })
+            const data = await response.json();
+            console.log('Post response:', data); // Log response
             queryClient.invalidateQueries({ queryKey: ["equipments"] });
             onAddEquipment(response);
 

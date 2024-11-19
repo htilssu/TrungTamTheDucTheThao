@@ -7,7 +7,9 @@ import { wDelete, wGet } from '../../../utils/request.util.js';
 const fetchEquipments = async () => {
     try {
         const response = await wGet('/api/equipment');
-        return response ?? [];
+        const data = await response.json()
+        return data ?? []
+
     } catch (error) {
         console.error("Error fetching equipment:", error);
         toast.error("Có lỗi xảy ra khi tải danh sách thiết bị.");
