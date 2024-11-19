@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import { ToastContainer, toast } from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { wPost, wGet } from "../../../../../utils/request.util";
+import {wGet, wPost} from '../../../../../utils/request.util';
 
 const AddRoomTypes = ({ onAddField }) => {
     const [newRoom, setNewRoom] = useState({
@@ -48,9 +48,10 @@ const AddRoomTypes = ({ onAddField }) => {
             setIsLoading(true);
             try {
                 console.log("Sending data: ", newRoom);  
-                const response = await wPost('/api/rooms/add', newRoom); 
-                console.log("Response: ", response);  
-                onAddField(response); 
+                const response = await wPost('/api/rooms/add', newRoom);
+                const data = response.json();
+                console.log('Response: ', data);
+                onAddField(data);
                 setNewRoom({ name: "", roomType: { id: null }, capacity: "", floor: "", building: "" });
                 inputRef.current.blur();
                 toast.success("Thêm phòng thành công", { toastId: "add-success" });

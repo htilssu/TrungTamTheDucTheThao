@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import AddRoomTypes from './AddRoomTypes';
 import RoomTypesList from './RoomTypesList';
-import { wDelete, wGet, wPost, wPut } from '../../../../../utils/request.util';
+import {wDelete, wGet, wPost, wPut} from '../../../../../utils/request.util';
 import ConfirmDeleteModal from './../layout/ConfirmDeleteModal';
-import { ToastContainer, toast } from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 
 const RoomTypes = () => {
     const [roomTypes, setRoomTypes] = useState([]);
@@ -27,7 +27,8 @@ const RoomTypes = () => {
     const handleAddField = async (newField) => {
         try {
             const addedField = await wPost('/api/room-types/add', newField);
-            setRoomTypes((prev) => [...prev, addedField]); 
+            const data = await addedField.json();
+            setRoomTypes((prev) => [...prev, data]);
         } catch (error) {
             console.error('Error adding room type:', error);
         }finally {
