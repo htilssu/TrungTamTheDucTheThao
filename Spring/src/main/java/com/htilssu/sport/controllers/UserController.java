@@ -116,9 +116,9 @@ public class UserController {
             @RequestParam(defaultValue = "10") int pageSize
     ) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<User> userPage = userRepository.findAll(pageable);
-        Page<UserDto> userDtoPage = userPage.map(userMapper::toDto);
-        return ResponseEntity.ok(userDtoPage);
+        Page<UserDto> userPage = userRepository.findAll(pageable)
+                .map(userMapper::toDto);
+        return ResponseEntity.ok(userPage);
     }
 
     @DeleteMapping("/{id}")

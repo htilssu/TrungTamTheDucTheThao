@@ -11,15 +11,23 @@ export async function wPost(url, data) {
     },
     body: JSON.stringify(data),
   });
-  return response.json();
+  if (response.ok) {
+    return response.json();
+  }
+  else {
+    throw new Error((await response.json()).message);
+  }
 }
 
 export async function wGet(url) {
-  return (await fetch(baseUrl + url, {
+  const response = await fetch(baseUrl + url, {
     headers: {
       'Authorization': `Bearer ${getToken()}`,
     },
-  })).json();
+  });
+
+  if (!response.ok) throw new Error((await response.json()).message);
+  return response.json();
 }
 
 export async function wPut(url, data) {
@@ -30,7 +38,7 @@ export async function wPut(url, data) {
       'Authorization': `Bearer ${getToken()}`,
     },
     body: JSON.stringify(data),
-  })).json();
+  }));
 }
 
 export async function wDelete(url) {
@@ -39,5 +47,5 @@ export async function wDelete(url) {
     headers: {
       'Authorization': `Bearer ${getToken()}`,
     },
-  })).json();
+  }));
 }

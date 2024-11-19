@@ -11,4 +11,6 @@ FROM amazoncorretto:22-alpine-full AS runtime
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 
-CMD ["java", "-jar", "app.jar"]
+EXPOSE 8081:8081
+
+CMD ["java","-Xms524M", "-Xmx1024M", "-jar", "app.jar"]

@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.htilssu.sport.data.dtos.EquipmentTypeDto;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ public class EquipmentTypeService {
     public List<EquipmentTypeDto> findAll() {
         return equipmentTypeRepository.findAll()
                 .stream()
-                .map(equipmentType -> new EquipmentTypeDto(equipmentType.getId(), equipmentType.getName(), equipmentType.getAmount()))
+                .map(equipmentType -> new EquipmentTypeDto(equipmentType.getId(), equipmentType.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -30,14 +29,7 @@ public class EquipmentTypeService {
     }
 
     public EquipmentType save(EquipmentType equipmentType) {
-        validateEquipmentType(equipmentType);
         return equipmentTypeRepository.save(equipmentType);
-    }
-    // Hàm kiểm tra số lượng
-    private void validateEquipmentType(EquipmentType equipmentType) {
-        if (equipmentType.getAmount() < 0) {
-            throw new IllegalArgumentException("Số lượng không được âm");  // Ném lỗi với thông báo phù hợp
-        }
     }
 
     public Optional<EquipmentType> update(Long id, EquipmentType equipmentType) {
@@ -49,8 +41,7 @@ public class EquipmentTypeService {
         }
     }
 
-
-
+    // Xóa loại thiết bị
     public boolean delete(Long id) {
         if (equipmentTypeRepository.existsById(id)) {
             equipmentTypeRepository.deleteById(id);

@@ -28,7 +28,7 @@ pull-image:
     - job: build-image
       artifacts: false
   before_script:
-    - chmod 400 $SSH_KEY
+    - chmod 600 $SSH_KEY
   script:
     - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
       echo \"$ENV\" > ~/secrets/.env.tttd &&

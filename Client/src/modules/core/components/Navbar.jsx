@@ -1,7 +1,6 @@
 import {useContext, useEffect, useRef, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {UserContext} from '../../../context/UserContext';
-// Component cho một Menu Item
 // eslint-disable-next-line react/prop-types
 const MegaItem = ({title, description, link}) => {
   return (
@@ -170,21 +169,20 @@ const Navbar = () => {
               </button>
 
               {/* User menu dropdown */}
-              {isUserMenuOpen && (
+              {!isLoading && user && isUserMenuOpen && (
                   <div ref={UsermenuRef}
                        className="absolute right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
                     <div className="px-4 py-3">
                                     <span className="block text-sm font-medium text-gray-900 dark:text-white">
                                     {user?.firstName} {user?.lastName}</span>
                       <span className="block text-sm text-gray-500 dark:text-gray-400">
-                                    ngokhong@gmail.com</span>
+                                    {user?.email}</span>
                     </div>
                     <ul className="py-2">
                       <UserMenuItem link="/dashboard" text="Dashboard"/>
                       <UserMenuItem link="/settings" text="Settings"/>
                       <UserMenuItem link={`/user/5`} text="Edit"/>
-                      <UserMenuItem link="/sign-in" text="Sign out"/>
-
+                      <UserMenuItem  text="Sign out"/>
                     </ul>
                   </div>
               )}

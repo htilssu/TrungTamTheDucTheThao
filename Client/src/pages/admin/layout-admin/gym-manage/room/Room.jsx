@@ -1,53 +1,73 @@
 import { useState, useEffect } from "react";
-import AddRoomForm from './AddRoomForm';
-import RoomList from './RoomList';
-
+import AddRoomForm from './AddRoomForm'; 
+import RoomList from './RoomList'; 
+import ConfirmDeleteModal from "../layout/ConfirmDeleteModal"; 
+import { wDelete, wGet } from '../../../../../utils/request.util'; 
+import { ToastContainer, toast } from 'react-toastify';
 
 const Room = () => {
-    const [fields, setFields] = useState([]);
+    const [fields, setFields] = useState([]); 
     const [roomTypes, setRoomTypes] = useState([]); 
-    const [nextId, setNextId] = useState(1);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [roomToDelete, setRoomToDelete] = useState(null); 
 
-    // useEffect(() => {
-    //     fetch('http://localhost:8080/api/roomtypes')
-    //         .then((response) => response.json())
-    //         .then((data) => setRoomTypes(data))
-    //         .catch((error) => console.error('Error fetching room types:', error));
+    useEffect(() => {
+        fetchRoomTypes(); 
+        fetchRooms(); 
+    }, []);
 
-    //     fetch('http://localhost:8080/api/rooms')
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             const formattedRooms = data.map((room) => ({
-    //                 id: room.id,
-    //                 name: room.name,
-    //                 type: room.RoomType.name, 
-    //                 capacity: room.capacity,
-    //                 floor: room.floor,
-    //                 building: room.building
-    //             }));
-    //             setFields(formattedRooms);
-    //             const maxId = Math.max(...data.map((room) => room.id), 0);
-    //             setNextId(maxId + 1);
-    //         })
-    //         .catch((error) => console.error('Error fetching rooms:', error));
-    // }, []);
+    const fetchRoomTypes = async () => {
+        try {
+            const response = await wGet('/api/room-types'); 
+            setRoomTypes(response);
+        } catch (error) {
+            console.error('Error fetching room types:', error);
+        }
+    };
+
+    const fetchRooms = async () => {
+        try {
+            const response = await wGet('/api/rooms'); 
+            setFields(response);
+        } catch (error) {
+            console.error('Error fetching rooms:', error);
+        }
+    };
 
     const handleAddField = (newField) => {
-        setFields([...fields, { ...newField, id: nextId }]);
-        setNextId(nextId + 1);
+        setFields((prev) => [...prev, newField]);
     };
 
     const handleUpdateField = (updatedField) => {
-        setFields(fields.map((field) => (field.id === updatedField.id ? updatedField : field)));
+        setFields((prev) =>
+            prev.map((field) => (field.id === updatedField.id ? updatedField : field))
+        );
     };
 
     const handleDeleteField = (id) => {
-        setFields(fields.filter((field) => field.id !== id));
+        setRoomToDelete(id);
+        setDeleteModalOpen(true); 
     };
 
-    const filterFieldsByType = (type) => {
-        return fields.filter((field) => field.type === type);
+    const confirmDelete = async () => {
+        if (roomToDelete) {
+            try {
+                await wDelete(`/api/rooms/delete/${roomToDelete}`); 
+                setFields((prev) => prev.filter((field) => field.id !== roomToDelete)); 
+            } catch (error) {
+                console.error('Error deleting room:', error);
+            } finally {
+                setDeleteModalOpen(false); 
+                setRoomToDelete(null);
+                toast.success("Xóa phòng thành công", { toastId: "delete-success" });
+            }
+        }
+    };
+
+    const cancelDelete = () => {
+        setDeleteModalOpen(false); 
+        setRoomToDelete(null); 
     };
 
     return (
@@ -67,11 +87,11 @@ const Room = () => {
                 {roomTypes.map((type) => (
                     <div key={type.id}>
                         <h4 className="text-xl font-semibold mb-4 mt-5">{`Phòng Tập ${type.name}`}</h4>
-                        {filterFieldsByType(type.name).length > 0 ? (
+                        {fields.filter((field) => field.RoomType?.id === type.id).length > 0 ? (
                             <RoomList
-                                fields={filterFieldsByType(type.name)}
+                                fields={fields.filter((field) => field.RoomType?.id === type.id)}
                                 onUpdateField={handleUpdateField}
-                                onDeleteField={handleDeleteField}
+                                onDeleteField={handleDeleteField} 
                             />
                         ) : (
                             <p>Không có phòng tập {type.name.toLowerCase()} nào.</p>
@@ -79,6 +99,14 @@ const Room = () => {
                     </div>
                 ))}
             </div>
+
+            <ConfirmDeleteModal
+                isOpen={isDeleteModalOpen}
+                onDelete={confirmDelete} 
+                onCancel={cancelDelete} 
+            />
+
+            <ToastContainer />
         </div>
     );
 };
