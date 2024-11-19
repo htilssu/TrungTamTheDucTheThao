@@ -6,7 +6,6 @@ import './index.css';
 import App from './App.jsx';
 
 export const root = createRoot(document.getElementById('root'));
-export const backEnd = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
 
 root.render(
     <StrictMode>

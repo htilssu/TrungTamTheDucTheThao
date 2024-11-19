@@ -1,4 +1,4 @@
-import {useEffect, useState } from 'react';
+import {useState} from 'react';
 import {motion} from 'framer-motion';
 import {useNavigate} from 'react-router-dom';
 import {toast, ToastContainer} from 'react-toastify';
@@ -45,8 +45,7 @@ const SignIn = () => {
     }
 
     if (!hasError) {
-      try {
-        const data = await signIn(email, password);
+      const data = await (await signIn(email, password)).json();
         //save token
         if (import.meta.env.DEV) {
           console.log('data =', data);
@@ -62,9 +61,7 @@ const SignIn = () => {
         } else {
           showToast('Email hoặc mật khẩu không chính xác.');
         }
-      }
-      catch (e) {
-      }
+
     }
 
   }

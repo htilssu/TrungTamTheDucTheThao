@@ -18,4 +18,5 @@ public class BookingFieldDTO {
     private String bookingStatus;
     private Double depositAmount;
     private Double totalAmount;
+    private Boolean isPay;
 }
