@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { BeatLoader } from "react-spinners";
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import {wGet, wPost} from "../../../../utils/request.util.js";
 
 const AddEmployeeForm = ({ addEmployee, cancelAdd }) => {
     const [employee, setEmployee] = useState({
         name: '',
         phoneNumber: '',
-        experience: '', 
+        experience: '',
         description: '',
     });
 
@@ -38,11 +38,12 @@ const AddEmployeeForm = ({ addEmployee, cancelAdd }) => {
 
         try {
             // Kiểm tra số điện thoại tồn tại trong danh sách các huấn luyện viên
-            const checkResponse = await axios.get('http://localhost:8080/api/coach');
-            
+            const checkResponse = await wGet('/api/coach');
+            const data = await checkResponse.json()
+
             // Kiểm tra nếu số điện thoại đã tồn tại trong danh sách huấn luyện viên
-            const phoneNumberExists = checkResponse.data.some(coach => coach.phoneNumber === employee.phoneNumber);
-            
+            const phoneNumberExists = data.some(coach => coach.phoneNumber === employee.phoneNumber);
+
             if (phoneNumberExists) {
                 toast.error('Số điện thoại này đã được sử dụng bởi huấn luyện viên khác!');
                 setLoading(false);
@@ -51,8 +52,7 @@ const AddEmployeeForm = ({ addEmployee, cancelAdd }) => {
 
             // Nếu số điện thoại chưa tồn tại, tiến hành thêm mới huấn luyện viên
             const newEmployee = { ...employee, avatar };
-            await axios.post('http://localhost:8080/api/coach/add', newEmployee);
-            
+            await wPost('/api/coach/add', newEmployee);
             toast.success('Thêm huấn luyện viên thành công');
 
             setEmployee({
@@ -62,7 +62,7 @@ const AddEmployeeForm = ({ addEmployee, cancelAdd }) => {
                 description: '',
             });
             setAvatar(null);
-            
+
         } catch (error) {
             console.error('Lỗi khi thêm huấn luyện viên:', error);
             toast.error('Có lỗi xảy ra khi thêm huấn luyện viên!');
@@ -76,7 +76,7 @@ const AddEmployeeForm = ({ addEmployee, cancelAdd }) => {
             employee.name &&
             isPhoneNumberValid() &&
             employee.experience &&
-            employee.description 
+            employee.description
         );
     };
 
