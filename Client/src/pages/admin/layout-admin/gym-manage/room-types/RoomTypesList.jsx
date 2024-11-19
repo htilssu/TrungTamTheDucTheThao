@@ -1,28 +1,39 @@
 import { useState } from "react";
 import { TiDelete, TiEdit } from "react-icons/ti";
 import EditRoomTypes from './EditRoomTypes';
+import ConfirmDeleteModal from './../layout/ConfirmDeleteModal'; 
 import PropTypes from 'prop-types';
 
 const RoomTypesList = ({ fields, onUpdateField, onDeleteField }) => {
-    const [editingField, setEditingField] = useState(null);
+    const [editingField, setEditingField] = useState(null); 
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false); 
+    const [fieldToDelete, setFieldToDelete] = useState(null);
 
     const handleEditClick = (field) => {
-        setEditingField(field);
+        setEditingField(field); 
     };
 
     const handleCancelEdit = () => {
-        setEditingField(null);
+        setEditingField(null); 
     };
 
     const handleUpdateField = (updatedField) => {
-        onUpdateField(updatedField);
+        onUpdateField(updatedField); 
         setEditingField(null);
     };
 
     const handleDelete = (id) => {
-        if (window.confirm("Bạn có chắc muốn xóa phòng này không?")) {
-            onDeleteField(id);
-        }
+        setFieldToDelete(id); 
+        setDeleteModalOpen(true); 
+    };
+
+    const confirmDelete = () => {
+        onDeleteField(fieldToDelete); 
+        setDeleteModalOpen(false); 
+    };
+
+    const cancelDelete = () => {
+        setDeleteModalOpen(false);
     };
 
     return (
@@ -58,6 +69,12 @@ const RoomTypesList = ({ fields, onUpdateField, onDeleteField }) => {
                     onUpdate={handleUpdateField}
                 />
             )}
+
+            <ConfirmDeleteModal
+                isOpen={isDeleteModalOpen}
+                onDelete={confirmDelete}
+                onCancel={cancelDelete}
+            />
         </div>
     );
 };
