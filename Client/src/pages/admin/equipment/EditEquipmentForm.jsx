@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
 import { wGet, wPut } from '../../../utils/request.util';
 
 const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
     const [editedEquipment, setEditedEquipment] = useState(equipment);
     const [equipmentTypes, setEquipmentTypes] = useState([]);
+    const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -24,7 +25,18 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
             }
         };
 
+        const fetchRooms = async () => {
+            try {
+                const response = await wGet('/api/rooms');
+                setRooms(response);
+            } catch (error) {
+                console.error("Error fetching rooms:", error);
+                toast.error("Không thể tải danh sách phòng.");
+            }
+        };
+
         fetchEquipmentTypes();
+        fetchRooms();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -69,6 +81,28 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
                 </select>
             </div>
             <div>
+                <label htmlFor="room" className="block">Phòng:</label>
+                <select
+                    id="room"
+                    name="room"
+                    value={editedEquipment.room?.id || ''}
+                    onChange={(e) =>
+                        setEditedEquipment((prev) => ({
+                            ...prev,
+                            room: rooms.find((room) => room.id === parseInt(e.target.value)),
+                        }))
+                    }
+                    className="w-full border px-4 py-2 rounded"
+                >
+                    <option value="" disabled>Chọn phòng</option>
+                    {rooms.map((room) => (
+                        <option key={room.id} value={room.id}>
+                            {room.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div>
                 <label htmlFor="status" className="block">Trạng thái:</label>
                 <select
                     id="status"
@@ -82,33 +116,9 @@ const EditEquipmentForm = ({ equipment, cancelEdit, updateEquipment }) => {
                     <option value="Bảo trì">Bảo trì</option>
                 </select>
             </div>
-            <div>
-                <label htmlFor="price" className="block">Giá:</label>
-                <input
-                    id="price"
-                    type="number"
-                    name="price"
-                    value={editedEquipment.price || ''}
-                    onChange={handleChange}
-                    className="w-full border px-4 py-2 rounded"
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="amount" className="block">Số lượng:</label>
-                <input
-                    id="amount"
-                    type="number"
-                    name="amount"
-                    value={editedEquipment.amount || ''}
-                    onChange={handleChange}
-                    className="w-full border px-4 py-2 rounded"
-                    required
-                />
-            </div>
-            <button 
-                type="submit" 
-                disabled={loading} 
+            <button
+                type="submit"
+                disabled={loading}
                 className={`px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ${loading && 'opacity-50 cursor-not-allowed'}`}
             >
                 {loading ? 'Đang cập nhật...' : 'Cập nhật'}
@@ -132,8 +142,12 @@ EditEquipmentForm.propTypes = {
             name: PropTypes.string.isRequired
         }),
         status: PropTypes.string.isRequired,
-        price: PropTypes.number, 
+        price: PropTypes.number,
         amount: PropTypes.number,
+        room: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired
+        }),
     }).isRequired,
     cancelEdit: PropTypes.func.isRequired,
     updateEquipment: PropTypes.func.isRequired

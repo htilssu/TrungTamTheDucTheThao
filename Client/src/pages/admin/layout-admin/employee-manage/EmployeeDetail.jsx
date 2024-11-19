@@ -9,7 +9,7 @@ const EmployeeDetail = ({ employee }) => {
             <h2 className="text-3xl font-semibold mb-4 text-gray-800">Chi Tiết Nhân Viên</h2>
             <div className="flex items-center mb-6">
                 <img
-                    src={employee.avatar}
+                    src={employee.avatar || "/avatarH.png"}
                     alt="Avatar"
                     className="w-32 h-32 object-cover rounded-full border border-gray-300 shadow-md mr-4"
                 />
