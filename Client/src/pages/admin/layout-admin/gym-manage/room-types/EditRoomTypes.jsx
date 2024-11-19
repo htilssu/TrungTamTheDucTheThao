@@ -23,7 +23,8 @@ const EditRoomTypes = ({ field, onCancel, onUpdate }) => {
 
         try {
             const response = await wPut(`/api/room-types/update/${updatedField.id}`, updatedField);
-            onUpdate(response);
+            const data = await response.json()
+            onUpdate(data);
         } catch (error) {
             console.error("Error during update:", error);
             toast.error("Đã xảy ra lỗi khi cập nhật loại phòng");

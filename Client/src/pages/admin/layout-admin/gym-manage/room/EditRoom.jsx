@@ -16,7 +16,8 @@ const EditRoom = ({ field, onCancel, onUpdate }) => {
     const fetchRoomTypes = async () => {
         try {
             const response = await wGet('/api/room-types');
-            setRoomTypes(response);
+            const data = await response.json()
+            setRoomTypes(data);
         } catch (error) {
             console.error('Error fetching room types:', error);
         } 
