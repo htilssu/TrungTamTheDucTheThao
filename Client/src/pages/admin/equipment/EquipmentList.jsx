@@ -7,21 +7,21 @@ import { wDelete, wGet } from '../../../utils/request.util.js';
 const fetchEquipments = async () => {
     try {
         const response = await wGet('/api/equipment');
-        return response ?? []; 
+        return response ?? [];
     } catch (error) {
         console.error("Error fetching equipment:", error);
         toast.error("Có lỗi xảy ra khi tải danh sách thiết bị.");
-        throw error; 
+        throw error;
     }
 };
 
 const EquipmentList = () => {
     const [editingEquipment, setEditingEquipment] = useState(null);
-    const [confirmDelete, setConfirmDelete] = useState(false); 
+    const [confirmDelete, setConfirmDelete] = useState(false);
     const [equipmentToDelete, setEquipmentToDelete] = useState(null);
     const queryClient = useQueryClient();
 
-    const { data: equipments, error, isLoading } = useQuery({
+    const { data: equipments = [], error, isLoading } = useQuery({
         queryKey: ['equipments'],
         queryFn: fetchEquipments,
         staleTime: 5 * 60 * 1000,
@@ -50,13 +50,13 @@ const EquipmentList = () => {
         try {
             await wDelete(`/api/equipment/${equipmentToDelete}`);
             toast.success("Xóa thiết bị thành công!");
-            setConfirmDelete(false); 
-            setEquipmentToDelete(null); 
+            setConfirmDelete(false);
+            setEquipmentToDelete(null);
             queryClient.invalidateQueries(['equipments']);
         } catch (error) {
             console.error("Error deleting equipment:", error);
             toast.error("Có lỗi xảy ra khi xóa thiết bị.");
-            setConfirmDelete(false); 
+            setConfirmDelete(false);
         }
     };
 
@@ -136,7 +136,7 @@ const EquipmentList = () => {
                                 />
                             </div>
                             <div className="p-4">
-                                <h3 className="text-lg font-semibold flex " >
+                                <h3 className="text-lg font-semibold flex ">
                                     <p className={"mt-2 flex "}>
                                         Loại: <span className={"font-bold ml-1"}>{equipment.equipmentType.name}</span>
                                     </p>
@@ -145,10 +145,7 @@ const EquipmentList = () => {
                                     Mã số thiết bị: {equipment.id}
                                 </p>
                                 <p className={`mt-2 font-semibold`}>
-                                    Giá: {equipment.price.toLocaleString()} VNĐ
-                                </p>
-                                <p className={`mt-2 font-semibold`}>
-                                    Số lượng: {equipment.amount}
+                                    Phòng: {equipment.room.name}
                                 </p>
                                 <p className={`mt-2 ${getStatusColor(equipment.status)}`}>
                                     Trạng thái: {equipment.status}
