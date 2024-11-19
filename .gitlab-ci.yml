@@ -42,5 +42,5 @@ pull-image:
       echo \"$ENV\" > ~/secrets/.env.tttd &&
       sudo docker pull htilssu/trungtamthethao:latest &&
       sudo docker rm trungtamthethao -f &&
-      sudo docker run --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p $PORT:8080 htilssu/trungtamthethao:latest
+      sudo docker run --log-opt max-size=10m --log-opt max-file=3 --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p $PORT:8080 htilssu/trungtamthethao:latest
       "
