@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { wGet, wPost } from "../../../../utils/request.util.js";
-import { toast } from "react-toastify";
+import {wGet, wPost} from "../../../../utils/request.util.js";
+import {useEffect, useState} from "react";
+import {useQuery} from "@tanstack/react-query";
+import {toast} from "react-toastify";
+import {queryClient} from "../../../../modules/cache.js";
 import SearchBar from "./components/SearchBar.jsx";
 import AdminTable from "./components/AdminTable.jsx";
 import AdminEditModal from "./components/AdminEditModal.jsx";
 import AdminDeleteModal from "./components/AdminDeleteModal.jsx";
-import { queryClient } from "../../../../modules/cache.js";
 
 const fetchAdmins = async () => {
-    const response = await wGet('/v1/permission/roles/1');
+    const response = await wGet('/v1/permission/roles/3');
     return response?.users || [];
 };
 
@@ -21,7 +21,7 @@ const updateAdminRole = async (userId, roleId) => {
     return response;
 };
 
-const RolesUser = ({ roles }) => {
+const RolesCoach = ({ roles }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [editingAdmin, setEditingAdmin] = useState(null);
     const [newRole, setNewRole] = useState('');
@@ -30,7 +30,7 @@ const RolesUser = ({ roles }) => {
 
     const { data: admins, isLoading, isError } = useQuery(
         {
-            queryKey: ['users'],
+            queryKey: ['coaches'],
             queryFn: fetchAdmins,
             cacheTime: 5 * 60 * 1000,
             staleTime: 10 * 60 * 1000,
@@ -93,14 +93,14 @@ const RolesUser = ({ roles }) => {
 
     return (
         <div className="max-w-7xl mx-auto p-6 bg-gray-50">
-            <h1 className="text-4xl font-bold text-gray-600 mb-4 text-center">
-                Danh sách User
+            <h1 className="text-4xl font-bold text-green-600 mb-4 text-center">
+                Danh sách Huấn Luyện Viên
             </h1>
 
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
 
             <AdminTable admins={admins} filteredAdmins={filteredAdmins} handleEdit={handleEdit}
-                        handleDelete={setAdminToDelete} roleName={"User"}/>
+                        handleDelete={setAdminToDelete} roleName={"HLV"}/>
 
             {editingAdmin && (
                 <AdminEditModal
@@ -124,4 +124,4 @@ const RolesUser = ({ roles }) => {
     );
 };
 
-export default RolesUser;
+export default RolesCoach;
