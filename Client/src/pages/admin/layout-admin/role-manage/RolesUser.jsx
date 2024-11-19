@@ -1,41 +1,47 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { wGet, wPost } from "../../../../utils/request.util.js";
+import { toast } from "react-toastify";
 import SearchBar from "./components/SearchBar.jsx";
-import RolesManager from "./RolesManager.jsx";
 import AdminTable from "./components/AdminTable.jsx";
 import AdminEditModal from "./components/AdminEditModal.jsx";
 import AdminDeleteModal from "./components/AdminDeleteModal.jsx";
+import { queryClient } from "../../../../modules/cache.js";
 
-const RolesUser = () => {
-    const [admins, setAdmins] = useState([]);
+const fetchAdmins = async () => {
+    const response = await wGet('/v1/permission/roles/1');
+    return response?.users || [];
+};
+
+const updateAdminRole = async (userId, roleId) => {
+    const response = await wPost('/v1/permission/roles/assign', {
+        "userId": userId,
+        "roleId": roleId
+    });
+    return response;
+};
+
+const RolesUser = ({ roles }) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredAdmins, setFilteredAdmins] = useState([]);
     const [editingAdmin, setEditingAdmin] = useState(null);
     const [newRole, setNewRole] = useState('');
     const [adminToDelete, setAdminToDelete] = useState(null);
-    const [isRolesManagerOpen, setIsRolesManagerOpen] = useState(false);
-    const [roles, setRoles] = useState([]);
+    const [filteredAdmins, setFilteredAdmins] = useState([]);
+
+    const { data: admins, isLoading, isError } = useQuery(
+        {
+            queryKey: ['users'],
+            queryFn: fetchAdmins,
+            cacheTime: 5 * 60 * 1000,
+            staleTime: 10 * 60 * 1000,
+            refetchOnWindowFocus: false, // Không refetch khi chuyển tab
+        }
+    );
 
     useEffect(() => {
-        const fetchAdmins = async () => {
-            const data = [{id: 1, name: 'Nguyễn Văn A', email: 'admin1@example.com', role: 'Admin'}, {
-                id: 2,
-                name: 'Trần Thị B',
-                email: 'admin2@example.com',
-                role: 'Admin'
-            }, {id: 3, name: 'Lê Văn C', email: 'admin3@example.com', role: 'HLV'}, {
-                id: 4,
-                name: 'Phạm Thị D',
-                email: 'admin4@example.com',
-                role: 'Super-Admin'
-            },];
-            setAdmins(data);
-            setFilteredAdmins(data);
-        };
-        fetchAdmins();
-    }, []);
-
-    useEffect(() => {
-        const filtered = admins.filter((admin) => admin.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        const filtered = (admins || []).filter((admin) =>
+            admin.lastName?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
         setFilteredAdmins(filtered);
     }, [searchTerm, admins]);
 
@@ -45,63 +51,77 @@ const RolesUser = () => {
     };
 
     const handleSave = () => {
-        setAdmins((prevAdmins) => prevAdmins.map((admin) => admin.id === editingAdmin.id ? {
-            ...admin,
-            role: newRole
-        } : admin));
-        setEditingAdmin(null);
+        if (newRole) {
+            // Lấy roleId từ danh sách roles
+            const selectedRole = roles.find(role => role.name === newRole);
+            // Gọi API để cập nhật quyền
+            try {
+                const response = updateAdminRole(editingAdmin.id, selectedRole.id);
+
+                console.log('Cập nhật quyền thành công', response);
+
+                setTimeout(() => {
+                    queryClient.invalidateQueries('coaches');
+                    queryClient.invalidateQueries('users');
+                    queryClient.invalidateQueries('admins');
+                    setEditingAdmin(null);
+                    toast.info('Cập nhật quyền thành công');
+                }, 2000);
+
+            } catch (error) {
+                console.error('Cập nhật quyền thất bại', error);
+                toast.error('Cập nhật quyền thất bại');
+            }
+        }
     };
 
     const handleDelete = () => {
         if (adminToDelete) {
-            setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminToDelete.id));
+            // Gửi request xóa admin
+            toast.info('Đang xóa admin...');
             setAdminToDelete(null);
         }
     };
 
-    const toggleRolesManager = () => {
-        setIsRolesManagerOpen(!isRolesManagerOpen);
-    };
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-    const handleRolesUpdate = (updatedRoles) => {
-        setRoles(updatedRoles);
-    };
+    if (isError) {
+        return <div>Error fetching admins. Please try again later.</div>;
+    }
 
-    return (<div className="max-w-7xl mx-auto px-6">
-            <h1 className="text-4xl text-center font-semibold text-gray-800 mb-6">Phân Quyền Hệ Thống</h1>
-            <button
-                onClick={toggleRolesManager}
-                className={`py-2 px-6 rounded-lg text-white transition-all duration-300 mb-2 
-                ${isRolesManagerOpen ? 'bg-gray-400 hover:bg-gray-500' : 'bg-emerald-500 hover:bg-emerald-600'}`}
-            >
-                {isRolesManagerOpen ? "Đóng Quản Lý Vai Trò" : "Quản Lý Vai Trò"}
-            </button>
-            {isRolesManagerOpen && <RolesManager onRolesUpdate={handleRolesUpdate}/>}
+    return (
+        <div className="max-w-7xl mx-auto p-6 bg-gray-50">
+            <h1 className="text-4xl font-bold text-gray-600 mb-4 text-center">
+                Danh sách User
+            </h1>
 
-            <div className={"bg-white rounded-xl p-4"}>
-                <h1 className="text-3xl font-semibold text-gray-800 mb-6">Danh sách Admin</h1>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
 
-                <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+            <AdminTable admins={admins} filteredAdmins={filteredAdmins} handleEdit={handleEdit}
+                        handleDelete={setAdminToDelete} roleName={"User"}/>
 
-                <AdminTable admins={admins} filteredAdmins={filteredAdmins} handleEdit={handleEdit}
-                            handleDelete={setAdminToDelete}/>
-            </div>
-
-            {editingAdmin && (<AdminEditModal
+            {editingAdmin && (
+                <AdminEditModal
                     editingAdmin={editingAdmin}
-                    roles={roles}
+                    roles={roles}  /* Truyền roles vào AdminEditModal */
                     newRole={newRole}
                     setNewRole={setNewRole}
                     handleSave={handleSave}
                     handleClose={() => setEditingAdmin(null)}
-                />)}
+                />
+            )}
 
-            {adminToDelete && (<AdminDeleteModal
+            {adminToDelete && (
+                <AdminDeleteModal
                     adminToDelete={adminToDelete}
                     handleDelete={handleDelete}
                     handleClose={() => setAdminToDelete(null)}
-                />)}
-        </div>);
+                />
+            )}
+        </div>
+    );
 };
 
 export default RolesUser;

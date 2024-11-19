@@ -1,45 +1,85 @@
-const SwimPage = () => {
+import { FaSwimmingPool, FaShieldAlt, FaConciergeBell } from 'react-icons/fa'; 
+import { FaHandHoldingUsd } from 'react-icons/fa';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './swim.css';
 
+const SwimPage = () => {
     const pools = [
         { 
             name: "Hồ bơi 1", 
-            image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7" 
+            image: "hoboi1.jpg" 
         },
         { 
             name: "Hồ bơi 2", 
-            image: "https://images.unsplash.com/photo-1519681393784-d120267933ba" 
+            image: "hoboi2.jpg" 
         },
         { 
             name: "Hồ bơi 3", 
-            image: "https://images.unsplash.com/photo-1590779033100-9f60a05a013d" 
+            image: "hoboi3.jpg" 
         },
         { 
             name: "Hồ bơi 4", 
-            image: "https://images.unsplash.com/photo-1590785855011-59054669ef0f" 
+            image: "hoboi4.jpg" 
         },
         { 
             name: "Hồ bơi 5", 
-            image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7" 
+            image: "hoboi5.jpg" 
         }
     ];
+
+    const navigate = useNavigate();
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleClick = () => {
+        setSubmitted(true);
+        setTimeout(() => {
+            setSubmitted(false);
+            navigate('/booking-swim');
+        }, 2000);
+    };
+
+    const handleClickBooking = () => {
+        navigate('/booking-swim');
+    };
 
     return (
         <div className="min-h-screen bg-gray-50">
 
-            {/* Hero Section */}
             <div className="relative mt-20">
-                <div className="absolute inset-0 bg-black/50"></div>
+                <div className="absolute inset-0 bg-black/60"></div>
                 <img
-                    src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                    src="hoboi.jpg"
                     alt="Swimming Pool"
                     className="w-full h-[600px] object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center text-center">
+                <div className="fixed bottom-9 right-16 z-50">
+                    <button
+                        onClick={handleClickBooking}
+                        className="relative inline-flex items-center justify-center px-8 py-4 overflow-hidden text-white bg-gradient-to-r from-blue-500 to-teal-500 rounded-full shadow-lg transition duration-300 group hover:animate-wobble"
+                    >
+                        <span className="absolute inset-0 w-full h-full bg-blue-400 opacity-50 rounded-full transform scale-0 transition-transform duration-500 ease-out group-hover:scale-150"></span>
+                        <span className="relative z-10">Đặt Vé Ngay</span>
+                    </button>
+                </div>
                     <div className="text-white">
                         <h1 className="text-5xl font-bold mb-4">Hồ Bơi Cao Cấp</h1>
                         <p className="text-xl mb-8">Trải nghiệm không gian thư giãn tuyệt vời</p>
-                        <button className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition">
-                            Đặt ngay
+                        <button 
+                            className="relative inline-flex items-center justify-center px-8 py-3 overflow-hidden text-white bg-blue-600 border border-transparent rounded-full group transition duration-300"
+                            onClick={handleClick}
+                        >
+                            <span className="absolute inset-0 w-full h-full bg-blue-700 transform scale-0 transition-transform duration-300 ease-in-out group-hover:scale-125"></span>
+                            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-300 to-blue-600 opacity-60 blur-md group-hover:opacity-100 group-hover:animate-pulse"></span>
+
+                            <span className="relative z-10 flex items-center">
+                                {submitted ? (
+                                    <FaHandHoldingUsd className="text-2xl animate-bounce" /> 
+                                ) : (
+                                    "Đặt ngay"
+                                )}
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -52,8 +92,8 @@ const SwimPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* Feature 1 */}
                         <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <div className="text-blue-600 text-4xl mb-4">
-                                <i className="fas fa-swimming-pool"></i>
+                            <div className="text-blue-600 text-4xl mb-4 flex justify-center">
+                                <FaSwimmingPool />
                             </div>
                             <h3 className="text-xl font-semibold mb-2">Hồ bơi riêng tư</h3>
                             <p className="text-gray-600">Không gian riêng tư, sang trọng dành cho bạn và gia đình</p>
@@ -61,8 +101,8 @@ const SwimPage = () => {
 
                         {/* Feature 2 */}
                         <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <div className="text-blue-600 text-4xl mb-4">
-                                <i className="fas fa-shield-alt"></i>
+                            <div className="text-blue-600 text-4xl mb-4 flex justify-center">
+                                <FaShieldAlt />
                             </div>
                             <h3 className="text-xl font-semibold mb-2">An toàn tuyệt đối</h3>
                             <p className="text-gray-600">Đội ngũ cứu hộ chuyên nghiệp, hệ thống lọc nước hiện đại</p>
@@ -70,8 +110,8 @@ const SwimPage = () => {
 
                         {/* Feature 3 */}
                         <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <div className="text-blue-600 text-4xl mb-4">
-                                <i className="fas fa-concierge-bell"></i>
+                            <div className="text-blue-600 text-4xl mb-4 flex justify-center">
+                                <FaConciergeBell />
                             </div>
                             <h3 className="text-xl font-semibold mb-2">Tiện nghi đầy đủ</h3>
                             <p className="text-gray-600">Phòng thay đồ, nhà tắm, cafe, đồ ăn nhẹ</p>
@@ -86,22 +126,23 @@ const SwimPage = () => {
                     <h2 className="text-4xl font-bold text-center mb-12 text-blue-800">
                         Không Gian Hồ Bơi
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        {[
-                            "",
-                            "",
-                            "",
-                            "",
-                        ].map((img, index) => (
-                            <div
-                                key={index}
-                                className="overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition duration-300"
+                    <div className="flex justify-center items-center my-[10vmin] transform skew-x-[5deg] px-4 md:px-0 mx-5">
+                        {pools.map((pool, index) => (
+                            <div 
+                                key={index} 
+                                className={`w-[200px] transition-all duration-1000 ease-in-out h-[50vmin] relative ${index !== pools.length - 1 ? 'mr-4' : ''} hover:flex-grow-[10] group`}
                             >
-                                <img
-                                    src={img}
-                                    alt={`Pool Image ${index + 1}`}
-                                    className="w-full h-64 object-cover"
+                                <img 
+                                    src={pool.image} 
+                                    alt={pool.name}
+                                    className="w-full h-full object-cover transition-all duration-1000 ease-in-out grayscale group-hover:grayscale-0"
                                 />
+                                <div 
+                                    className="absolute bottom-0 left-10 min-w-full bg-blue-400 bg-opacity-75 text-black p-2 -rotate-90 origin-bottom-left transition-all duration-500 ease-in-out text-center text-base whitespace-nowrap
+                                        group-hover:rotate-0 group-hover:top-[calc(100%-2em)] group-hover:bg-black group-hover:bg-opacity-50 group-hover:text-white group-hover:text-2xl group-hover:left-0 group-hover:-skew-x-[1deg]"
+                                >
+                                    {pool.name}
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -157,12 +198,12 @@ const SwimPage = () => {
                             {
                                 name: "Nguyễn Văn A",
                                 title: "Chuyên Gia Bơi Chuyên Nghiệp",
-                                image: ""
+                                image: "https://via.placeholder.com/300"
                             },
                             {
                                 name: "Trần Thị B",
                                 title: "Huấn Luyện Viên Quốc Gia",
-                                image: ""
+                                image: "https://via.placeholder.com/300"
                             },
                             // Thêm nhiều HLV khác
                         ].map((trainer, index) => (
@@ -232,76 +273,8 @@ const SwimPage = () => {
                     </div>
                 </div>
             </section>
-            
-
-            <div className="flex justify-center items-center my-[10vmin] transform skew-x-[5deg]">
-            {pools.map((pool, index) => (
-                <div 
-                    key={index} 
-                    className={`
-                        flex-1 
-                        transition-all 
-                        duration-1000 
-                        ease-in-out 
-                        h-[75vmin] 
-                        relative 
-                        ${index !== pools.length - 1 ? 'mr-4' : ''}
-                        hover:flex-grow-[10]
-                        group
-                    `}
-                >
-                    <img 
-                        src={pool.image} 
-                        alt={pool.name}
-                        className="
-                            w-full 
-                            h-full 
-                            object-cover 
-                            transition-all 
-                            duration-1000 
-                            ease-in-out 
-                            grayscale 
-                            group-hover:grayscale-0
-                        "
-                    />
-                    <div 
-                        className="
-                            absolute 
-                            bottom-0 
-                            left-0 
-                            min-w-full 
-                            bg-pink-500 
-                            bg-opacity-75 
-                            text-black 
-                            p-2 
-                            -rotate-90 
-                            origin-bottom-left 
-                            transition-all 
-                            duration-500 
-                            ease-in-out 
-                            text-center 
-                            text-base 
-                            whitespace-nowrap
-
-                            group-hover:rotate-0 
-                            group-hover:top-[calc(100%-2em)] 
-                            group-hover:bg-black 
-                            group-hover:bg-opacity-50 
-                            group-hover:text-white 
-                            group-hover:text-2xl 
-                            group-hover:-skew-x-[5deg]
-                        "
-                    >
-                        {pool.name}
-                    </div>
-                </div>
-            ))}
         </div>
-        </div>
-
-        
     );
 }
 
 export default SwimPage;
-

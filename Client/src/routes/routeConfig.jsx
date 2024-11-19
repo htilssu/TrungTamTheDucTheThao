@@ -34,11 +34,12 @@ import Equipment from '../pages/admin/equipment/Equipment.jsx';
 import EquipmentList from '../pages/admin/equipment/EquipmentList.jsx';
 import HistoryBookingAdmin from '../pages/admin/layout-admin/football-manage/HistoryBookingPage.jsx';
 import SwimPage from '../pages/swim/SwimPage.jsx';
+import BookingSwim from '../pages/swim/booking/BookingSwim.jsx';
+import BookingDetail from '../pages/swim/booking/BookinngDetail.jsx';
 import NotHavePermission from '../layouts/NotHavePermission.jsx';
 import AuthorizedView from '../layouts/AuthorizedView.jsx';
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx';
-
-
+import RoomTypes from './../pages/admin/layout-admin/gym-manage/room-types/RoomTypes';
 import CheckoutPage from "../modules/core/components/check-out/CheckoutPage.jsx";
 import PaymentSuccessPage from "../modules/core/components/check-out/PaymentSuccessPage.jsx";
 
@@ -51,6 +52,46 @@ export const router = createBrowserRouter([
         path: '',
         element: <AdminDashboard/>,
         children: [
+            {
+                index: true,
+                element: <HomeAdminLayout/>,
+            },
+            {
+                path: 'post-manage',
+                element: <PostLayout/>,
+            },
+            {
+                path: 'room-manage',
+                element: <RoomLayout/>,
+                children: [
+                  {
+                      index: true,
+                      element: <Room/>,
+                  },{
+                    path: 'room-types',
+                    element: <RoomTypes/>,
+                  },{
+                    path: 'room-list',
+                    element: <Room/>,
+                },
+              ]
+            },
+            {
+                path: 'customer-manage',
+                element: <CustomerLayout/>,
+            },
+            {
+                path: 'statistic-manage',
+                element: <StatisticalLayout/>,
+            },
+            {
+                path: 'employee-manage',
+                element: <EmployeeLayout/>,
+            },
+            {
+                path: 'courses-manage',
+                element: <CoursesManage/>,
+            },
           {
             index: true,
             element: <HomeAdminLayout/>,
@@ -175,6 +216,22 @@ export const router = createBrowserRouter([
         element: <SwimPage/>,
       },
       {
+        path: 'booking-swim',
+        element: <BookingSwim/>,
+      },
+      {
+        path: 'booking-detail',
+        element: <BookingDetail/>,
+      },
+      {
+        path: 'booking-swim',
+        element: <BookingSwim/>,
+      },
+      {
+        path: 'booking-detail',
+        element: <BookingDetail/>,
+      },
+      {
         path: 'user/:id',
         element: <UserDisplay/>,
       },
@@ -194,7 +251,15 @@ export const router = createBrowserRouter([
       {
         path: '/contact',
         element: <ContactPage/>,
-      }
+      },
+      {
+        path: '/checkout',
+        element: <CheckoutPage/>,
+      },
+      {
+        path: '/payment-success/:bookingId',
+        element: <PaymentSuccessPage/>,
+      },
     ],
     errorElement: <PageNotFound/>,
   },

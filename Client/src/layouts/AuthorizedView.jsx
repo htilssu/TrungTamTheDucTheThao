@@ -1,13 +1,13 @@
 import {useAuth} from '../context/UserContext.jsx';
 import {Outlet, useNavigate} from 'react-router-dom';
 
-const AuthorizedView = ({role, children}) => {
+const AuthorizedView = ({role}) => {
   const navigate = useNavigate();
 
   const {isLoading, user} = useAuth();
 
   if (!isLoading) {
-    if (user.role !== role) {
+    if (user.roleName !== role) {
       navigate('/403');
     }
   }

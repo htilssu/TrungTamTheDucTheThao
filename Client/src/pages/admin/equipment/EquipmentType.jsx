@@ -1,179 +1,182 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { wDelete, wGet, wPost, wPut } from "../../../utils/request.util.js";
+import EditCategoryForm from "./EditEquipmentType.jsx";
+import {toast} from "react-toastify";
+
 
 const CategoryForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        amount: ''
-    });
+    const [formData, setFormData] = useState({ name: '', amount: '' });
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
-    const [editingCategory, setEditingCategory] = useState(null); // To track which category is being edited
+    const [editingCategory, setEditingCategory] = useState(null);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(''); // Reset error
-
-        try {
-            if (editingCategory) {
-                // If editing, send PUT request to update the category
-                const response = await axios.put(`http://localhost:8080/api/equipment-types/${editingCategory.id}`, {
-                    name: formData.name,
-                    amount: parseInt(formData.amount, 10),
-                });
-
-                // Update the category in the list
-                setCategories((prevCategories) => prevCategories.map((category) =>
-                    category.id === editingCategory.id ? response.data : category
-                ));
-                setEditingCategory(null); // Reset editing state
-            } else {
-                // If creating new category, send POST request
-                const response = await axios.post('http://localhost:8080/api/equipment-types', {
-                    name: formData.name,
-                    amount: parseInt(formData.amount, 10),
-                });
-
-                // Add the new category to the list
-                setCategories((prevCategories) => [...prevCategories, response.data]);
-            }
-
-            // Reset form data after submission
-            setFormData({
-                name: '',
-                amount: ''
-            });
-        } catch (err) {
-            console.error(err);
-            setError('Đã xảy ra lỗi khi tạo/sửa thể loại thiết bị.');
-        }
-    };
-
+    // Fetch list of categories
     const getCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/equipment-types');
-            setCategories(response.data);
+            const response = await wGet('/api/equipment-types');
+
+            const data = await response.json()
+            setCategories(data);
         } catch (err) {
             console.error(err);
             setError('Đã xảy ra lỗi khi lấy danh sách thể loại thiết bị.');
         }
     };
 
-    const handleEdit = (category) => {
-        setEditingCategory(category);
-        setFormData({
-            name: category.name,
-            amount: category.amount
-        });
+    useEffect(() => {
+        getCategories(); // Initial data fetch
+    }, []);
+
+    // Handle form field changes
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
     };
 
-    const handleDelete = async (id) => {
+    // Handle form submission (Create new category)
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        if (!formData.name || !formData.amount) {
+            setError('Tên thể loại và số lượng không được để trống.');
+            return;
+        }
+
         try {
-            // Call API to delete category
-            await axios.delete(`http://localhost:8080/api/equipment-types/${id}`);
-            // Remove category from the list
-            setCategories((prevCategories) => prevCategories.filter((category) => category.id !== id));
+            const response = await wPost('/api/equipment-types',
+
+                {
+                name: formData.name,
+                amount: parseInt(formData.amount, 10),
+            })
+            const data = await response.json();
+
+            // Update the category list with the newly created category
+            setCategories(prevCategories => [...prevCategories, data]);
+
+            // Reset form data after submission
+            setFormData({ name: '', amount: '' });
+            toast.success('Thêm thể loại thành công!');
         } catch (err) {
             console.error(err);
-            setError('Đã xảy ra lỗi khi xóa thể loại thiết bị.');
+            setError('Đã xảy ra lỗi khi tạo thể loại thiết bị.');
+            toast.error('Đã xảy ra lỗi khi tạo thể loại thiết bị.');
         }
     };
 
-    const handleCancel = () => {
-        // Reset form to initial state and stop editing
-        setEditingCategory(null);
-        setFormData({
-            name: '',
-            amount: ''
-        });
+    // Handle edit action
+    const handleEdit = (category) => {
+        setEditingCategory(category);
     };
 
-    // Call getCategories when the component is mounted
-    useEffect(() => {
-        getCategories();
-    }, []);
+    // Handle delete action
+    const handleDelete = async (id) => {
+        try {
+            await wDelete(`/api/equipment-types/${id}`);
+            setCategories(prevCategories => prevCategories.filter(category => category.id !== id));
+            toast.success('Xóa thể loại thành công!');
+        } catch (err) {
+            console.error(err);
+            setError('Đã xảy ra lỗi khi xóa thể loại thiết bị.');
+            toast.error('Đã xảy ra lỗi khi xóa thể loại thiết bị.');
+        }
+    };
+
+    // Handle update action after editing
+    // Handle update action after editing
+    const handleUpdate = async (updatedCategory) => {
+        try {
+            await wPut(`/api/equipment-types/${updatedCategory.id}`, {
+                name: updatedCategory.name,
+                amount: updatedCategory.amount
+            });
+            getCategories();
+            setEditingCategory(null);
+            setEditingCategory(null);
+            toast.success('Cập nhật thể loại thành công!');
+        } catch (error) {
+            console.error('Lỗi cập nhật:', error);
+            toast.error('Cập nhật thất bại');
+        }
+    };
+
+    // Handle cancel edit
+    const handleCancel = () => {
+        setEditingCategory(null);
+    };
 
     return (
         <div className="flex justify-center items-start space-x-6 p-4 mt-32">
+            {/* Form to create new category */}
             <div className="max-w-md w-full p-4 bg-white shadow-md rounded-md">
-                <h2 className="flex justify-center font-bold text-2xl mb-5">
-                    {editingCategory ? 'Sửa Thể Loại Trang Thiết Bị' : 'Đăng Ký Thể Loại Trang Thiết Bị'}
-                </h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {error && <p className="text-red-500">{error}</p>}
-                    <div className="relative">
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="peer placeholder-transparent w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
-                            placeholder="Tên Thể Loại Thiết Bị"
-                            required
-                        />
-                        <label
-                            htmlFor="name"
-                            className="absolute -top-3 left-3 bg-white px-1 text-gray-500 transition-all duration-300 transform peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-500"
-                        >
-                            Tên Thể Loại Thiết Bị
-                        </label>
+                {editingCategory ? (
+                    <EditCategoryForm
+                        category={editingCategory}
+                        onCancel={handleCancel}
+                        onUpdate={handleUpdate}
+                    />
+                ) : (
+                    <div>
+                        <h2 className="flex justify-center font-bold text-2xl mb-5">
+                            Đăng Ký Thể Loại Trang Thiết Bị
+                        </h2>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {error && <p className="text-red-500">{error}</p>}
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className="peer placeholder-transparent w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+                                    placeholder="Tên Thể Loại Thiết Bị"
+                                    required
+                                />
+                                <label
+                                    htmlFor="name"
+                                    className="absolute -top-3 left-3 bg-white px-1 text-gray-500 transition-all duration-300 transform peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-500"
+                                >
+                                    Tên Thể Loại Thiết Bị
+                                </label>
+                            </div>
+
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    id="amount"
+                                    name="amount"
+                                    value={formData.amount}
+                                    onChange={handleChange}
+                                    className="peer placeholder-transparent w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+                                    placeholder="Số Lượng"
+                                    required
+                                    min="1"
+                                />
+                                <label
+                                    htmlFor="amount"
+                                    className="absolute -top-3 left-3 bg-white px-1 text-gray-500 transition-all duration-300 transform peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-500"
+                                >
+                                    Số Lượng
+                                </label>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+                            >
+                                Đăng Ký
+                            </button>
+                        </form>
                     </div>
-
-                    <div className="relative">
-                        <input
-                            type="number"
-                            id="amount"
-                            name="amount"
-                            value={formData.amount}
-                            onChange={handleChange}
-                            onKeyPress={(e) => {
-                                if (!/^[0-9]+$/.test(e.key)) {
-                                    e.preventDefault();
-                                }
-                            }}
-                            className="peer placeholder-transparent w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
-                            placeholder="Số Lượng"
-                            required
-                            min="1"
-                        />
-                        <label
-                            htmlFor="amount"
-                            className="absolute -top-3 left-3 bg-white px-1 text-gray-500 transition-all duration-300 transform peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-500"
-                        >
-                            Số Lượng
-                        </label>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
-                    >
-                        {editingCategory ? 'Cập Nhật' : 'Đăng Ký'}
-                    </button>
-
-                    {/* Cancel button */}
-                    {editingCategory && (
-                        <button
-                            type="button"
-                            onClick={handleCancel}
-                            className="w-full bg-gray-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors mt-2"
-                        >
-                            Hủy
-                        </button>
-                    )}
-                </form>
+                )}
             </div>
 
-            {/* Category List with Edit and Delete */}
+            {/* List of categories */}
             <div className="max-w-md w-full p-4 bg-white border-[1px] text-black rounded-md">
                 <h2 className="text-2xl font-semibold mb-4">Danh Sách Thể Loại</h2>
                 {categories.length > 0 ? (
@@ -200,7 +203,7 @@ const CategoryForm = () => {
                         ))}
                     </ul>
                 ) : (
-                    <p>Chưa có thể loại nào được đăng ký.</p>
+                    <p className="text-gray-500">Chưa có thể loại thiết bị nào.</p>
                 )}
             </div>
         </div>
