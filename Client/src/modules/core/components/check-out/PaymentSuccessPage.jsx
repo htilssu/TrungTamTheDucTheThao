@@ -2,12 +2,19 @@ import {useParams} from 'react-router-dom';
 import {wGet} from '../../../../utils/request.util.js';
 import {useQuery} from '@tanstack/react-query';
 
+const fetchBookingData = async (bookingId) => {
+    const response = await wGet(`/v1/booking-field/${bookingId}`);
+    return response.json();
+}
+
 function PaymentSuccessPage() {
     const {bookingId} = useParams();
 
     // Sử dụng useQuery để fetch dữ liệu bookingData
     const {data: bookingData, error, isLoading} = useQuery({
-        queryKey: ['bookingData', bookingId], queryFn: () => wGet(`/v1/booking-field/${bookingId}`), staleTime: 300000, // 5 phút
+        queryKey: ['bookingData', bookingId],
+        queryFn: fetchBookingData(bookingId),
+        staleTime: 300000, // 5 phút
         cacheTime: 600000, // 10 phút
     });
 

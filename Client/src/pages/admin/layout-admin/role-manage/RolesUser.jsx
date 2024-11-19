@@ -10,7 +10,8 @@ import { queryClient } from "../../../../modules/cache.js";
 
 const fetchAdmins = async () => {
     const response = await wGet('/v1/permission/roles/1');
-    return response?.users || [];
+    const responseJson = await response.json();
+    return responseJson?.users || [];
 };
 
 const updateAdminRole = async (userId, roleId) => {

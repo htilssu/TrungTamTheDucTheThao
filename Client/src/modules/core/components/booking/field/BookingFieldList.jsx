@@ -26,7 +26,7 @@ const BookingFieldList = () => {
             setLoading(true);
             try {
                 const response = await wGet(`/v1/booking-field/user/${customerId}`);
-                setBookings(response);
+                setBookings(response.json());
             } catch (error) {
                 console.error("Error fetching bookings:", error);
             } finally {

@@ -7,7 +7,7 @@ import {wGet} from "../../../../utils/request.util.js";
 // Hàm fetch dữ liệu
 const fetchFields = async () => {
     const response = await wGet("/v1/fields");
-    return response ?? [];
+    return response.json() ?? [];
 };
 
 const FieldListPage = () => {

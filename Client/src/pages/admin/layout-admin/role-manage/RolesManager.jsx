@@ -8,7 +8,7 @@ import {toast, ToastContainer} from "react-toastify";
 
 const fetchRoles = async () => {
     const response = await wGet('/v1/permission/roles');
-    return response || [];
+    return response.json() || [];
 };
 
 const RolesManager = () => {
