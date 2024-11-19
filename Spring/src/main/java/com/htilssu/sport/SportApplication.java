@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @EnableWebSecurity
 @EnableWebMvc
-@EnableJpaRepositories("com.htilssu.sport.repositories")
+@EnableJpaRepositories("com.htilssu.sport.repository")
 @Configuration
 public class SportApplication {
 

@@ -2,7 +2,7 @@
 package com.htilssu.sport.data.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.htilssu.sport.validations.MinAge;
+import com.htilssu.sport.validation.MinAge;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
