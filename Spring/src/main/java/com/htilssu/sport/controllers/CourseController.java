@@ -1,23 +1,14 @@
 package com.htilssu.sport.controllers;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.htilssu.sport.data.dtos.CourseDto;
-import com.htilssu.sport.data.mappers.CourseMapper;
 import com.htilssu.sport.data.models.Course;
+import com.htilssu.sport.data.mappers.CourseMapper;
 import com.htilssu.sport.services.CourseService;
-
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -42,8 +33,13 @@ public class CourseController {
 
     @PostMapping("/add")
     public CourseDto createCourse(@RequestBody CourseDto courseDto) {
+        // Ánh xạ từ DTO sang Entity
         Course course = courseMapper.toEntity(courseDto);
+
+        // Lưu khóa học vào cơ sở dữ liệu
         Course savedCourse = courseService.createCourse(course);
+
+        // Trả về DTO của khóa học vừa lưu
         return courseMapper.toDto(savedCourse);
     }
 

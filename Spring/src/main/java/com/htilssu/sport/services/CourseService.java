@@ -1,7 +1,12 @@
 package com.htilssu.sport.services;
 
+import com.htilssu.sport.data.models.Coach;
 import com.htilssu.sport.data.models.Course;
+import com.htilssu.sport.data.models.Room;
+import com.htilssu.sport.repositories.CoachRepository;
 import com.htilssu.sport.repositories.CourseRepository;
+import com.htilssu.sport.repositories.RoomRepository;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +18,8 @@ import java.util.Optional;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final CoachRepository coachRepository;
+    private final RoomRepository roomRepository;
 
     // Lấy tất cả khóa học
     public List<Course> getAllCourses() {
@@ -26,6 +33,19 @@ public class CourseService {
 
     // Tạo khóa học
     public Course createCourse(Course course) {
+        // Lấy Coach từ ID trong Course
+        Long coachId = course.getCoach().getId();
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy Coach với ID: " + coachId));
+        course.setCoach(coach);
+
+        // Lấy Room từ ID trong Course
+        Long roomId = course.getRoom().getId();
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy Room với ID: " + roomId));
+        course.setRoom(room);
+
+        // Lưu khóa học vào cơ sở dữ liệu
         return courseRepository.save(course);
     }
 
@@ -42,8 +62,7 @@ public class CourseService {
         course.setStartDate(courseDetails.getStartDate());
         course.setEndDate(courseDetails.getEndDate());
         course.setSlot(courseDetails.getSlot());
-        course.setIdCoach(courseDetails.getIdCoach());
-        course.setIdRoom(courseDetails.getIdRoom());
+
         course.setThumbnail(courseDetails.getThumbnail());
 
         return courseRepository.save(course);
