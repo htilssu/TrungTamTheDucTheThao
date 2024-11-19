@@ -7,25 +7,28 @@ const AdminEditModal = ({ editingAdmin, roles, newRole, setNewRole, handleSave, 
                 <div className="flex items-center mb-6">
                     {/* Avatar Section */}
                     <Avatar
-                        alt={editingAdmin.name}
+                        alt={editingAdmin.lastName}
                         src={editingAdmin.avatarUrl || '/avatarT.png'}
-                        sx={{ width: 90, height: 90, marginRight: 2 }}
+                        sx={{width: 90, height: 90, marginRight: 2}}
                     />
                     <div>
-                        <h2 className="text-3xl font-semibold text-gray-800">{editingAdmin.name}</h2>
-                        <p className="text-gray-600">{editingAdmin.email}</p>
+                        <h2 className="text-3xl font-semibold text-gray-800">{editingAdmin.lastName}</h2>
+                        <p className="text-gray-600">{editingAdmin.email || "tuananh21@gmail.com"}</p>
                     </div>
                 </div>
 
                 {/* Admin Role Selection */}
                 <div className="mb-6">
-                    <label htmlFor="adminRole" className="block text-gray-700 font-medium mb-2">Quyền</label>
+                    <label htmlFor="adminRole" className="block text-gray-700 font-medium mb-2">Chọn quyền mới</label>
                     <select
                         id="adminRole"
                         value={newRole}
                         onChange={(e) => setNewRole(e.target.value)}
                         className="w-full p-4 border-2 border-emerald-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 transition duration-200"
                     >
+                        {/* Option mặc định "Tất Cả" */}
+                        <option value="Tất Cả">Xem Tất Cả</option>
+                        {/* Các option quyền */}
                         {roles.map((role) => (
                             <option key={role.id} value={role.name}>
                                 {role.name}

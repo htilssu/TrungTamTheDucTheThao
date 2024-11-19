@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/permission")
 @Tag(name = "Permission", description = "Permission API")
 @RestController
-@IsAdmin
+//@IsAdmin
 @AllArgsConstructor
 public class PermissionController {
 

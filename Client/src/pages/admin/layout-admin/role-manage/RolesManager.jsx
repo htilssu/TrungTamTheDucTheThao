@@ -1,24 +1,34 @@
-import { useState, useEffect } from 'react';
+import {useState} from 'react';
 import RoleForm from "./components/RoleForm.jsx";
 import RolesList from "./components/RolesList.jsx";
 import EditRoleModal from "./components/EditRoleModal.jsx";
+import {wGet} from "../../../../utils/request.util.js";
+import {useQuery} from "@tanstack/react-query";
+import {toast, ToastContainer} from "react-toastify";
 
-const RolesManager = ({ onRolesUpdate }) => {
-    const [roles, setRoles] = useState([
-        { id: 1, name: 'Admin', description: 'Quản lý toàn bộ hệ thống' },
-        { id: 2, name: 'User', description: 'Người dùng có quyền truy cập cơ bản' },
-    ]);
+const fetchRoles = async () => {
+    const response = await wGet('/v1/permission/roles');
+    return response || [];
+};
+
+const RolesManager = () => {
+
+    const {data: roles, isLoading, isError} = useQuery(
+        {
+            queryKey: ['roles'],
+            queryFn: fetchRoles,
+            cacheTime: 5 * 60 * 1000,
+            staleTime:  60 * 1000,
+        }
+    );
+
     const [editingRole, setEditingRole] = useState(null);
-
-    useEffect(() => {
-        // Propagate the roles to parent component when updated
-        onRolesUpdate(roles);
-    }, [roles, onRolesUpdate]);
 
     const handleAddRole = (name, description) => {
         if (name.trim() && description.trim()) {
-            const newRole = { id: Date.now(), name, description };
-            setRoles((prevRoles) => [...prevRoles, newRole]);
+            const newRole = {name, description};
+            // Gửi request tạo mới role
+            toast.info('Đang tạo mới vai trò...');
         }
     };
 
@@ -27,19 +37,23 @@ const RolesManager = ({ onRolesUpdate }) => {
     };
 
     const handleSaveEdit = (updatedRole) => {
-        setRoles((prevRoles) =>
-            prevRoles.map((role) =>
-                role.id === updatedRole.id ? updatedRole : role
-            )
-        );
-        setEditingRole(null);
+        // Gửi request cập nhật role
+        toast.info('Đang cập nhật vai trò...');
     };
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error fetching roles. Please try again later.</div>;
+    }
 
     return (
         <div className="p-6 bg-white shadow-lg rounded-lg mb-10">
             <h1 className="text-2xl text-center font-bold text-gray-800 mb-2">Quản Lý Vai Trò</h1>
-            <RoleForm onAddRole={handleAddRole} roles={roles} />
-            <RolesList roles={roles} onEditRole={handleEditRole} />
+            <RoleForm onAddRole={handleAddRole} roles={roles}/>
+            <RolesList roles={roles} onEditRole={handleEditRole}/>
             {editingRole && (
                 <EditRoleModal
                     role={editingRole}
@@ -47,6 +61,7 @@ const RolesManager = ({ onRolesUpdate }) => {
                     onCancel={() => setEditingRole(null)}
                 />
             )}
+            <ToastContainer/>
         </div>
     );
 };
