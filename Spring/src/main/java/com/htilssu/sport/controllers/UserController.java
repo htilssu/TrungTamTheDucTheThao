@@ -111,13 +111,14 @@ public class UserController {
     //Lấy tất cả user trong hệ thống
     //@IsAdmin
     @GetMapping("/all")
-    public ResponseEntity<Page<User>> getAllUsers(
+    public ResponseEntity<Page<UserDto>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize
     ) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<User> userPage = userRepository.findAll(pageable);
-        return ResponseEntity.ok(userPage);
+        Page<UserDto> userDtoPage = userPage.map(userMapper::toDto);
+        return ResponseEntity.ok(userDtoPage);
     }
 
     @DeleteMapping("/{id}")
