@@ -1,46 +1,45 @@
 
-import  { useState } from "react";
-import {DatePicker} from "antd";
+import { useState, useEffect } from "react";
+import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import axios from "axios";
-import React, { useEffect } from 'react';
 import ImageSwiper from "./ImageSwiper.jsx";
-
-
+import { toast, ToastContainer } from "react-toastify";
 
 const Sellcourses = () => {
     const [courseData, setCourseData] = useState({
-        id : "",
         name: "",
         description: "",
         price: "",
-        time: [0, 0],
-        startDate: [],
-        endDate: [],
+        time: "",
+        startDate: null,
+        endDate: null,
         slot: "",
-        coach: { id: null },
-        room: { id: null },
+        coachId: "",
+        roomId: "",
     });
+
     const [coaches, setCoaches] = useState([]);
     const [rooms, setRooms] = useState([]);
+    const [images, setImages] = useState([]);
+    const [editingMode, setEditingMode] = useState(false);
+
     useEffect(() => {
         const fetchCoaches = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/coach');
-                console.log('Dữ liệu giảng viên:', response.data);
+                const response = await axios.get("http://localhost:8080/api/coach");
                 setCoaches(response.data);
             } catch (error) {
-                console.error('Có lỗi xảy ra khi lấy giảng viên:', error);
+                toast.error("Có lỗi xảy ra khi lấy giảng viên:", error);
             }
         };
 
         const fetchRooms = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/rooms');
-                console.log('Dữ liệu phòng học:', response.data);
+                const response = await axios.get("http://localhost:8080/api/rooms");
                 setRooms(response.data);
             } catch (error) {
-                console.error('Có lỗi xảy ra khi lấy phòng học:', error);
+                toast.error("Có lỗi xảy ra khi lấy phòng học:", error);
             }
         };
 
@@ -48,58 +47,32 @@ const Sellcourses = () => {
         fetchRooms();
     }, []);
 
-    const [images, setImages] = useState([]);
-    const [editingMode, setEditingMode] = useState(false);
-    const disabledDate = (current) => {
-        return current && current < dayjs().startOf('day');
-    };
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-
-        if ((name === "price" || name === "quantity" || name === "duration") && value < 0) {
-            return; 
-        }
-        if (name === "time") {
-            const timeParts = value.split(':');
-            setCourseData((prevData) => ({ ...prevData, time: [parseInt(timeParts[0]), parseInt(timeParts[1])] }));
-        } else if (name === "startDate" || name === "endDate") {
-            const dateParts = value.split('-');
-            const dateArray = dateParts.map(part => parseInt(part));
-            setCourseData((prevData) => ({ ...prevData, [name]: dateArray }));
-        } else if (name.startsWith("coach") || name.startsWith("room")) {
-            setCourseData((prevData) => ({ ...prevData, [name]: { id: parseInt(value) } }));
-        } else {
-            setCourseData((prevData) => ({ ...prevData, [name]: value }));
-        }
         setCourseData((prev) => ({
             ...prev,
             [name]: value,
         }));
     };
 
-
-    const handleKeyPress = (e) => {
-        // Ngăn chặn nhập dấu '-'
-        if (e.key === '-') {
-            e.preventDefault();
-        }
+    const handleDateChange = (date, dateString, name) => {
+        setCourseData((prev) => ({
+            ...prev,
+            [name]: dateString,
+        }));
     };
 
     const handleImageChange = (e) => {
-        const newImages = [...images];
-        if (newImages.length >= 6) {
-            alert("Bạn chỉ có thể thêm tối đa 6 ảnh!");
+        const files = Array.from(e.target.files);
+        if (files.length + images.length > 6) {
+            toast("Bạn chỉ có thể thêm tối đa 6 ảnh!");
             return;
         }
 
-        const files = Array.from(e.target.files);
         const promises = files.map((file) => {
             return new Promise((resolve) => {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    resolve(e.target.result);
-                };
+                reader.onload = (e) => resolve(e.target.result);
                 reader.readAsDataURL(file);
             });
         });
@@ -108,12 +81,6 @@ const Sellcourses = () => {
             setImages((prevImages) => [...prevImages, ...results]);
         });
     };
-    const handleDateChange = (date, dateString, name) => {
-        setCourseData((prev) => ({
-            ...prev,
-            [name]: dateString, // Lưu giá trị đã định dạng
-        }));
-    };
 
     const handleDeleteImage = (index) => {
         if (!editingMode) return;
@@ -121,59 +88,60 @@ const Sellcourses = () => {
         setImages(updatedImages);
     };
 
-    const handleSubmit =  async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const dataToSend = {
+            name: courseData.name,
+            description: courseData.description,
+            price: parseFloat(courseData.price) || 0,
+            time: courseData.time || "00:00",
+            startDate: courseData.startDate || dayjs().format("YYYY-MM-DD"),
+            endDate: courseData.endDate || dayjs().format("YYYY-MM-DD"),
+            slot: parseInt(courseData.slot) || 0,
+            idCoach: parseInt(courseData.coachId),
+            idRoom: parseInt(courseData.roomId),
+            thumbnail: images[0] || "null",
+        };
+
         try {
-            const response = await axios.post('http://localhost:8080/api/course/add', {
-                ...courseData,
-                coach: { id: parseInt(courseData.coachId) },
-                room: { id: parseInt(courseData.roomId) }
-            });
-            console.log(response.data); 
-            alert('Khóa học đã được thêm thành công!');
-            setCourseData({
-                            id:"",
-                            name: "",
-                            description: "",
-                            price: "",
-                            time: [0, 0],
-                            startDate: [],
-                            endDate: [],
-                            slot: "",
-                            coach: { id: null },
-                            room: { id: null },
-                        });
+            const response = await axios.post("http://localhost:8080/api/course/add", dataToSend);
+            if (response.status === 200) {
+                toast.success("Khóa học đã được thêm thành công!");
+                setCourseData({
+                    name: "",
+                    description: "",
+                    price: "",
+                    time: "",
+                    startDate: null,
+                    endDate: null,
+                    slot: "",
+                    coachId: "",
+                    roomId: "",
+                });
+                setImages([]);
+            }
         } catch (error) {
-            console.error('Có lỗi xảy ra:', error);
-            alert('Có lỗi xảy ra khi thêm khóa học. Vui lòng kiểm tra log.');
+            toast.error("Lỗi:", error);
+            alert("Không thể thêm khóa học. Kiểm tra lại!");
         }
     };
 
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 300,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 1000,
-    };
+    const disabledDate = (current) => current && current < dayjs().startOf("day");
 
     return (
         <div className="flex flex-col lg:flex-row justify-center w-full h-auto">
             <form onSubmit={handleSubmit} className="max-w-3xl p-6 bg-white rounded-lg mb-8 border-[1px]">
-                {/* Form Inputs */}
                 <div className="mb-6 mt-3">
                     {images.length > 0 ? (
                         <ImageSwiper
                             images={images}
                             editingMode={editingMode}
                             handleDeleteImage={handleDeleteImage}
-                            sliderSettings={sliderSettings}
                         />
                     ) : (
                         <div className="w-full h-80 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
-                            <img src="/no-image.png" alt="No Image" className="object-contain h-full"/>
+                            <img src="/no-image.png" alt="No Image" className="object-contain h-full" />
                         </div>
                     )}
 
@@ -195,7 +163,6 @@ const Sellcourses = () => {
                     >
                         Thêm ảnh
                     </button>
-
                     <button
                         type="button"
                         onClick={() => setEditingMode(!editingMode)}
@@ -205,233 +172,135 @@ const Sellcourses = () => {
                     </button>
                 </div>
 
-
-                {/* Form Fields */}
-                <div className="col-span-1 sm:grid sm:grid-cols-2 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label className="flex text-gray-700 font-bold mb-2">Tên khóa học</label>
+                        <label className="text-gray-700 font-bold mb-2">Tên khóa học</label>
                         <input
                             type="text"
                             name="name"
                             value={courseData.name}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-4 py-2 border rounded-lg"
                             placeholder="Nhập tên khóa học"
                             required
                         />
                     </div>
                     <div>
-                        <label className="flex text-gray-700 font-bold mb-2">Giá</label>
+                        <label className="text-gray-700 font-bold mb-2">Giá</label>
                         <input
                             type="number"
                             name="price"
                             value={courseData.price}
-                            min={"1"}
                             onChange={handleChange}
-                            onKeyPress={handleKeyPress}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-4 py-2 border rounded-lg"
                             placeholder="Nhập giá khóa học"
                             required
                         />
                     </div>
-
                     <div>
-                        <label className="flex text-gray-700 font-bold mb-2">Số lượng</label>
+                        <label className="text-gray-700 font-bold mb-2">Thời gian </label>
+                        <input
+                            type="time"
+                            name="time"
+                            value={courseData.time}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-gray-700 font-bold mb-2">Số lượng</label>
                         <input
                             type="number"
-                            name="quantity"
-                            value={courseData.quantity}
-                            min={"1"}
+                            name="slot"
+                            value={courseData.slot}
                             onChange={handleChange}
-                            onKeyPress={handleKeyPress}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-4 py-2 border rounded-lg"
                             placeholder="Nhập số lượng học viên"
                             required
                         />
                     </div>
-
-                    <div>
-                        <label className="flex text-gray-700 font-bold mb-2">Thời lượng (giờ)</label>
-                        <input
-                            type="number"
-                            name="duration"
-                            value={courseData.duration}
-                            min={"1"}
-                            onChange={handleChange}
-                            onKeyPress={handleKeyPress}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            placeholder="Nhập thời lượng khóa học"
-                            required
-                        />
-                    </div>
-
                     <div>
                         <label className="text-gray-700 font-bold mb-2">Thời gian bắt đầu</label>
                         <DatePicker
-                            name="startTime"
-                            value={courseData.startTime ? dayjs(courseData.startTime) : null}
-                            onChange={(date, dateString) => handleDateChange(date, dateString, "startTime")}
+                            name="startDate"
+                            value={courseData.startDate ? dayjs(courseData.startDate) : null}
+                            onChange={(date, dateString) => handleDateChange(date, dateString, "startDate")}
                             disabledDate={disabledDate}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            required
+                            className="w-full px-4 py-2 border rounded-lg"
                         />
                     </div>
-
                     <div>
                         <label className="text-gray-700 font-bold mb-2">Thời gian kết thúc</label>
                         <DatePicker
-                            name="endTime"
-                            value={courseData.endTime ? dayjs(courseData.endTime) : null}
-                            onChange={(date, dateString) => handleDateChange(date, dateString, "endTime")}
+                            name="endDate"
+                            value={courseData.endDate ? dayjs(courseData.endDate) : null}
+                            onChange={(date, dateString) => handleDateChange(date, dateString, "endDate")}
                             disabledDate={disabledDate}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            required
+                            className="w-full px-4 py-2 border rounded-lg"
                         />
                     </div>
-                    <div className="col-span-2">
-                        <label className=" text-gray-700 font-bold mb-2">Mô tả</label>
+                    
+                    <div>
+                        <label className="text-gray-700 font-bold mb-2">Phòng học</label>
+                        <select
+                            name="roomId"
+                            value={courseData.roomId}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg"
+                            required
+                        >
+                            <option value="">Chọn phòng học</option>
+                            {rooms.map((room) => (
+                                <option key={room.id} value={room.id}>
+                                    {room.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-gray-700 font-bold mb-2">Giảng viên</label>
+                        <select
+                            name="coachId"
+                            value={courseData.coachId}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg"
+                            required
+                        >
+                            <option value="">Chọn giảng viên</option>
+                            {coaches.map((coach) => (
+                                <option key={coach.id} value={coach.id}>
+                                    {coach.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                </div>
+                <div>
+                        <label className="text-gray-700 font-bold mb-2">Mô tả</label>
                         <textarea
                             name="description"
                             value={courseData.description}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-4 py-2 border rounded-lg"
                             placeholder="Nhập mô tả khóa học"
                             rows="4"
                         />
                     </div>
 
+                <div className="flex justify-center mt-6">
+                    <button
+                        type="submit"
+                        className="py-3 px-6 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700"
+                    >
+                        Thêm khóa học
+                    </button>
                 </div>
-
-                <div>
-                <label className="text-gray-700 font-bold mb-2">Giáo viên</label>
-                <select
-                    name="coachId"
-                    value={courseData.coachId}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required
-                >
-                    <option value="">Chọn giảng viên</option>
-                    {coaches.map((coach) => (
-                        <option key={coach.id} value={coach.id}>
-                            {coach.id}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div>
-                <label className="text-gray-700 font-bold mb-2">Phòng học</label>
-                <select
-                    name="roomId"
-                    value={courseData.roomId}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required
-                >
-                    <option value="">Chọn phòng học</option>
-                    {rooms.map((room) => (
-                        <option key={room.id} value={room.id}>
-                            {room.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-                <button
-                    type="submit"
-                    className="w-full py-3 mt-4 mb-5 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
-                >
-                Đăng ký khóa học
-                </button>
             </form>
-            <div className={"w-full max-w-xl h-full"}>
-                <div className="max-w-xl w-full h-full bg-white shadow-lg rounded-lg p-6 md:ml-4">
-                    <h2 className="text-2xl font-bold mb-4 flex justify-center">Xem trước thông tin khóa học</h2>
-                    <div className="mb-4">
-                        {images.length > 0 ? (
-                            <ImageSwiper
-                                images={images}
-                                editingMode={false}
-                                handleDeleteImage={() => {
-                                }}
-                                sliderSettings={sliderSettings}
-                            />
-                        ) : (
-                            <img
-                                src="/no-image.png"
-                                alt="No Image"
-                                className="w-full h-64 object-contain"
-                            />
-                        )}
-                    </div>
-                    <div className={"flex justify-center mb-2"}>
-                        <strong className="text-center break-words w-full max-w-xs">
-                            {courseData.name || "Chưa có thông tin"}
-                        </strong>
-                    </div>
-
-
-                    <div className="mb-2 max-w-xl break-words">
-                        <strong>Giá:</strong> {courseData.price ? `${Number(courseData.price).toLocaleString('vi-VN')} VNĐ` : "Chưa có thông tin"}
-                    </div>
-                    <div className="mb-2  max-w-xl break-words">
-                        <strong>Số lượng học viên:</strong> {courseData.slot || "Chưa có thông tin"}
-                    </div>
-                    <div className="mb-2 max-w-xl break-words">
-                        <strong>Thời gian bắt đầu:</strong> {courseData.startTime || "Chưa có thông tin"}
-                    </div>
-                    <div className="mb-2  max-w-xl break-words">
-                        <strong>Thời gian kết thúc:</strong> {courseData.endTime || "Chưa có thông tin"}
-                    </div>
-                    <div className="mb-2  max-w-xl break-words">
-                        <strong>Thời lượng:</strong> {courseData.duration || "Chưa có thông tin"}
-                    </div>
-
-                    <div className="mb-2 max-w-xl break-words">
-                        <strong>Mô tả:</strong>
-                        <p>{courseData.description || "Chưa có thông tin"}</p>
-                    </div>
-                    <div className="mb-2  max-w-xl break-words">
-                        <strong>Địa diểm:</strong> {courseData.location || "Chưa có thông tin"}
-                    </div>
-                </div>
-
-
-                {/* Card hiển thị thông tin khóa học */}
-                <div className=" w-full h-full rounded-lg p-6 md:ml-4 mt-4">
-                    <div
-                        className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden shadow-md transition-transform transform hover:scale-105 hover:shadow-lg">
-                        {images.length > 0 ? (
-                            <img
-                                src={images[0]}
-                                alt="banner"
-                                className="w-full h-full object-contant absolute inset-0 transition-transform duration-300 hover:scale-110"
-                            />
-                        ) : (
-                            <img
-                                src="/no-image.png"
-                                alt="No Image"
-                                className="w-full h-full object-contain absolute inset-0 transition-transform duration-300 hover:scale-110"
-                            />
-                        )}
-                        <div
-                            className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-                            <h3 className="text-lg font-semibold mb-2 text-white">{courseData.name || "Tên khóa học"}</h3>
-                            <div className="text-xl font-semibold mb-2 text-red-500">
-                                {courseData.price ? `${Number(courseData.price).toLocaleString('vi-VN')} VNĐ` : "Giá"}
-                            </div>
-                            <button
-                                className="px-4 py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600 transition duration-300">
-                                Xem chi tiết
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ToastContainer/>
         </div>
-    )
-        ;
+
+    );
 };
 
 export default Sellcourses;
-
