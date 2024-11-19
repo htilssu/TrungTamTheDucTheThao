@@ -7,11 +7,12 @@ import java.time.LocalTime;
 
 @Data
 @Entity
-@Table(name = "pricefield")
+@Table(name = "price_field")
 public class PricingField {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pricingId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "price_field_id_seq")
+    @SequenceGenerator(name = "price_field_id_seq", sequenceName = "price_field_id_seq", allocationSize = 1)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "field_id", nullable = false)

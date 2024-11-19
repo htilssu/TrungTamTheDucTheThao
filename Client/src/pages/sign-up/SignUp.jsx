@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import {useState} from 'react';
+import {motion} from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {wPost} from '../../utils/request.util.js';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -31,112 +32,94 @@ const SignUp = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    const showToast = (message) => {
+      const showToast = (message) => {
         const toastId = message;
         if (!toast.isActive(toastId)) {
-            toast.error(message, { toastId });
+            toast.error(message, {toastId});
         }
-    };
+        return false;
+      };  
 
-    const validateInput = () => {
-        const validations = [
-            {
-                condition: !name,
-                message: 'Tên không được để trống.'
-            },
-            {
-                condition: name.length < 2 || name.length > 30,
-                message: 'Tên phải có từ 2 đến 30 ký tự.'
-            },
-            {
-                condition: !dob,
-                message: 'Ngày sinh không được để trống.'
-            },
-            {
-                condition: dob && calculateAge(dob) < 13,
-                message: 'Tuổi phải lớn hơn hoặc bằng 13.'
-            },
-            {
-                condition: !email,
-                message: 'Email không được để trống.'
-            },
-            {
-                condition: email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email),
-                message: 'Email không hợp lệ.'
-            },
-            {
-                condition: !password,
-                message: 'Mật khẩu không được để trống.'
-            },
-            {
-                condition: password && (password.length < 6 || password.length > 18),
-                message: 'Mật khẩu phải có ít nhất 6 ký tự.'
-            },
-            {
-                condition: password && !/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,18}$/.test(password),
-                message: 'Mật khẩu phải có từ 6 kí tự đến 18 kí tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt.'
-            },
-            {
-                condition: !rePassword,
-                message: 'Nhập lại mật khẩu không được để trống.'
-            },
-            {
-                condition: password !== rePassword,
-                message: 'Mật khẩu nhập lại không khớp.'
-            }
-        ];
+      let hasError = false;
 
-        for (const { condition, message } of validations) {
-            if (condition) {
-                showToast(message);
-                return true; 
-            }
-        }
-        return false; 
-    };
+      if (!name) {
+        showToast('Tên không được để trống.');
+        hasError = true;
+      } else if (name.length < 2 || name.length > 30) {
+          showToast('Tên phải có từ 2 đến 30 ký tự.');
+          hasError = true;
+      }
 
-    const hasError = validateInput();
+      if (!dob) {
+          showToast('Ngày sinh không được để trống.');
+          hasError = true;
+      } else if (calculateAge(dob) < 13) {
+          showToast('Tuổi phải lớn hơn hoặc bằng 13.');
+          hasError = true;
+      }
 
-    if (!hasError) {
-        try {
-            const response = await fetch('http://localhost:8080/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user: {
-                        lastName: name,
-                        gender: gender,
-                        dob: dob.toISOString().split('T')[0]
-                    },
-                    email: email,
-                    password: password,
-                    confirmPassword: rePassword
-                }),
+      if (!email) {
+          showToast('Email không được để trống.');
+          hasError = true;
+      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+          showToast('Email không hợp lệ.');
+          hasError = true;
+      }
+
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,18}$/;
+
+      if (!password) {
+          showToast('Mật khẩu không được để trống.');
+          hasError = true;
+      } else if (password.length < 6 || password.length > 18) {
+          showToast('Mật khẩu phải có ít nhất 6 ký tự.');
+          hasError = true;
+      } else if (!passwordRegex.test(password)) {
+          showToast('Mật khẩu phải có từ 6 kí tự đến 18 kí tự, bao gồm ít nhất một chữ in hoa, một số, và một ký tự đặc biệt.');
+          hasError = true;
+      }
+
+      if (!rePassword) {
+          showToast('Nhập lại mật khẩu không được để trống.');
+          hasError = true;
+      } else if (password !== rePassword) {
+          showToast('Mật khẩu nhập lại không khớp.');
+          hasError = true;
+      }
+
+      if (!hasError) {
+          try {
+            const response = await wPost('/api/register', {
+              user: {
+                lastName: name,
+                gender: gender,
+                dob: dob.toISOString().split('T')[0],
+              },
+              email: email,
+              password: password,
+              confirmPassword: rePassword,
             });
 
-            if (response.ok) {
-                toast.success('Đăng ký tài khoản thành công!');
-                setName('');
-                setGender(true);
-                setDob(null);
-                setEmail('');
-                setPassword('');
-                setRepassword('');
-                return navigate('/sign-in');
-            } else {
-                const errorData = await response.json();
-                showToast(errorData.message || 'Đăng ký tài khoản thất bại.');
-            }
-        } catch {
-            showToast('Lỗi khi gửi yêu cầu.');
-        }
-    }
-};
-
+              if (response.ok) {
+                  toast.success('Đăng ký tài khoản thành công!');
+                  setName('');
+                  setGender(true);
+                  setDob(null);
+                  setEmail('');
+                  setPassword('');
+                  setRepassword('');
+                  return navigate('/sign-in');
+              } else {
+                  const errorData = await response.json();
+                  showToast(errorData.message || 'Đăng ký tài khoản thất bại.');
+              }
+          } catch {
+              showToast('Lỗi khi gửi yêu cầu.');
+          }
+      }
+  };
 
     return (
         <div
@@ -238,35 +221,28 @@ const SignUp = () => {
                 >
                     {/* Gender Input */}
                     <div className="flex items-center space-x-4">
-                      <button 
-                          className={`text-sm font-semibold cursor-pointer ${isMale ? 'text-teal-500' : 'text-gray-400'}`} 
-                          onClick={() => setIsMale(true)}
-                          aria-pressed={isMale}
-                      >
-                          Nam
-                      </button>
-                      
-                      <div 
-                          className={`w-8 h-4 flex items-center rounded-full p-1 cursor-pointer ${isMale ? 'bg-teal-500' : 'bg-pink-400'}`} 
-                          onClick={toggleGender}
-                          role="button" 
-                          tabIndex={0} 
-                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { toggleGender(); }}}
-                          aria-label="Toggle gender"
-                      >
-                          <div 
-                              className={`bg-white w-2 h-2 rounded-full shadow-md transform duration-300 ease-in-out ${isMale ? 'translate-x-0' : 'translate-x-4'}`} 
-                          />
-                      </div>
-                      
-                      <button 
-                          className={`text-sm font-semibold cursor-pointer ${!isMale ? 'text-pink-400' : 'text-gray-400'}`} 
-                          onClick={() => setIsMale(false)}
-                          aria-pressed={!isMale}
-                      >
-                          Nữ
-                      </button>
-                  </div>
+                    <span 
+                        className={`text-sm font-semibold cursor-pointer ${isMale ? 'text-teal-500' : 'text-gray-400'}`} 
+                        onClick={() => setIsMale(true)}
+
+                    >
+                        Nam
+                    </span>
+                    <div 
+                        className={`w-8 h-4 flex items-center rounded-full p-1 cursor-pointer ${isMale ? 'bg-teal-500' : 'bg-pink-400'}`} 
+                        onClick={toggleGender}
+                    >
+                        <div 
+                        className={`bg-white w-2 h-2 rounded-full shadow-md transform duration-300 ease-in-out ${isMale ? 'translate-x-0' : 'translate-x-4'}`} 
+                        />
+                    </div>
+                    <span 
+                        className={`text-sm font-semibold cursor-pointer ${!isMale ? 'text-pink-400' : 'text-gray-400'}`} 
+                        onClick={() => setIsMale(false)}
+                    >
+                        Nữ
+                    </span>
+                    </div>
                 </motion.div>
                 {/* Dob */}
                 <motion.div

@@ -11,8 +11,9 @@ import java.sql.Timestamp;
 public class FootballField {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long fieldId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "football_field_id_seq")
+    @SequenceGenerator(name = "football_field_id_seq", sequenceName = "football_field_id_seq", allocationSize = 1)
+    private Long id;
 
     @NotBlank(message = "Tên sân không được để trống")
     @Size(max = 100, message = "Tên sân không được vượt quá 100 ký tự")

@@ -12,14 +12,16 @@ public class CourseMember {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_member_id_seq")
+    @SequenceGenerator(name = "course_member_id_seq", sequenceName = "course_member_id_seq", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
-    private User idUser;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_course", nullable = false)
-    private Course idCourse;
+    private Course course;
 
 }

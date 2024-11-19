@@ -14,17 +14,19 @@ public class CourseRequest {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_request_id_seq")
+    @SequenceGenerator(name = "course_request_id_seq", sequenceName = "course_request_id_seq", allocationSize = 1)
     private Long id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_course", nullable = false)
-    private Course idCourse;
+    private Course course;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
-    private User idUser;
+    private User user;
 
     @NotNull
     @Column(name = "status", nullable = false)

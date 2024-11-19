@@ -1,17 +1,9 @@
 
-    package com.htilssu.sport.data.models;
+package com.htilssu.sport.data.models;
 
-    import java.time.LocalDate;
-
-    import com.htilssu.sport.validation.MinAge;
-
-    import jakarta.persistence.Column;
-    import jakarta.persistence.Entity;
-    import jakarta.persistence.GeneratedValue;
-    import jakarta.persistence.GenerationType;
-    import jakarta.persistence.Id;
-    import jakarta.persistence.SequenceGenerator;
-    import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.htilssu.sport.validation.MinAge;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
@@ -19,40 +11,47 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-    @Getter
-    @Setter
-    @Entity
-    @Table(name = "\"user\"")
-    public class User {
+import java.time.LocalDate;
 
-        @Id
-        @Column(name = "id", nullable = false)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-        @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
-        private Long id;
+@Getter
+@Setter
+@Entity
+@Table(name = "\"user\"")
+public class User {
 
-        @NotBlank(message = "Số điện thoại không được để trống")
-        @Size(min = 10, max = 13, message = "Số điện thoại phải có 10 đến 13 chữ số")
-        @Pattern(regexp = "\\d+", message = "Số điện thoại chỉ được chứa số")
-        @Column(name = "phone_number", nullable = true, length = 10)
-        private String phoneNumber;
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", allocationSize = 1)
+    private Long id;
 
-        @NotBlank(message = "Họ không được để trống")
-        @Column(name = "first_name", nullable = true)
-        private String firstName;
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Size(min = 10, max = 13, message = "Số điện thoại phải có 10 đến 13 chữ số")
+    @Pattern(regexp = "\\d+", message = "Số điện thoại chỉ được chứa số")
+    @Column(name = "phone_number", length = 10, unique = true)
+    private String phoneNumber;
 
-        @NotBlank(message = "Tên không được để trống")
-        @Column(name = "last_name", nullable = false)
-        private String lastName;
+    @NotBlank(message = "Họ không được để trống")
+    @Column(name = "first_name")
+    private String firstName;
 
-        @Column(name = "gender", nullable = false)
-        private Boolean gender = false;
+    @NotBlank(message = "Tên không được để trống")
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
-        @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
-        @MinAge(message = "Người dùng phải từ 16 tuổi trở lên", value = 16)
-        @Column(name = "dob", nullable = false)
-        private LocalDate dob;
+    @Column(name = "gender", nullable = false)
+    private Boolean gender = false;
 
-        @Column(name = "avatar", nullable = true)
-        private String avatar = "";
-    }
+    @Past(message = "Ngày sinh phải là một ngày trong quá khứ")
+    @MinAge(message = "Người dùng phải từ 16 tuổi trở lên", value = 16)
+    @Column(name = "dob", nullable = false)
+    private LocalDate dob;
+
+    @Column(name = "avatar")
+    private String avatar = "";
+
+    @ManyToOne(optional = false)
+    @JsonBackReference
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
+}

@@ -1,15 +1,14 @@
 package com.htilssu.sport.data.util;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.htilssu.sport.data.models.Account;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JwtUtil {
 
@@ -19,10 +18,16 @@ public class JwtUtil {
     public static String generateToken(Account account) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", account.getEmail());
+        claims.put("role", account.getUser()
+                .getRole()
+                .getName()
+                .toUpperCase());
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(account.getEmail())
+                .setSubject(account.getUser()
+                        .getId()
+                        .toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
@@ -42,14 +47,25 @@ public class JwtUtil {
 
     public static long getExpirationTimeMillis(String token) {
         Claims claims = extractClaims(token);
-        return claims.getExpiration().getTime();
+        return claims.getExpiration()
+                .getTime();
     }
 
     public static boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
+        return extractClaims(token).getExpiration()
+                .before(new Date());
     }
 
     public static String getEmailFromToken(String token) {
         return extractClaims(token).getSubject();
+    }
+
+    public static boolean verifyToken(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 }
