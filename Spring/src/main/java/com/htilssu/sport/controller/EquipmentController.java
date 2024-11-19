@@ -3,21 +3,12 @@ package com.htilssu.sport.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.htilssu.sport.data.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.htilssu.sport.data.dtos.EquipmentDto;
-import com.htilssu.sport.data.dtos.EquipmentTypeDto;
-import com.htilssu.sport.data.dtos.ErrorResponse;
 import com.htilssu.sport.data.models.Equipment;
 import com.htilssu.sport.service.EquipmentService;
 
@@ -34,37 +25,43 @@ public class EquipmentController {
                 .stream()
                 .map(equipment -> new EquipmentDto(
                         equipment.getId(),
-                        new EquipmentTypeDto(
-                                equipment.getEquipmentType().getId(),
-                                equipment.getEquipmentType().getName()
-                        ),
-                        equipment.getName(),
-                        equipment.getAmount(),
-                        equipment.getPrice(),
+                        new EquipmentTypeDto(equipment.getEquipmentType().getId(), equipment.getEquipmentType().getName(), equipment.getEquipmentType().getAmount()),
                         equipment.getStatus(),
-                        equipment.getImage()
-                ))
+                        equipment.getImage(),
+                        new RoomDto(
+                                equipment.getRoom().getId(),
+                                equipment.getRoom().getCapacity(),
+                                equipment.getRoom().getName(),
+                                equipment.getRoom().getFloor(),
+                                equipment.getRoom().getBuilding(),
+                                new RoomTypeDto(equipment.getRoom().getRoomType().getId(), equipment.getRoom().getRoomType().getName())
+                        )))
                 .collect(Collectors.toList());
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<EquipmentDto> getEquipmentById(@PathVariable Long id) {
         return equipmentService.findById(id)
-                .map(equipment -> new EquipmentDto(
-                        equipment.getId(),
-                        new EquipmentTypeDto(
-                                equipment.getEquipmentType().getId(),
-                                equipment.getEquipmentType().getName()
-                        ),
-                        equipment.getName(),
-                        equipment.getAmount(),
-                        equipment.getPrice(),
-                        equipment.getStatus(),
-                        equipment.getImage()
-                ))
+                .map(equipment -> {
+                    return new EquipmentDto(
+                            equipment.getId(),
+                            new EquipmentTypeDto(equipment.getEquipmentType().getId(), equipment.getEquipmentType().getName(), equipment.getEquipmentType().getAmount()),
+                            equipment.getStatus(),
+                            equipment.getImage(),
+                            new RoomDto(
+                                    equipment.getRoom().getId(),
+                                    equipment.getRoom().getCapacity(),
+                                    equipment.getRoom().getName(),
+                                    equipment.getRoom().getFloor(),
+                                    equipment.getRoom().getBuilding(),
+                                    new RoomTypeDto(equipment.getRoom().getRoomType().getId(), equipment.getRoom().getRoomType().getName())
+                            )
+                    );
+                })
                 .map(ResponseEntity::ok)
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+
 
     @PostMapping
     public ResponseEntity<?> createEquipment(@RequestBody Equipment equipment) {
@@ -72,46 +69,51 @@ public class EquipmentController {
             Equipment createdEquipment = equipmentService.save(equipment);
             EquipmentDto equipmentDto = new EquipmentDto(
                     createdEquipment.getId(),
-                    new EquipmentTypeDto(
-                            createdEquipment.getEquipmentType().getId(),
-                            createdEquipment.getEquipmentType().getName()
-                    ),
-                    createdEquipment.getName(),
-                    createdEquipment.getAmount(),
-                    createdEquipment.getPrice(),
+                    new EquipmentTypeDto(createdEquipment.getEquipmentType().getId(), createdEquipment.getEquipmentType().getName(), createdEquipment.getEquipmentType().getAmount()),
                     createdEquipment.getStatus(),
-                    createdEquipment.getImage()
-            );
+                    createdEquipment.getImage(),
+                    new RoomDto(
+                            createdEquipment.getRoom().getId(),
+                            createdEquipment.getRoom().getCapacity(),
+                            createdEquipment.getRoom().getName(),
+                            createdEquipment.getRoom().getFloor(),
+                            createdEquipment.getRoom().getBuilding(),
+                            new RoomTypeDto(
+                                    createdEquipment.getRoom().getRoomType().getId(),
+                                    createdEquipment.getRoom().getRoomType().getName()
+                            )
+            ));
             return ResponseEntity.status(HttpStatus.CREATED).body(equipmentDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
         }
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<EquipmentDto> updateEquipment(@PathVariable Long id, @RequestBody Equipment equipment) {
         return equipmentService.update(id, equipment)
                 .map(updatedEquipment -> new EquipmentDto(
                         updatedEquipment.getId(),
-                        new EquipmentTypeDto(
-                                updatedEquipment.getEquipmentType().getId(),
-                                updatedEquipment.getEquipmentType().getName()
-                        ),
-                        updatedEquipment.getName(),
-                        updatedEquipment.getAmount(),
-                        updatedEquipment.getPrice(),
+                        new EquipmentTypeDto(updatedEquipment.getEquipmentType().getId(), updatedEquipment.getEquipmentType().getName(), updatedEquipment.getEquipmentType().getAmount()),
                         updatedEquipment.getStatus(),
-                        updatedEquipment.getImage()
-                ))
+                        updatedEquipment.getImage(),
+                        new RoomDto(
+                                updatedEquipment.getRoom().getId(),
+                                updatedEquipment.getRoom().getCapacity(),
+                                updatedEquipment.getRoom().getName(),
+                                updatedEquipment.getRoom().getFloor(),
+                                updatedEquipment.getRoom().getBuilding(),
+                                new RoomTypeDto(
+                                        updatedEquipment.getRoom().getRoomType().getId(),
+                                        updatedEquipment.getRoom().getRoomType().getName()
+                                ))))
                 .map(ResponseEntity::ok)
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ErrorResponse> deleteEquipment(@PathVariable Long id) {
-        boolean isDeleted = equipmentService.delete(id);
-        if (isDeleted) {
-            return ResponseEntity.ok(new ErrorResponse("Loại thiết bị đã được xóa thành công"));
+    public ResponseEntity<Void> deleteEquipment(@PathVariable Long id) {
+        if (equipmentService.delete(id)) {
+            return ResponseEntity.noContent().build();
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

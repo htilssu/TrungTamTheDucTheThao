@@ -8,10 +8,8 @@ import java.io.Serializable;
 public record EquipmentDto(
         Long id,
         EquipmentTypeDto equipmentType,
-        String name,
-        Integer amount,
-        Double price,
         String status,
-        String image
+        String image,
+        RoomDto room
 ) implements Serializable {
 }

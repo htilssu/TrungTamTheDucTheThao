@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public record EquipmentTypeDto(
         Long id,
-        String name
+        String name,
+        Integer amount
 ) implements Serializable {
 }

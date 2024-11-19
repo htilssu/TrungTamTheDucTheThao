@@ -19,8 +19,9 @@ const Room = () => {
 
     const fetchRoomTypes = async () => {
         try {
-            const response = await wGet('/api/room-types'); 
-            setRoomTypes(response);
+            const response = await wGet('/api/room-types');
+            const data = await response.json()
+            setRoomTypes(data);
         } catch (error) {
             console.error('Error fetching room types:', error);
         }
@@ -28,8 +29,9 @@ const Room = () => {
 
     const fetchRooms = async () => {
         try {
-            const response = await wGet('/api/rooms'); 
-            setFields(response);
+            const response = await wGet('/api/rooms');
+            const data = await response.json()
+            setFields(data);
         } catch (error) {
             console.error('Error fetching rooms:', error);
         }
