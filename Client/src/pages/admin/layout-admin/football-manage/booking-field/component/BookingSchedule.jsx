@@ -14,7 +14,8 @@ const BookingSchedule = ({ selectedField, selectedDate, setSelectedDate, onOpenB
             if (selectedField && selectedDate) {
                 try {
                     const response = await wGet(`/v1/booking-field/available-times/${selectedField}?date=${selectedDate}`);
-                    const { availableTimes, bookedTimes } = response;
+                    const responseJson = await response.json();
+                    const { availableTimes, bookedTimes } = responseJson;
 
                     setAvailableTimes(availableTimes);  // Cập nhật khung giờ trống
                     setBookedTimes(bookedTimes);  // Cập nhật khung giờ đã đặt

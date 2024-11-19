@@ -79,6 +79,7 @@ const AddFieldForm = ({onAddField, onClose}) => {
         const formErrors = validateFieldData(newField);
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
+            setLoading(false);
             return;
         }
 
@@ -105,19 +106,12 @@ const AddFieldForm = ({onAddField, onClose}) => {
         };
 
         try {
-            const response = await wPost("/v1/fields", fieldData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
+            const response = await wPost("/v1/fields", fieldData);
+            const data = await response.json();
             const timeoutId = setTimeout(() => {
-                if (response.status === 201) {
-                    toast.success('Thêm sân thành công!');
-                } else {
-                    toast.error('Có lỗi xảy ra khi thêm sân!');
-                }
-                if (onAddField) onAddField(response.data);
+
+                toast.success('Thêm sân thành công!');
+                if (onAddField) onAddField(data);
                 queryClient.invalidateQueries({queryKey: ['fields']});
                 setLoading(false);
             }, 3000);
@@ -125,7 +119,7 @@ const AddFieldForm = ({onAddField, onClose}) => {
             return () => clearTimeout(timeoutId);
         } catch (error) {
             console.error("Error adding field:", error);
-            alert("Đã xảy ra lỗi khi thêm sân. Vui lòng kiểm tra lại dữ liệu nhập.");
+            toast.error("Đã xảy ra lỗi khi thêm sân. Vui lòng kiểm tra lại dữ liệu nhập.");
         }
     };
 

@@ -1,28 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import EditEquipmentForm from "./EditEquipmentForm.jsx";
+import { wDelete, wGet } from '../../../utils/request.util.js';
 
 const fetchEquipments = async () => {
     try {
-        const response = await axios.get('http://localhost:8080/api/equipment');
-        return response.data ?? []; // Ensure to return the data from the response
+        const response = await wGet('/api/equipment');
+        const data = await response.json()
+        return data ?? []
+
     } catch (error) {
         console.error("Error fetching equipment:", error);
         toast.error("Có lỗi xảy ra khi tải danh sách thiết bị.");
-        throw error; // Rethrow the error so React Query handles it
+        throw error;
     }
 };
 
 const EquipmentList = () => {
     const [editingEquipment, setEditingEquipment] = useState(null);
-    const [confirmDelete, setConfirmDelete] = useState(false); // State for confirming deletion
-    const [equipmentToDelete, setEquipmentToDelete] = useState(null); // Equipment to be deleted
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [equipmentToDelete, setEquipmentToDelete] = useState(null);
     const queryClient = useQueryClient();
 
-    // Use React Query to fetch equipment data
-    const { data: equipments, error, isLoading } = useQuery({
+    const { data: equipments = [], error, isLoading } = useQuery({
         queryKey: ['equipments'],
         queryFn: fetchEquipments,
         staleTime: 5 * 60 * 1000,
@@ -42,24 +43,22 @@ const EquipmentList = () => {
         }
     };
 
-    // Function to show confirmation dialog before deletion
     const handleDeleteConfirmation = (id) => {
         setConfirmDelete(true);
         setEquipmentToDelete(id);
     };
 
-    // Function to delete the equipment after confirmation
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/equipment/${equipmentToDelete}`);
+            await wDelete(`/api/equipment/${equipmentToDelete}`);
             toast.success("Xóa thiết bị thành công!");
-            setConfirmDelete(false); // Close confirmation dialog
-            setEquipmentToDelete(null); // Reset the item to delete
+            setConfirmDelete(false);
+            setEquipmentToDelete(null);
             queryClient.invalidateQueries(['equipments']);
         } catch (error) {
             console.error("Error deleting equipment:", error);
             toast.error("Có lỗi xảy ra khi xóa thiết bị.");
-            setConfirmDelete(false); // Close confirmation dialog on error
+            setConfirmDelete(false);
         }
     };
 
@@ -71,7 +70,6 @@ const EquipmentList = () => {
         setEditingEquipment(null);
     };
 
-    // Loading and error handling
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -83,7 +81,6 @@ const EquipmentList = () => {
     return (
         <div className="max-w-[1200px] mx-auto p-4">
 
-            {/* Confirmation Dialog */}
             {confirmDelete && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
@@ -113,7 +110,7 @@ const EquipmentList = () => {
                         <EditEquipmentForm
                             equipment={editingEquipment}
                             cancelEdit={cancelEdit}
-                            updateEquipment={(updatedEquipment) => {
+                            updateEquipment={() => {
                                 toast.success("Cập nhật thiết bị thành công!");
                                 setEditingEquipment(null);
                                 queryClient.invalidateQueries(['equipments']);
@@ -129,7 +126,6 @@ const EquipmentList = () => {
                 </div>
             )}
 
-            {/* Equipment List */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {equipments.length > 0 ? (
                     equipments.map((equipment) => (
@@ -142,13 +138,16 @@ const EquipmentList = () => {
                                 />
                             </div>
                             <div className="p-4">
-                                <h3 className="text-lg font-semibold flex " >
+                                <h3 className="text-lg font-semibold flex ">
                                     <p className={"mt-2 flex "}>
-                                        Loai: <p className={"font-bold ml-1"}>{equipment.equipmentType.name}</p>
+                                        Loại: <span className={"font-bold ml-1"}>{equipment.equipmentType.name}</span>
                                     </p>
                                 </h3>
                                 <p className={`mt-2 font-semibold`}>
-                                    Ma so thiet bi: {equipment.id}
+                                    Mã số thiết bị: {equipment.id}
+                                </p>
+                                <p className={`mt-2 font-semibold`}>
+                                    Phòng: {equipment.room.name}
                                 </p>
                                 <p className={`mt-2 ${getStatusColor(equipment.status)}`}>
                                     Trạng thái: {equipment.status}

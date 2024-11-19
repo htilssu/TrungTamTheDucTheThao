@@ -3,9 +3,10 @@ import BookingList from './BookingList';
 import LoadingSpinner from './LoadingSpinner';
 import ConfirmModal from './ConfirmModal';
 import BookingDetail from './BookingDetail';
-import { toast } from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 import { wGet, wPost } from "../../../../../utils/request.util.js";
-import {Modal} from "@mantine/core";
+import { Modal } from "@mantine/core";
+import StatusSelectionButtons from "./StatusSelectionButtons.jsx";
 
 const BookingFieldList = () => {
     const [customerId] = useState(1); // Fixed customer ID for this session
@@ -15,6 +16,7 @@ const BookingFieldList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [pendingBookings, setPendingBookings] = useState([]);
+    const [actingBookings, setActingBookings] = useState([]);
     const [confirmedBookings, setConfirmedBookings] = useState([]);
     const [cancelledBookings, setCancelledBookings] = useState([]);
     const [activeStatus, setActiveStatus] = useState('pending');
@@ -24,7 +26,8 @@ const BookingFieldList = () => {
             setLoading(true);
             try {
                 const response = await wGet(`/v1/booking-field/user/${customerId}`);
-                setBookings(response);
+                const responseJson = await response.json() || [];
+                setBookings(responseJson);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
             } finally {
@@ -35,7 +38,8 @@ const BookingFieldList = () => {
     }, [customerId]);
 
     useEffect(() => {
-        setPendingBookings(bookings.filter(booking => booking.bookingStatus === 'ACTING'));
+        setPendingBookings(bookings.filter(booking => booking.bookingStatus === 'PENDING'));
+        setActingBookings(bookings.filter(booking => booking.bookingStatus === 'ACTING'));
         setConfirmedBookings(bookings.filter(booking => booking.bookingStatus === 'COMPLETED'));
         setCancelledBookings(bookings.filter(booking => booking.bookingStatus === 'CANCELLED'));
     }, [bookings]);
@@ -44,7 +48,7 @@ const BookingFieldList = () => {
         try {
             await wPost(`/v1/booking-field/${bookingId}/cancel`);
             setBookings(prevBookings => prevBookings.filter(booking => booking.id !== bookingId));
-            toast.success("Booking cancelled successfully!");
+            toast.success("Hủy lịch thành công!");
         } catch (error) {
             console.error("Error cancelling booking:", error);
         }
@@ -85,6 +89,8 @@ const BookingFieldList = () => {
         switch (activeStatus) {
             case 'pending':
                 return <BookingList bookings={pendingBookings} openModal={openModal} openDetailModal={openDetailModal} />;
+            case 'acting':
+                return <BookingList bookings={actingBookings} openModal={openModal} openDetailModal={openDetailModal} />;
             case 'confirmed':
                 return <BookingList bookings={confirmedBookings} openModal={openModal} openDetailModal={openDetailModal} />;
             case 'cancelled':
@@ -95,31 +101,17 @@ const BookingFieldList = () => {
     };
 
     return (
-        <div className="w-full min-h-screen flex items-center justify-center px-10">
-            <div className="w-full max-w-4xl px-16 py-4 bg-opacity-90 rounded-3xl shadow-2xl transform transition-all duration-500">
-                <h1 className="text-3xl font-bold text-center mb-8 tracking-wider uppercase">
+        <div className="w-full min-h-screen flex justify-center  py-6 px-10 bg-gradient-to-br from-green-200 via-green-300 to-green-500">
+            <div className="w-full max-w-5xl px-16 py-8 bg-white bg-opacity-90 rounded-3xl shadow-2xl transform transition-all duration-500">
+                <h1 className="text-4xl font-extrabold text-center mb-8 tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-400">
                     Lịch Sử Đặt Sân Bóng
                 </h1>
 
                 {/* Status selection buttons */}
-                <div className="flex justify-center mb-4 space-x-4">
-                    {['pending', 'confirmed', 'cancelled'].map((status) => (
-                        <button
-                            key={status}
-                            onClick={() => setActiveStatus(status)}
-                            className={`px-6 py-2 rounded-full font-semibold text-sm transition-all duration-300 transform ${
-                                activeStatus === status
-                                    ? 'bg-white text-green-800 shadow-md scale-110'
-                                    : 'bg-green-600 text-white opacity-90 hover:opacity-100 hover:shadow-lg hover:-translate-y-1'
-                            }`}
-                        >
-                            {status === 'pending' ? 'Ongoing' : status === 'confirmed' ? 'Completed' : 'Cancelled'}
-                        </button>
-                    ))}
-                </div>
+                <StatusSelectionButtons activeStatus={activeStatus} setActiveStatus={setActiveStatus} />
 
                 {/* Booking list based on selected status */}
-                <div className="rounded-lg bg-green-50 bg-opacity-80 p-5 shadow-inner">
+                <div className="rounded-xl bg-green-50 bg-opacity-90 p-6 shadow-inner backdrop-blur-sm border border-green-300">
                     {renderBookingList()}
                 </div>
 
@@ -143,6 +135,7 @@ const BookingFieldList = () => {
                     />
                 </Modal>
             </div>
+            <ToastContainer />
         </div>
     );
 };

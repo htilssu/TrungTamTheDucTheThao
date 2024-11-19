@@ -34,4 +34,7 @@ public class Equipment {
 
     @Column(name = "image")
     private String image;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_room", nullable = false)
+    private Room room;
 }
