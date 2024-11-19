@@ -8,7 +8,8 @@ import Pagination from "./components/Pagination.jsx";
 const fetchCustomers = async (page, pageSize) => {
     try {
         const response = await wGet(`/v1/user/all?page=${page}&pageSize=${pageSize}`);
-        return response.json();
+        const responseJson = await response.json() || [];
+        return responseJson;
     } catch (error) {
         throw new Error('Error fetching customers: ' + error.message);
     }
