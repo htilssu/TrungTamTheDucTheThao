@@ -234,8 +234,8 @@ const RentYardPage = () => {
             //Xử lý sau khi thanh toán thành công từ callback URL
             try {
                 const response = await wPost('/v1/booking-field', bookingData);
-
-                const bookingId = response.id;
+                const data = await response.json();
+                const bookingId = data.id;
                 console.log('Booking ID:', bookingId);
 
                 if (bookingId !== undefined)

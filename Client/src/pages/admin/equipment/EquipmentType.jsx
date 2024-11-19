@@ -39,7 +39,11 @@ const CategoryForm = () => {
                     name: formData.name
                 });
 
-                setCategories((prevCategories) => [...prevCategories, response]);
+                if (response.ok){
+                    const data = await response.json();
+
+                    setCategories((prevCategories) => [...prevCategories, data]);
+                }
             }
 
             setFormData({

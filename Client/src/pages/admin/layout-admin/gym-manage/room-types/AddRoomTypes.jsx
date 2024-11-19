@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import { ToastContainer, toast } from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { wPost } from "../../../../../utils/request.util";
+import {wPost} from '../../../../../utils/request.util';
 
 const AddRoomTypes = ({ onAddField }) => {
     const [newRoomType, setNewRoomType] = useState({ name: "" });
@@ -25,8 +25,9 @@ const AddRoomTypes = ({ onAddField }) => {
             try {
                 console.log("Sending data: ", newRoomType);  
                 const response = await wPost('/api/room-types/add', newRoomType);
-                console.log("Response: ", response);  
-                onAddField(response);
+                const data = await response.json();
+                console.log('Response: ', data);
+                onAddField(data);
                 setNewRoomType({ name: "" });
                 inputRef.current.blur();
             } catch (error) {
