@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import {useState} from 'react';
+import {motion} from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {wPost} from '../../utils/request.util.js';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -90,22 +91,16 @@ const SignUp = () => {
 
       if (!hasError) {
           try {
-              const response = await fetch('http://localhost:8080/api/register', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                      user: {
-                          lastName: name,
-                          gender: gender,
-                          dob: dob.toISOString().split('T')[0]
-                      },
-                      email: email,
-                      password: password,
-                      confirmPassword: rePassword
-                  }),
-              });
+            const response = await wPost('/api/register', {
+              user: {
+                lastName: name,
+                gender: gender,
+                dob: dob.toISOString().split('T')[0],
+              },
+              email: email,
+              password: password,
+              confirmPassword: rePassword,
+            });
 
               if (response.ok) {
                   toast.success('Đăng ký tài khoản thành công!');
