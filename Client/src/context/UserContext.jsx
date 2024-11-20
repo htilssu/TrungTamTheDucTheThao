@@ -3,6 +3,7 @@ import {getToken, removeToken} from '../utils/token.util.js';
 import {getUser} from '../utils/user.util.js';
 
 export const UserContext = createContext(null);
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(UserContext);
 
 // eslint-disable-next-line react/prop-types

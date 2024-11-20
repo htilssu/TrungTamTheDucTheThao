@@ -6,11 +6,12 @@ const AuthorizedView = ({role}) => {
 
   const {isLoading, user} = useAuth();
 
-  if (!isLoading) {
-    console.log(user);
+  if (!isLoading && !user) {
     if (user.roleName !== role) {
       navigate('/403');
     }
+  } else {
+    return null;
   }
 
   return (
