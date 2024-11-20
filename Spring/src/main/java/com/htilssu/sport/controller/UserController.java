@@ -24,7 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/user")
 @AllArgsConstructor
-@IsUser
+//@IsUser
 public class UserController {
 
     private final UserRepository userRepository;
