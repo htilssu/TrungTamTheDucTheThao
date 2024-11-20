@@ -3,8 +3,8 @@ import { TiTick, TiTrash, TiEye } from "react-icons/ti";
 import { Confirm } from 'react-admin';
 import ViewCourses from "./ViewCourses.jsx";
 import EditCourses from "./EditCourses.jsx";
+import {wDelete, wGet} from "../../../utils/request.util.js";
 import { toast, ToastContainer } from "react-toastify";
-import {wDelete, wGet} from "../../../utils/request.util.js";import { toast, ToastContainer } from "react-toastify";
 
 const CoursesManage = () => {
     const [selectedCourseId, setSelectedCourseId] = useState(null);
