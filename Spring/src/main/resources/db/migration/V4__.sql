@@ -15,3 +15,7 @@ ALTER TABLE equipment
 -- Add foreign key constraint for 'id_room'
 ALTER TABLE equipment
     ADD CONSTRAINT FK_EQUIPMENT_ON_ID_ROOM FOREIGN KEY (id_room) REFERENCES room (id);
+
+CREATE SEQUENCE IF NOT EXISTS course_id_seq START
+WITH
+    1 INCREMENT BY 1;
