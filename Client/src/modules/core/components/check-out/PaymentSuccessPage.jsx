@@ -4,7 +4,7 @@ import {useQuery} from '@tanstack/react-query';
 
 const fetchBookingData = async (bookingId) => {
     const response = await wGet(`/v1/booking-field/${bookingId}`);
-    const responseJson = await response.json() || [];
+    const responseJson = await response.json() || null;
     return responseJson;
 }
 

@@ -58,7 +58,7 @@ const BookingItem = ({ booking, openModal, openDetailModal }) => {
                             </button>
                         )}
 
-                        {(booking.bookingStatus === 'PENDING') && (
+                        {(booking.bookingStatus !== 'CANCELLED' && !booking.isPay ) && (
                             <button
                                 onClick={handlePayment}
                                 className="bg-gradient-to-r from-green-400 to-green-500 text-white py-2 px-6 rounded-lg font-medium shadow-md hover:shadow-lg hover:scale-105 transition-all">
