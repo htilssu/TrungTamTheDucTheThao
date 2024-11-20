@@ -21,6 +21,9 @@ export const UserProvider = ({children}) => {
         removeToken();
       });
     }
+    else {
+      setIsLoading(false);
+    }
   }, []);
 
   return (
