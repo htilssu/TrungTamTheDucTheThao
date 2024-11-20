@@ -1,80 +1,179 @@
+
 import { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import "swiper/swiper-bundle.css";
-import '../../admin/CoursesManage/ViewCourses.css';
 import axios from "axios";
 
 const ViewCourses = ({ id, onClose }) => {
     const [course, setCourse] = useState(null);
+    const [room, setRoom] = useState(null);
+    const [coach, setCoach] = useState(null);
     const defaultImage = "https://via.placeholder.com/600x400?text=Khóa+Học";
 
     useEffect(() => {
+        // Hàm để lấy thông tin khóa học
         const fetchCourse = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/course/${id}`);
-                setCourse(response.data);
+                setCourse(response.data); // Lưu thông tin khóa học
             } catch (error) {
                 console.error("Error fetching course data:", error);
+            }
+        };
+
+        // Hàm để lấy thông tin phòng học dựa trên roomId của khóa học
+        const fetchRoom = async (roomId) => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/rooms/${roomId}`);
+                setRoom(response.data); // Lưu thông tin phòng học
+            } catch (error) {
+                console.error("Error fetching room data:", error);
+            }
+        };
+
+        // Hàm để lấy thông tin giảng viên dựa trên coachId của khóa học
+        const fetchCoach = async (coachId) => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/coach/${coachId}`);
+                setCoach(response.data); // Lưu thông tin giảng viên
+            } catch (error) {
+                console.error("Error fetching coach data:", error);
             }
         };
 
         if (id) {
             fetchCourse();
         }
-    }, [id]);
+
+        if (course) {
+            // Gọi API để lấy thông tin phòng học và giảng viên khi course được load
+            if (course.Room && course.Room.id) {
+                fetchRoom(course.Room.id);
+            }
+            if (course.Coach && course.Coach.id) {
+                fetchCoach(course.Coach.id);
+            }
+        }
+    }, [id, course]); // Lắng nghe thay đổi từ `id` và `course`
 
     if (!course) {
         return <div className="text-center text-lg text-gray-500">Chưa chọn khóa học.</div>;
     }
 
-    const formatTime = (timeArray) => {
-        const [hours, minutes] = timeArray;
-        return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
-    };
-
-    const formatDate = (dateArray) => {
-        const [year, month, day] = dateArray;
-        return `${day}/${month}/${year}`;
-    };
-
     return (
-        <div className="flex flex-col items-center">
-            
-
-            <div className="w-full max-w-3xl mb-4">
-                <Swiper
-                    spaceBetween={10}
-                    slidesPerView={1}
-                    navigation
-                    pagination={{ clickable: true }}
-                    autoplay={{ delay: 3000, disableOnInteraction: false }}
-                    modules={[Navigation, Pagination, Autoplay]}
-                >
-                    <SwiperSlide>
-                        <img src={course.thumbnail || defaultImage} alt={`Khóa học ${course.name}`} className="w-full h-auto rounded-lg" />
-                    </SwiperSlide>
-                </Swiper>
+        <div className="flex flex-col items-center bg-white rounded-lg p-6 shadow-lg max-w-6xl mx-auto space-y-6">
+            {/* Hình ảnh khóa học */}
+            <div className="w-full mb-6">
+                <img
+                    src={course.thumbnail || defaultImage}
+                    alt={`Khóa học ${course.name}`}
+                    className="w-full h-auto rounded-lg shadow-lg"
+                />
             </div>
 
-            <div className="flex space-x-4 w-full max-w-3xl">
-                <div key={course.id} className="bg-white p-4 shadow-md w-1/2">
-                    <p><span className="font-bold">Tên khóa học :</span> {course.name}</p>
-                    <p><span className="font-bold">Giá :</span> {course.price.toLocaleString()} VND</p>
-                    <p><span className="font-bold">Số lượng học viên :</span> {course.slot}</p>
-                    <p><span className="font-bold">Huấn luyện viên ID :</span> {course.coach.id}</p>
-                    <p><span className="font-bold">Thời gian học :</span> {formatTime(course.time)}</p>
-                    <p><span className="font-bold">Thời gian bắt đầu :</span> {formatDate(course.startDate)}</p>
-                    <p><span className="font-bold">Thời gian kết thúc :</span> {formatDate(course.endDate)}</p>
-                    <p><span className="font-bold">Phòng học :</span> {course.room.name}</p>
-                    <p><span className="font-bold">Sức chứa phòng :</span> {course.room.capacity}</p>
-                    <p><span className="font-bold">Tầng :</span> {course.room.floor}</p>
-                    <p><span className="font-bold">Tòa nhà :</span> {course.room.building}</p>
-                </div>
-                <div className="bg-white p-4 shadow-md w-1/2 max-h-48 overflow-y-auto">
-                    <p className="font-bold">Mô tả khóa học:</p>
-                    <p>{course.description || "Không có mô tả chi tiết."}</p>
-                </div>
+            {/* Dữ liệu khóa học */}
+            <div className="relative p-4">
+                <form className="p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block mb-2">Tên khóa học</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={course.name}
+                                className="w-full p-2 border rounded"
+                                required
+                                readOnly
+                            />
+                        </div>
+                        <div>
+                            <label className="block mb-2">Giá</label>
+                            <input
+                                type="number"
+                                name="price"
+                                value={course.price}
+                                className="w-full p-2 border rounded"
+                                required
+                                readOnly
+                            />
+                        </div>
+                        <div>
+                            <label className="block mb-2">Số lượng học viên</label>
+                            <input
+                                type="number"
+                                name="slot"
+                                value={course.slot}
+                                className="w-full p-2 border rounded"
+                                required
+                                readOnly
+                            />
+                        </div>
+                        <div>
+                            <label className="block mb-2">Thời gian</label>
+                            <input
+                                type="text"
+                                name="time"
+                                value={course.time ? course.time.split(':')[0] + ' giờ' : ''}
+                                className="w-full p-2 border rounded"
+                                readOnly
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block mb-2">Thời gian bắt đầu</label>
+                            <input
+                                type="date"
+                                name="startDate"
+                                value={course.startDate}
+                                className="w-full p-2 border rounded"
+                                readOnly
+                            />
+                        </div>
+                        <div>
+                            <label className="block mb-2">Thời gian kết thúc</label>
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={course.endDate}
+                                className="w-full p-2 border rounded"
+                                readOnly
+                            />
+                        </div>
+
+                        {/* Tên phòng học */}
+                        <div>
+                            <label className="block mb-2">Tên phòng học</label>
+                            <input
+                                type="text"
+                                name="roomName"
+                                value={room ? room.name : "Chưa có thông tin"}
+                                className="w-full p-2 border rounded"
+                                readOnly
+                            />
+                        </div>
+
+                        {/* Tên giảng viên */}
+                        <div>
+                            <label className="block mb-2">Tên giảng viên</label>
+                            <input
+                                type="text"
+                                name="coachName"
+                                value={coach ? coach.name : "Chưa có thông tin"}
+                                className="w-full p-2 border rounded"
+                                readOnly
+                            />
+                        </div>
+
+                        <div className="col-span-2">
+                            <label className="block mb-2">Mô tả khóa học</label>
+                            <textarea
+                                name="description"
+                                value={course.description}
+                                className="w-full p-2 border rounded"
+                                rows="3"
+                                readOnly
+                            />
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     );
