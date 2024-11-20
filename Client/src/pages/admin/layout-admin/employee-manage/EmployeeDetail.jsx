@@ -22,7 +22,7 @@
 //                     <h4 className="font-semibold text-lg text-gray-700">Thông Tin </h4>
 //                     <p className="text-gray-600"><strong>Điện thoại:</strong> {employee.phoneNumber}</p>
 //                     <p className="text-gray-600"><strong>Thời gian làm việc:</strong> {employee.experience} năm</p>
-                    
+
 //                 </div>
 //                 <div className="bg-gray-100 p-4 rounded-lg shadow-xl max-h-40 overflow-y-auto">
 //                 <strong>Giới thiệu bản thân:</strong>
@@ -47,7 +47,7 @@ const EmployeeDetail = ({ employee }) => {
             <h2 className="text-3xl font-semibold mb-4 text-gray-800">Chi Tiết Huấn Luyện Viên</h2>
             <div className="flex items-center mb-6">
                 <img
-                    src={employee.avatar || "/avatarH.png"}
+                    src={employee.avatar}
                     alt="Avatar"
                     className="w-32 h-32 object-cover rounded-full border border-gray-300 shadow-md mr-4"
                 />

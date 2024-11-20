@@ -4,6 +4,9 @@ import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import axios from "axios";
 import ImageSwiper from "./ImageSwiper.jsx";
+import {wGet, wPost} from "../../../../utils/request.util.js";
+
+
 import { toast, ToastContainer } from "react-toastify";
 
 const Sellcourses = () => {
@@ -27,8 +30,10 @@ const Sellcourses = () => {
     useEffect(() => {
         const fetchCoaches = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/coach");
-                setCoaches(response.data);
+                const response = wGet('/api/coach');
+                const data = await response.json()
+                console.log('Dữ liệu giảng viên:', data);
+                setCoaches(data);
             } catch (error) {
                 toast.error("Có lỗi xảy ra khi lấy giảng viên:", error);
             }
@@ -36,8 +41,10 @@ const Sellcourses = () => {
 
         const fetchRooms = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/rooms");
-                setRooms(response.data);
+                const response = await wGet('/api/rooms');
+                const data = await response.json()
+                console.log('Dữ liệu phòng học:', data);
+                setRooms(data);
             } catch (error) {
                 toast.error("Có lỗi xảy ra khi lấy phòng học:", error);
             }
@@ -105,22 +112,28 @@ const Sellcourses = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:8080/api/course/add", dataToSend);
-            if (response.status === 200) {
-                toast.success("Khóa học đã được thêm thành công!");
-                setCourseData({
-                    name: "",
-                    description: "",
-                    price: "",
-                    time: "",
-                    startDate: null,
-                    endDate: null,
-                    slot: "",
-                    coachId: "",
-                    roomId: "",
-                });
-                setImages([]);
+            const response = wPost('/api/course/add', {
+                ...courseData,
+                coach: { id: parseInt(courseData.coachId) },
+                room: { id: parseInt(courseData.roomId) }
             }
+            )
+            const data = await response.json()
+            ;
+            console.log(data);
+            alert('Khóa học đã được thêm thành công!');
+            setCourseData({
+                            id:"",
+                            name: "",
+                            description: "",
+                            price: "",
+                            time: [0, 0],
+                            startDate: [],
+                            endDate: [],
+                            slot: "",
+                            coach: { id: null },
+                            room: { id: null },
+                        });
         } catch (error) {
             toast.error("Lỗi:", error);
             alert("Không thể thêm khóa học. Kiểm tra lại!");
@@ -239,7 +252,7 @@ const Sellcourses = () => {
                             className="w-full px-4 py-2 border rounded-lg"
                         />
                     </div>
-                    
+
                     <div>
                         <label className="text-gray-700 font-bold mb-2">Phòng học</label>
                         <select
@@ -274,7 +287,7 @@ const Sellcourses = () => {
                             ))}
                         </select>
                     </div>
-                    
+
                 </div>
                 <div>
                         <label className="text-gray-700 font-bold mb-2">Mô tả</label>

@@ -5,6 +5,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import {wGet} from "../../../utils/request.util.js";
 
 const ScrollableCourseList = () => {
   const [courses, setCourses] = useState([]);
@@ -14,7 +15,7 @@ const ScrollableCourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/course');
+        const response = wGet('/api/course');
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
@@ -105,8 +106,8 @@ const ScrollableCourseList = () => {
             </div>
             <h1 className="text-center text-xl font-bold mb-4">{currentCourse.name}</h1>
             <div className="grid grid-cols-2 gap-4 mb-4">
-             
-             
+
+
               <p className="bg-gray-100 p-4 rounded-lg text-center">
                 Giá: {currentCourse.price
                   ? `${Number(currentCourse.price).toLocaleString('vi-VN')} VNĐ`
@@ -124,7 +125,7 @@ const ScrollableCourseList = () => {
               <p className="bg-gray-100 p-4 rounded-lg text-center">
                 Số lượng: {currentCourse.slot || 'N/A'}
               </p>
-              
+
               <p className="bg-gray-100 p-4 rounded-lg text-center">
                 Mô tả: {currentCourse.description || 'N/A'}
               </p>

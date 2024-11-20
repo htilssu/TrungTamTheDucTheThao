@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { TiEye, TiEdit, TiDeleteOutline } from "react-icons/ti";
 import {wGet} from "../../../../utils/request.util.js";
 
@@ -63,8 +62,8 @@ const EmployeeList = ({ editEmployee, viewEmployee,deleteEmployee }) => {
                                         className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 flex items-center justify-center"
                                         onClick={() => editEmployee(employee.id)}
                                     >
-                                        <TiEdit className="mr-1" size={18} />
-                                        Sửa
+                                        <TiEdit className="mr-1" size={18}/>
+                                        Edit
                                     </button>
                                     <button
                                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center justify-center ml-2"

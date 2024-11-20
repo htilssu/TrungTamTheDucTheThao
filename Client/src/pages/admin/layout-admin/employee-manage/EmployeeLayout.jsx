@@ -7,6 +7,7 @@ import Modal from "../../library-admin/ModalDetail.jsx";
 import ModalConfirmation from "../../library-admin/ModalConfirmDelete.jsx";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 import {wDelete, wGet, wPut} from "../../../../utils/request.util.js";
 
 const EmployeeLayout = () => {
@@ -69,6 +70,8 @@ const EmployeeLayout = () => {
         }
     };
 
+
+
     const deleteEmployee = async (id) => {
         try {
             const response = await wDelete(`/api/coach/delete/${id}`);
@@ -82,6 +85,7 @@ const EmployeeLayout = () => {
             toast.error("Có lỗi xảy ra khi xóa huấn luyện viên.");
         }
     };
+
 
     return (
         <div className="min-h-screen bg-gray-100">
