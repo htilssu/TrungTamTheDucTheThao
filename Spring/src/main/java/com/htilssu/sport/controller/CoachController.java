@@ -35,11 +35,11 @@ public class CoachController {
 
     // Lấy thông tin coach theo ID và trả về toàn bộ dữ liệu của coach
     @GetMapping("/{id}")
-    public ResponseEntity<CoachDto> getCoachById(@PathVariable Long id) {
+    public ResponseEntity<CoachDto> getCoachById(@PathVariable("id") Long id) {
         return coachService.findById(id)
-                .map(coachMapper::toDto) // Chuyển đổi Coach sang CoachDto
+                .map(coachMapper::toDto)
                 .map(ResponseEntity::ok)
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND)); // Nếu không tìm thấy coach, trả về 404
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     // Thêm mới một coach
@@ -51,24 +51,26 @@ public class CoachController {
     }
 
     // Cập nhật thông tin coach theo ID
+    // Đảm bảo tham số id trong URL được ánh xạ đúng
     @PutMapping("/edit/{id}")
-    public ResponseEntity<CoachDto> updateCoach(@PathVariable Long id, @RequestBody CoachDto coachDto) {
+    public ResponseEntity<CoachDto> updateCoach(@PathVariable("id") Long id, @RequestBody CoachDto coachDto) {
         if (!coachService.findById(id).isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Nếu không tìm thấy coach với ID, trả về lỗi 404
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Coach coach = coachMapper.toEntity(coachDto); // Chuyển đổi từ CoachDto sang Coach entity
-        coach.setId(id); // Đặt ID cho coach
-        Coach updatedCoach = coachService.save(coach); // Lưu vào cơ sở dữ liệu
-        return ResponseEntity.ok(coachMapper.toDto(updatedCoach)); // Trả về thông tin đã cập nhật
+        Coach coach = coachMapper.toEntity(coachDto);
+        coach.setId(id); // Đặt lại ID cho coach
+        Coach updatedCoach = coachService.save(coach);
+        return ResponseEntity.ok(coachMapper.toDto(updatedCoach));
     }
 
     // Xóa một coach theo ID
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteCoach(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCoach(@PathVariable("id") Long id) {
         if (!coachService.findById(id).isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Nếu không tìm thấy coach, trả về lỗi 404
         }
         coachService.deleteById(id); // Xóa coach theo ID
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Trả về mã 204 khi xóa thành công
     }
+
 }
