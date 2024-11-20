@@ -7,6 +7,7 @@ const AuthorizedView = ({role}) => {
   const {isLoading, user} = useAuth();
 
   if (!isLoading) {
+    console.log(user);
     if (user.roleName !== role) {
       navigate('/403');
     }

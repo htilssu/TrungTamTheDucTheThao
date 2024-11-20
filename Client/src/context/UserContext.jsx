@@ -12,8 +12,9 @@ export const UserProvider = ({children}) => {
   useEffect(() => {
     const token = getToken();
     if (token) {
-      getUser().then((data) => {
-        setUser(data);
+      getUser().then(async (data) => {
+        const u = await data.json();
+        setUser(u);
         setIsLoading(false);
       }).catch(() => {
         removeToken();
