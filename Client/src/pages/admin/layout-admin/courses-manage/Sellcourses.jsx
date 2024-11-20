@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import React, { useEffect } from 'react';
 import ImageSwiper from "./ImageSwiper.jsx";
+import {wGet, wPost} from "../../../../utils/request.util.js";
 
 
 
@@ -26,9 +27,10 @@ const Sellcourses = () => {
     useEffect(() => {
         const fetchCoaches = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/coach');
-                console.log('Dữ liệu giảng viên:', response.data);
-                setCoaches(response.data);
+                const response = wGet('/api/coach');
+                const data = await response.json()
+                console.log('Dữ liệu giảng viên:', data);
+                setCoaches(data);
             } catch (error) {
                 console.error('Có lỗi xảy ra khi lấy giảng viên:', error);
             }
@@ -36,9 +38,10 @@ const Sellcourses = () => {
 
         const fetchRooms = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/rooms');
-                console.log('Dữ liệu phòng học:', response.data);
-                setRooms(response.data);
+                const response = await wGet('/api/rooms');
+                const data = await response.json()
+                console.log('Dữ liệu phòng học:', data);
+                setRooms(data);
             } catch (error) {
                 console.error('Có lỗi xảy ra khi lấy phòng học:', error);
             }
@@ -124,12 +127,15 @@ const Sellcourses = () => {
     const handleSubmit =  async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/course/add', {
+            const response = wPost('/api/course/add', {
                 ...courseData,
                 coach: { id: parseInt(courseData.coachId) },
                 room: { id: parseInt(courseData.roomId) }
-            });
-            console.log(response.data); 
+            }
+            )
+            const data = await response.json()
+            ;
+            console.log(data);
             alert('Khóa học đã được thêm thành công!');
             setCourseData({
                             id:"",

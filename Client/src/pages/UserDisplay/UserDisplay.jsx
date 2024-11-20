@@ -3,6 +3,7 @@ import React, { useState, useEffect,useContext } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import {wGet, wPut} from "../../utils/request.util.js";
 
 const UserDisplay = () => {
   const { id } = useParams(); // Lấy ID từ URL
@@ -69,12 +70,12 @@ const UserDisplay = () => {
 
  // Fetch user data
  useEffect(() => {
-  axios.get(`http://localhost:8080/user/${id}`)
+  wGet(`/user/${id}`)
     .then(response => {
-      const userData = response.data;
-      setUser(userData); // Lưu dữ liệu người dùng vào context
-      setOriginalDob(userData.dob); // Lưu lại ngày sinh ban đầu
-      setAvatarUrl(userData.avatar); // Set the avatar URL in state
+        const data = await response.json()
+      setUser(data); // Lưu dữ liệu người dùng vào context
+      setOriginalDob(data.dob); // Lưu lại ngày sinh ban đầu
+      setAvatarUrl(data.avatar); // Set the avatar URL in state
       setLoading(false);
     })
     .catch(error => {
@@ -96,10 +97,10 @@ const UserDisplay = () => {
       dob: user.dob || originalDob,
       avatar: avatarUrl, // Send the updated avatar URL to the backend
     };
-    axios
-      .put(`http://localhost:8080/user/${id}`, updatedUser)
-      .then((response) => {
-        setUser(response.data);
+    wPut(`/user/${id}`, updatedUser)
+      .then(async (response) => {
+          const data = await response.json()
+        setUser(data);
         setIsEditing(false);
         setSaving(false);
         setValidationErrors({});

@@ -1,7 +1,13 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit }) => {
     const [updatedEmployee, setUpdatedEmployee] = useState(employee);
+
+    useEffect(() => {
+        setUpdatedEmployee(employee);
+    }, [employee]);
 
     const handleChange = (e) => {
         setUpdatedEmployee({
@@ -12,6 +18,12 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!/^\d{10}$/.test(updatedEmployee.phoneNumber)) {
+            toast('Số điện thoại phải đủ 10 số .');
+            return;
+        }
+
         updateEmployee(updatedEmployee);
     };
 
@@ -22,84 +34,38 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
                 <input
                     type="text"
                     name="name"
-                    value={updatedEmployee.name}
+                    value={updatedEmployee.name || ''}
                     onChange={handleChange}
-                    placeholder="Employee Name"
+                    placeholder=" Name"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
                 />
                 <input
                     type="text"
-                    name="position"
-                    value={updatedEmployee.position}
+                    name="phoneNumber"
+                    value={updatedEmployee.phoneNumber || ''}
+                    onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
                     onChange={handleChange}
-                    placeholder="Position"
+                    maxLength={10} // Giới hạn nhập 10 ký tự
+                    placeholder="PhoneNumber"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
+                />
+
+                <input
+                    type="text"
+                    name="experience"
+                    value={updatedEmployee.experience || ''}
+                    onChange={handleChange}
+                    placeholder="Experience"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
                 />
                 <input
                     type="text"
-                    name="department"
-                    value={updatedEmployee.department}
+                    name="description"
+                    value={updatedEmployee.description || ''}
                     onChange={handleChange}
-                    placeholder="Department"
+                    placeholder="Description"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
                 />
-                <input
-                    type="email"
-                    name="email"
-                    value={updatedEmployee.email}
-                    onChange={handleChange}
-                    placeholder="Email"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
-                />
-                <input
-                    type="tel"
-                    name="phone"
-                    value={updatedEmployee.phone}
-                    onChange={handleChange}
-                    placeholder="Phone"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
-                />
-                <input
-                    type="text"
-                    name="address"
-                    value={updatedEmployee.address}
-                    onChange={handleChange}
-                    placeholder="Address"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
-                />
-                <input
-                    type="date"
-                    name="dateOfBirth"
-                    value={updatedEmployee.dateOfBirth}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
-                />
-                <select
-                    name="gender"
-                    value={updatedEmployee.gender}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
-                >
-                    <option value="Nam">Nam</option>
-                    <option value="Nữ">Nữ</option>
-                    <option value="Khác">Khác</option>
-                </select>
-                <input
-                    type="date"
-                    name="startDate"
-                    value={updatedEmployee.startDate}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
-                />
-                <select
-                    name="status"
-                    value={updatedEmployee.status}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
-                >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
             </div>
             <div className="flex flex-col justify-between items-center md:flex-row md:space-x-4">
                 <div className="flex gap-4 w-full">
@@ -117,15 +83,7 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
                         Cancel
                     </button>
                 </div>
-                <div className="w-full mt-4 md:mt-0">
-                    <button
-                        type="button"
-                        onClick={() => deleteEmployee(employee.id)}
-                        className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
-                    >
-                        Delete Employee
-                    </button>
-                </div>
+
             </div>
         </form>
     );

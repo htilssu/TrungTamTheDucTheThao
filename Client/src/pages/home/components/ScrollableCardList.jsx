@@ -5,6 +5,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import {Autoplay, Navigation, Pagination} from 'swiper/modules';
+import {wGet} from "../../../utils/request.util.js";
 
 const ScrollableCourseList = () => {
   const [courses, setCourses] = useState([]);
@@ -13,7 +14,7 @@ const ScrollableCourseList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/course');
+        const response = wGet('/api/course');
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
