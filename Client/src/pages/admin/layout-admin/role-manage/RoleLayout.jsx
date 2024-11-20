@@ -6,7 +6,8 @@ import {useQuery} from "@tanstack/react-query";
 
 const fetchRoles = async () => {
     const response = await wGet('/v1/permission/roles');
-    return response || [];
+    const responseJson = await response.json() || [];
+    return responseJson;
 };
 
 const RoleLayout = () => {

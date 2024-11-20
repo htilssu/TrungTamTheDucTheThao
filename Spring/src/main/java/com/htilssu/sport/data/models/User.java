@@ -50,7 +50,7 @@ public class User {
     @Column(name = "avatar")
     private String avatar = "";
 
-    @ManyToOne(optional = false)
+    @ManyToOne()
     @JsonBackReference
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;

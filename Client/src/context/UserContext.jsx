@@ -3,6 +3,7 @@ import {getToken, removeToken} from '../utils/token.util.js';
 import {getUser} from '../utils/user.util.js';
 
 export const UserContext = createContext(null);
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(UserContext);
 
 // eslint-disable-next-line react/prop-types
@@ -12,12 +13,16 @@ export const UserProvider = ({children}) => {
   useEffect(() => {
     const token = getToken();
     if (token) {
-      getUser().then((data) => {
-        setUser(data);
+      getUser().then(async (data) => {
+        const u = await data.json();
+        setUser(u);
         setIsLoading(false);
       }).catch(() => {
         removeToken();
       });
+    }
+    else {
+      setIsLoading(false);
     }
   }, []);
 

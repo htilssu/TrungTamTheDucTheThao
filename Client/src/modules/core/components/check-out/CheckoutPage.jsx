@@ -3,7 +3,7 @@ import {toast, ToastContainer} from 'react-toastify';
 import {useEffect, useState} from "react";
 import {WoWoWallet} from "@htilssu/wowo";
 import Modal from "./components/Modal.jsx";
-import {wDelete, wPost} from "../../../../utils/request.util.js";
+import {wDelete} from "../../../../utils/request.util.js";
 
 function CheckoutPage() {
     const location = useLocation();
@@ -44,8 +44,8 @@ function CheckoutPage() {
     }
 
     //Call API update Status Booking
-    const successCallbackUrl = `http://localhost:8080/v1/booking-field/${bookingId}/status-acting`;
-    const returnCallbackUrl = `http://localhost:5173/payment-success/${bookingId}`;
+    const successCallbackUrl = `https://api.tdtt.htilssu.id.vn/v1/booking-field/${bookingId}/status-acting`;
+    const returnCallbackUrl = `https://tdtt.htilssu.id.vn/payment-success/${bookingId}`;
 
     const handleConfirmPayment = async () => {
         setLoading(true);
@@ -62,9 +62,6 @@ function CheckoutPage() {
         };
 
         try {
-            //giả xử thanh toán thành công và gọi api cập nhật trạng thái booking
-            await wPost(`/v1/booking-field/${bookingId}/status-acting`);
-            ////
             const orderResponse = await wowoWallet.createOrder(orderProps);
             if (orderResponse && orderResponse.checkoutUrl) {
                 window.location.href = orderResponse.checkoutUrl;

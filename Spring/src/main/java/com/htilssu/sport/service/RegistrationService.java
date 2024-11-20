@@ -115,8 +115,8 @@ public class RegistrationService {
                 .dob()));
         user.setAvatar(null);
 
-        roleService.assignRole(user, DEFAULT_ROLE);
         User savedUser = userRepository.save(user);
+        roleService.assignRole(savedUser, DEFAULT_ROLE);
 
         Account account = new Account();
         account.setUser(savedUser);

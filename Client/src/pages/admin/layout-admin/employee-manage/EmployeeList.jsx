@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { TiEye, TiEdit, TiDeleteOutline } from "react-icons/ti";
 import {wGet} from "../../../../utils/request.util.js";
 
@@ -10,7 +9,7 @@ const EmployeeList = ({ editEmployee, viewEmployee,deleteEmployee }) => {
     useEffect(() => {
         const fetchCoaches = async () => {
             try {
-                const response = await wGet("/api/coach");
+                const response = await wGet('/api/coach');
                 const data = await response.json()
                 setEmployees(data);
             } catch (error) {
@@ -34,12 +33,12 @@ const EmployeeList = ({ editEmployee, viewEmployee,deleteEmployee }) => {
             ) : (
                 <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-xl">
                     <thead>
-                    <tr className="bg-gray-100">
-                        <th className="py-2 px-4 text-left border">Tên</th>
-                        <th className="py-2 px-4 text-left border">Số điện thoại</th>
-                        <th className="py-2 px-4 text-left border">Kinh Nghiệm(Năm)</th>
-                        <th className="py-2 px-4 text-center border">Hành động</th>
-                    </tr>
+                        <tr className="bg-gray-100">
+                            <th className="py-2 px-4 text-left border">Tên</th>
+                            <th className="py-2 px-4 text-left border">Số điện thoại</th>
+                            <th className="py-2 px-4 text-left border">Kinh Nghiệm(Năm)</th>
+                            <th className="py-2 px-4 text-center border">Hành động</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {employees.map((employee) => (
@@ -47,9 +46,9 @@ const EmployeeList = ({ editEmployee, viewEmployee,deleteEmployee }) => {
                             key={employee.id}
                             className="border-b hover:bg-gray-50 transition duration-200"
                         >
-                            <td className="py-2 px-4 border">{employee.name}</td>
-                            <td className="py-2 px-4 border">{employee.phoneNumber}</td>
-                            <td className="py-2 px-4 border">{employee.experience}</td>
+                                <td className="py-2 px-4 border">{employee.name}</td>
+                                <td className="py-2 px-4 border">{employee.phoneNumber}</td>
+                                <td className="py-2 px-4 border">{employee.experience}</td>
                             <td className="py-2 text-center border">
                                 <div className="flex flex-row justify-center items-center">
                                     <button
@@ -63,8 +62,8 @@ const EmployeeList = ({ editEmployee, viewEmployee,deleteEmployee }) => {
                                         className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 flex items-center justify-center"
                                         onClick={() => editEmployee(employee.id)}
                                     >
-                                        <TiEdit className="mr-1" size={18} />
-                                        Sửa
+                                        <TiEdit className="mr-1" size={18}/>
+                                        Edit
                                     </button>
                                     <button
                                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center justify-center ml-2"
@@ -72,11 +71,11 @@ const EmployeeList = ({ editEmployee, viewEmployee,deleteEmployee }) => {
                                     >
                                         <TiDeleteOutline className="mr-1" size={18} />
                                         Xóa
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             )}

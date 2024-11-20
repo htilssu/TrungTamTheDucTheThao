@@ -3,8 +3,8 @@ import { TiTick, TiTrash, TiEye } from "react-icons/ti";
 import { Confirm } from 'react-admin';
 import ViewCourses from "./ViewCourses.jsx";
 import EditCourses from "./EditCourses.jsx";
-import { toast, ToastContainer } from "react-toastify";
 import {wDelete, wGet} from "../../../utils/request.util.js";
+import { toast, ToastContainer } from "react-toastify";
 
 const CoursesManage = () => {
     const [selectedCourseId, setSelectedCourseId] = useState(null);
@@ -161,7 +161,7 @@ const CoursesManage = () => {
                 actions={[
                     <button
                         key="cancel"
-                        onClick={handleCancelDelete}    
+                        onClick={handleCancelDelete}
                         className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                     >
                         Hủy

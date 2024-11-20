@@ -12,13 +12,15 @@ import {queryClient} from "../../../../modules/cache.js";
 // Fetch danh sách admin theo vai trò
 const fetchAdmins = async () => {
     const response = await wGet('/v1/permission/roles/2');
-    return response?.users || [];
+    const responseJson = await response.json();
+    return responseJson?.users || [];
 };
 
 // Fetch danh sách roles
 const fetchRoles = async () => {
     const response = await wGet('/v1/permission/roles');
-    return response || [];
+    const responseJson = await response.json() || [];
+    return responseJson;
 };
 
 // Cập nhật quyền admin
