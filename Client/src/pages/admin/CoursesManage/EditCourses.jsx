@@ -219,7 +219,7 @@ const EditCourses = ({ courseId, onClose }) => {
                             ))}
                         </select>
                     </div>
-                    
+
                     <div className="col-span-2">
                         <label className="block mb-2">Mô tả</label>
                         <textarea
@@ -230,16 +230,16 @@ const EditCourses = ({ courseId, onClose }) => {
                         />
                     </div>
                     <div className="col-span-2 flex justify-end space-x-4">
-                    <button 
-                             type="button" 
+                    <button
+                             type="button"
                              className="bg-gray-300 text-gray-700 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 rounded-md py-2 px-4 transition duration-200 ease-in-out"
                              onClick={onClose}
                         >
                             Hủy
                         </button>
-                        
-                        <button 
-                            type="submit" 
+
+                        <button
+                            type="submit"
                             className="bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md py-2 px-4 transition duration-200 ease-in-out"
                         >
                             Lưu

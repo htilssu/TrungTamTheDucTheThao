@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 const Modal = ({ isOpen, onClose, message }) => {
     if (!isOpen) return null;
@@ -19,6 +19,12 @@ const Modal = ({ isOpen, onClose, message }) => {
             </div>
         </div>
     );
+};
+
+Modal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    message: PropTypes.string.isRequired,
 };
 
 export default Modal;

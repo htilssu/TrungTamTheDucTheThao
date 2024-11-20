@@ -66,25 +66,37 @@ const FieldList = ({ fields }) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {fields.map((field) => (
-                <div key={field.fieldId} className="flex flex-col justify-between bg-gray-200 rounded-xl shadow-md overflow-hidden">
+                <div key={field.fieldId} className="border-2 border-emerald-400 flex flex-col justify-between bg-green-100 rounded-xl shadow-md overflow-hidden">
                     {/* Hiển thị thông tin của sân */}
                     <div className="bg-white rounded-lg">
-                        <div className="flex overflow-x-auto space-x-2">
-                            {field.images && field.images.length > 0 ? (
-                                field.images.map((image, index) => (
+                        <div className={"relative"}>
+                            <div className="flex overflow-x-auto space-x-2">
+                                {field.images && field.images.length > 0 ? (
+                                    field.images.map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={image} // Sử dụng hình ảnh từ danh sách hình ảnh
+                                            alt={field.fieldName}
+                                            className="w-full h-40 object-cover"
+                                        />
+                                    ))
+                                ) : (
                                     <img
-                                        key={index}
-                                        src={image} // Sử dụng hình ảnh từ danh sách hình ảnh
+                                        src={field.imageUrl || "/sanbong2.png"}
                                         alt={field.fieldName}
                                         className="w-full h-40 object-cover"
                                     />
-                                ))
+                                )}
+                            </div>
+                            {/* Biểu tượng trạng thái */}
+                            {field.status === "active" ? (
+                                <span className="absolute top-2 right-2 bg-green-500 text-white text-xs font-semibold py-1 px-2 rounded-lg">
+              đang hoạt động
+            </span>
                             ) : (
-                                <img
-                                    src={field.imageUrl || "/sanbong2.png"}
-                                    alt={field.fieldName}
-                                    className="w-full h-40 object-cover"
-                                />
+                                <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold py-1 px-2 rounded-lg">
+              đang bảo trì
+            </span>
                             )}
                         </div>
                         <div className="p-4">

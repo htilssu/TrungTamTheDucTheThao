@@ -69,8 +69,6 @@ const EmployeeLayout = () => {
         }
     };
 
-
-
     const deleteEmployee = async (id) => {
         try {
             const response = await wDelete(`/api/coach/delete/${id}`);
@@ -84,7 +82,6 @@ const EmployeeLayout = () => {
             toast.error("Có lỗi xảy ra khi xóa huấn luyện viên.");
         }
     };
-
 
     return (
         <div className="min-h-screen bg-gray-100">

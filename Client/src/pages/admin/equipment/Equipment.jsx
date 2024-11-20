@@ -1,40 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {useNavigate} from "react-router-dom";
-import {wGet} from "../../../utils/request.util.js";
-import {queryClient} from "../../../modules/cache.js";
-import {toast} from "react-toastify";
+import { useState, useEffect } from 'react';
+import { queryClient } from "../../../modules/cache.js";
 import Modal from "./Modal.jsx";
-
+import { wGet, wPost } from '../../../utils/request.util.js';
+import PropTypes from 'prop-types';
 
 const EquipmentForm = ({ onAddEquipment }) => {
     const [formData, setFormData] = useState({
+        status: '',
         type: '',
-        status: ''
+        room: ''
     });
     const [equipmentTypes, setEquipmentTypes] = useState([]);
     const [image, setImage] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-    const [modalMessage, setModalMessage] = useState(""); // Message to show in modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [room, setRoom] = useState([]);
+
+    // Fetch equipment types
     useEffect(() => {
         const fetchEquipmentTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/equipment-types');
-                setEquipmentTypes(response.data);
+                const response = await wGet('/api/equipment-types');
+                const data = await response.json()
+                console.log('Fetched Equipment Types:', response); // Log response
+                setEquipmentTypes(data);
             } catch (error) {
+                console.error('Error fetching equipment types:', error); // Log error
                 setModalMessage("Không thể tải danh sách loại thiết bị.");
                 setIsModalOpen(true);
             }
         };
-
         fetchEquipmentTypes();
+    }, []);
+
+    // Fetch rooms
+    useEffect(() => {
+        const fetchRoom = async () => {
+            try {
+                const response = await wGet('/api/rooms');
+                const data = await response.json()
+                console.log('Fetched Rooms:', response); // Log response
+                setRoom(data);
+            } catch (error) {
+                console.error('Error fetching rooms:', error); // Log error
+                setModalMessage("Không thể tải danh sách phòng.");
+                setIsModalOpen(true);
+            }
+        };
+        fetchRoom();
     }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value
+            [name]: value,
         }));
     };
 
@@ -45,28 +65,44 @@ const EquipmentForm = ({ onAddEquipment }) => {
             equipmentType: { id: formData.type },
             status: formData.status,
             image: image || null,
+            room: { id: formData.room },
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/api/equipment', jsonData, {
+            const response = await wPost('/api/equipment', jsonData, {
                 headers: { 'Content-Type': 'application/json' },
-            });
+            })
+            const data = await response.json();
+            console.log('Post response:', data); // Log response
+            queryClient.invalidateQueries({ queryKey: ["equipments"] });
+            onAddEquipment(response);
 
-            queryClient.invalidateQueries({queryKey:["equipments"]});
-
-            // After successfully adding, update the equipment list
-            onAddEquipment(response.data);
-
-            setFormData({ type: '', status: '' });
+            // Reset form
+            setFormData({ name: '', status: '', type: '', room: '' });
             setImage(null);
-            setModalMessage("Thêm thiết bị thành công!"); // Set success message
-            setIsModalOpen(true); // Show modal
+            setModalMessage("Thêm thiết bị thành công!");
+            setIsModalOpen(true);
         } catch (error) {
-            setModalMessage("Có lỗi xảy ra khi thêm thiết bị."); // Set error message
-            setIsModalOpen(true); // Show modal
+            console.error('Error submitting equipment data:', error); // Log error
+            if (error.response) {
+                const status = error.response.status;
+                if (status === 400) {
+                    setModalMessage("Thông tin gửi lên không hợp lệ. Vui lòng kiểm tra lại.");
+                } else if (status === 404) {
+                    setModalMessage("Không tìm thấy tài nguyên yêu cầu.");
+                } else if (status === 500) {
+                    setModalMessage("Có lỗi xảy ra ở phía server. Vui lòng thử lại sau.");
+                } else {
+                    setModalMessage("Có lỗi xảy ra. Vui lòng thử lại.");
+                }
+            } else if (error.request) {
+                setModalMessage("Không nhận được phản hồi từ server. Vui lòng kiểm tra kết nối mạng.");
+            } else {
+                setModalMessage("Có lỗi xảy ra trong quá trình gửi yêu cầu. Vui lòng thử lại.");
+            }
+            setIsModalOpen(true);
         }
     };
-
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -78,6 +114,7 @@ const EquipmentForm = ({ onAddEquipment }) => {
             reader.readAsDataURL(file);
         }
     };
+
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -86,7 +123,7 @@ const EquipmentForm = ({ onAddEquipment }) => {
         <div className="max-w-[800px] mx-auto p-4 bg-white mb-5 shadow-2xl rounded-md mt-8">
             <div className="mb-8 w-full p-4 bg-white border-[1px] text-black rounded-md">
                 <h2 className="text-2xl font-semibold mb-4 flex justify-center">Thêm Trang Thiết Bị</h2>
-                <form onSubmit={handleSubmit} className="space-y-6 text-black border-bottom-[1px]">
+                <form onSubmit={handleSubmit} className="space-y-6 text-black">
                     <div className="mb-6 mt-3">
                         {image ? (
                             <div className="w-full h-80 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
@@ -114,7 +151,7 @@ const EquipmentForm = ({ onAddEquipment }) => {
                     </div>
 
                     <div className="relative">
-                        <label htmlFor="type" className="block text-gray-700">Loại trang thiết bị</label>
+                        <label htmlFor="type" className="block text-gray-700">Loại thiết bị</label>
                         <select
                             id="type"
                             name="type"
@@ -124,8 +161,29 @@ const EquipmentForm = ({ onAddEquipment }) => {
                             required
                         >
                             <option value="">Chọn loại</option>
-                            {equipmentTypes.map(equipmentType => (
-                                <option key={equipmentType.id} value={equipmentType.id}>{equipmentType.name}</option>
+                            {equipmentTypes.map((equipmentType) => (
+                                <option key={equipmentType.id} value={equipmentType.id}>
+                                    {equipmentType.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="relative">
+                        <label htmlFor="room" className="block text-gray-700">Thuộc phòng</label>
+                        <select
+                            id="room"
+                            name="room"
+                            value={formData.room}
+                            onChange={handleChange}
+                            className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+                            required
+                        >
+                            <option value="">Chọn phòng</option>
+                            {room.map((roomItem) => (
+                                <option key={roomItem.id} value={roomItem.id}>
+                                    {roomItem.name}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -154,11 +212,15 @@ const EquipmentForm = ({ onAddEquipment }) => {
                         Thêm thiết bị
                     </button>
                 </form>
-                {/* Modal component */}
+
                 <Modal isOpen={isModalOpen} onClose={closeModal} message={modalMessage} />
             </div>
         </div>
     );
+};
+
+EquipmentForm.propTypes = {
+    onAddEquipment: PropTypes.func.isRequired,
 };
 
 export default EquipmentForm;

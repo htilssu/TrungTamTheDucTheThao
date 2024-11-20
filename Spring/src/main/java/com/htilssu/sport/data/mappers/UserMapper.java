@@ -8,7 +8,9 @@ import org.mapstruct.*;
         componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
 
+    @Mapping(source = "role.name", target = "roleName")
     UserDto toDto(User user);
+    @Mapping(source = "roleName", target = "role.name")
     User toEntity(UserDto userDto);
     @BeanMapping(
             nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

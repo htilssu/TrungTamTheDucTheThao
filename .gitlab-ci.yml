@@ -1,11 +1,3 @@
-test:
-  stage: test
-  image: amazoncorretto:22-alpine
-  script:
-    - cd Spring
-    - chmod +x gradlew
-    - ./gradlew test
-
 default:
   image: docker
   services:
@@ -13,7 +5,23 @@ default:
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
-build-image:
+stages:
+  - testing
+  - build
+  - deploy
+
+Test:
+  stage: testing
+  image: amazoncorretto:22-alpine
+  script:
+    - cd Spring
+    - chmod +x gradlew
+    - ./gradlew test
+  cache:
+    paths:
+      - Spring/.gradle
+
+Build_Image:
   stage: build
   before_script:
     - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
@@ -25,14 +33,14 @@ build-image:
 pull-image:
   stage: deploy
   needs:
-    - job: build-image
+    - job: Build_Image
       artifacts: false
   before_script:
-    - chmod 400 $SSH_KEY
+    - chmod 600 $SSH_KEY
   script:
-    - ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
+    - ssh -v -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
       echo \"$ENV\" > ~/secrets/.env.tttd &&
       sudo docker pull htilssu/trungtamthethao:latest &&
-      sudo docker ps -aq  | xargs -r sudo docker stop | xargs -r sudo docker rm &&
-      sudo docker run --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p 8080:8080 htilssu/trungtamthethao:latest
+      sudo docker rm trungtamthethao -f &&
+      sudo docker run --log-opt max-size=10m --log-opt max-file=3 --env-file ~/secrets/.env.tttd -d --name trungtamthethao -p $PORT:8080 htilssu/trungtamthethao:latest
       "
