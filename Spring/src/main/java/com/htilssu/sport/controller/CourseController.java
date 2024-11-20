@@ -1,6 +1,7 @@
 package com.htilssu.sport.controller;
 
 import com.htilssu.sport.data.dtos.CourseDto;
+import com.htilssu.sport.data.mappers.CourseMapper;
 import com.htilssu.sport.data.models.Course;
 import com.htilssu.sport.service.CourseService;
 

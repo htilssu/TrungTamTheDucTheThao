@@ -2,7 +2,10 @@ package com.htilssu.sport.service;
 
 import com.htilssu.sport.data.models.Coach;
 import com.htilssu.sport.data.models.Course;
+import com.htilssu.sport.data.models.Room;
+import com.htilssu.sport.repository.CoachRepository;
 import com.htilssu.sport.repository.CourseRepository;
+import com.htilssu.sport.repository.RoomRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
