@@ -4,111 +4,91 @@ import AddEmployeeForm from "./AddEmployeeForm.jsx";
 import EmployeeList from "./EmployeeList.jsx";
 import EmployeeDetail from "./EmployeeDetail.jsx";
 import Modal from "../../library-admin/ModalDetail.jsx";
-import ModalConfirmation from "../../library-admin/ModalConfirmDelete.jsx"; // Import EmployeeDetail component
-
-const initialEmployees = [
-    {
-        id: 1,
-        avatar: '/avatarH.png',
-        name: 'Nguyễn Anh Tuấn',
-        position: 'Quản Lý',
-        department: 'Kinh Doanh',
-        email: 'a@example.com',
-        phone: '0123456789',
-        address: 'Hà Nội',
-        dateOfBirth: '1990-01-01',
-        gender: 'Nam',
-        startDate: '2020-01-01',
-        status: 'Active',
-    },
-    {
-        id: 2,
-        avatar: "/avatarT.jpeg",
-        name: "Jane Smith",
-        position: "Accountant",
-        department: "Finance",
-        email: "jane@example.com",
-        phone: "0123456788",
-        address: "Hà Nội",
-        dateOfBirth: "1992-02-02",
-        gender: "Nữ",
-        startDate: "2021-01-01",
-        status: "Inactive",
-    },
-    {
-        id: 3,
-        avatar: "/avatarH.png",
-        name: "Mike Johnson",
-        position: "Developer",
-        department: "Engineering",
-        email: "mike@example.com",
-        phone: "0123456787",
-        address: "Đà Nẵng",
-        dateOfBirth: "1990-03-03",
-        gender: "Nam",
-        startDate: "2020-01-01",
-        status: "Active",
-    },
-];
+import ModalConfirmation from "../../library-admin/ModalConfirmDelete.jsx";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {wDelete, wGet, wPut} from "../../../../utils/request.util.js";
 
 const EmployeeLayout = () => {
-    const [employees, setEmployees] = useState(initialEmployees);
+    const [employees, setEmployees] = useState([]);
     const [editingEmployee, setEditingEmployee] = useState(null);
     const [isAdding, setIsAdding] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
-    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false); // Trạng thái xác nhận xóa
-    const [employeeToDelete, setEmployeeToDelete] = useState(null); // Nhân viên sẽ xóa
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+    const [employeeToDelete, setEmployeeToDelete] = useState(null);
 
-    // Add Employee
+    // Thêm huấn luyện viên
     const addEmployee = (employee) => {
         setEmployees([...employees, { ...employee, id: employees.length + 1 }]);
-        setIsAdding(false); // Close the form after adding
+        setIsAdding(false);
     };
 
-    // Update Employee
-    const updateEmployee = (updatedEmployee) => {
-        setEmployees(
-            employees.map((employee) =>
-                employee.id === updatedEmployee.id ? updatedEmployee : employee
+    // Cập nhật huấn luyện viên
+    const updateEmployee = async (updatedEmployee) => {
+        try {
+            const response = await wPut(
+                `/api/coach/edit/${updatedEmployee.id}`,
+                updatedEmployee
             )
-        );
-        setEditingEmployee(null);
+            const data = await response.json();
+            if (data.status === 200) {
+                setEmployees(
+                    employees.map((employee) =>
+                        employee.id === updatedEmployee.id ? data: employee
+                    )
+                );
+                setEditingEmployee(null);
+                toast.success("Cập nhật huấn luyện viên thành công!");
+            } else {
+                toast.error("Không thể cập nhật huấn luyện viên. Vui lòng thử lại.");
+            }
+        } catch  {
+            toast.error("Có lỗi xảy ra khi cập nhật huấn luyện viên.");
+        }
     };
 
-    // Start Editing Employee
-    const editEmployee = (employee) => {
-        setEditingEmployee(employee);
-        setIsAdding(false); // Close the add form if editing
+    // Bắt đầu chỉnh sửa huấn luyện viên
+    const editEmployee = async (id) => {
+        try {
+            const response = await wGet(`/api/coach/${id}`);
+            const data = await response.json()
+            setEditingEmployee(data);
+        } catch  {
+            toast.error("Không thể lấy thông tin huấn luyện viên.");
+        }
     };
 
-    // View Employee Detail
-    const viewEmployee = (id) => {
-        const employee = employees.find(emp => emp.id === id);
-        setSelectedEmployee(employee);
+    // Xem chi tiết huấn luyện viên
+    const viewEmployee = async (id) => {
+        try {
+            const response = await wGet(`/api/coach/${id}`);
+            const data = await response.json()
+            setSelectedEmployee(data);
+        } catch  {
+            toast.error("Không thể lấy thông tin huấn luyện viên.");
+        }
     };
 
-    // Clear Selected Employee
-    const clearSelectedEmployee = () => {
-        setSelectedEmployee(null);
-    };
-
-    // Delete Employee
-    const deleteEmployee = (id) => {
-        setEmployees(employees.filter((employee) => employee.id !== id));
-        setIsConfirmingDelete(false); // Đóng modal xác nhận
-    };
-
-    // Mở modal xác nhận xóa
-    const confirmDelete = (employee) => {
-        setEmployeeToDelete(employee);
-        setIsConfirmingDelete(true);
+    const deleteEmployee = async (id) => {
+        try {
+            const response = await wDelete(`/api/coach/delete/${id}`);
+            const data = await response.json()
+            if (data.status === 200) {
+                setEmployees(employees.filter((employee) => employee.id !== id));
+            } else {
+                toast.success("Xóa huấn luyện viên thành công!");
+            }
+        } catch {
+            toast.error("Có lỗi xảy ra khi xóa huấn luyện viên.");
+        }
     };
 
     return (
         <div className="min-h-screen bg-gray-100">
+            <ToastContainer />
             <div className="container mx-auto p-10 bg-gray-100 rounded-xl shadow-lg">
                 <h1 className="text-4xl font-bold text-center text-primaryColor mb-2">
-                    Quản Lý Nhân Viên
+                    Quản Lý Huấn Luyện Viên
                 </h1>
 
                 <div className="flex justify-between items-center mb-6">
@@ -117,7 +97,7 @@ const EmployeeLayout = () => {
                             onClick={() => setIsAdding(true)}
                             className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                         >
-                            Thêm Nhân viên
+                            Thêm Huấn Luyện viên
                         </button>
                     )}
 
@@ -125,13 +105,12 @@ const EmployeeLayout = () => {
                         <EditEmployeeForm
                             employee={editingEmployee}
                             updateEmployee={updateEmployee}
-                            deleteEmployee={confirmDelete} // Truyền hàm xác nhận xóa
                             cancelEdit={() => setEditingEmployee(null)}
                         />
                     )}
                 </div>
 
-                <Modal isOpen={!!selectedEmployee} onClose={clearSelectedEmployee}>
+                <Modal isOpen={!!selectedEmployee} onClose={() => setSelectedEmployee(null)}>
                     <EmployeeDetail employee={selectedEmployee} />
                 </Modal>
 
@@ -140,7 +119,13 @@ const EmployeeLayout = () => {
                 )}
 
                 <div className="mb-6">
-                    <EmployeeList employees={employees} editEmployee={editEmployee} viewEmployee={viewEmployee} />
+                    <EmployeeList
+                        employees={employees}
+                        editEmployee={editEmployee}
+                        viewEmployee={viewEmployee}
+                        deleteEmployee={deleteEmployee} // Truyền hàm xóa
+
+                    />
                 </div>
             </div>
 
@@ -148,11 +133,13 @@ const EmployeeLayout = () => {
             <ModalConfirmation
                 isOpen={isConfirmingDelete}
                 onClose={() => setIsConfirmingDelete(false)}
-                onConfirm={() => deleteEmployee(employeeToDelete.id)}
-                employeeName={employeeToDelete ? employeeToDelete.name : ''}
+                onConfirm={deleteEmployee}
+                employeeName={
+                    employees.find((employee) => employee.id === employeeToDelete)?.name || ''
+                }
             />
         </div>
     );
-}
+};
 
 export default EmployeeLayout;

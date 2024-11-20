@@ -1,6 +1,8 @@
-
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import {wGet, wPut} from "../../../utils/request.util.js";
+
 
 const EditCourses = ({ courseId, onClose }) => {
     const [courseData, setCourseData] = useState({
@@ -11,59 +13,63 @@ const EditCourses = ({ courseId, onClose }) => {
         startDate: "",
         endDate: "",
         description: "",
-        coachId: "",
-        roomId: ""
+        coach: "", // Chỉ lưu trữ idCoach ở đây
+        roomId: "",
+        thumbnail: "",
     });
-    const [coaches, setCoaches] = useState([]); 
-    const [rooms, setRooms] = useState([]); 
+    const [rooms, setRooms] = useState([]);
+    const [coach, setCoach] = useState([]);
 
     useEffect(() => {
         const fetchCourseById = async () => {
             if (!courseId) return;
             try {
-                const response = await axios.get(`http://localhost:8080/api/course/${courseId}`);
-                const data = response.data;
-                
-                const startDateArray = data.startDate; 
-                const endDateArray = data.endDate;
-                
-                const startDate = startDateArray ? 
-                    `${startDateArray[0]}-${String(startDateArray[1]).padStart(2, '0')}-${String(startDateArray[2]).padStart(2, '0')}` 
-                    : "";
-                
-                const endDate = endDateArray ? 
-                    `${endDateArray[0]}-${String(endDateArray[1]).padStart(2, '0')}-${String(endDateArray[2]).padStart(2, '0')}` 
-                    : "";
+                const response = await wGet(`/api/course/${courseId}`);
+                const data = await response.json()
+
+                const startDate = data.startDate ? dayjs(data.startDate) : null;
+                const endDate = data.endDate ? dayjs(data.endDate) : null;
 
                 setCourseData({
-                    name: data.name,
-                    price: data.price,
-                    slot: data.slot,
-                    time: data.time[0] || "", 
-                    startDate: startDate,
-                    endDate: endDate,
-                    description: data.description,
-                    coachId: data.coach.id, 
-                    roomId: data.room.id 
+                    name: data.name || "",
+                    price: data.price || "",
+                    slot: data.slot || "",
+                    time: data.time || "",
+                    startDate: startDate && startDate.isValid() ? startDate : "",
+                    endDate: endDate && endDate.isValid() ? endDate : "",
+                    description: data.description || "",
+                    coach: data.idCoach || "", // Chỉ lưu trữ idCoach
+                    roomId: data.idRoom || "",
+                    thumbnail: data.thumbnail || "",
                 });
             } catch (error) {
                 console.error("Lỗi khi lấy thông tin khóa học:", error);
             }
         };
 
-        const fetchCoachesAndRooms = async () => {
+        const fetchRooms = async () => {
             try {
-                const coachResponse = await axios.get("http://localhost:8080/api/coach");
-                const roomResponse = await axios.get("http://localhost:8080/api/rooms");
-                setCoaches(coachResponse.data);
-                setRooms(roomResponse.data);
+                const roomResponse = await wGet("/api/rooms");
+                const data = await roomResponse.json()
+                setRooms(data);
             } catch (error) {
-                console.error("Lỗi khi tải dữ liệu giảng viên và phòng học:", error);
+                console.error("Lỗi khi tải dữ liệu phòng học:", error);
             }
         };
 
+        const fetchCoach = async () => {
+            try {
+                const coachResponse = await wGet("/api/coach");
+                const data = await coachResponse.json()
+                setCoach(data);
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu huấn luyện viên:", error);
+            }
+        };
+
+        fetchCoach();
         fetchCourseById();
-        fetchCoachesAndRooms();
+        fetchRooms();
     }, [courseId]);
 
     const handleChange = (e) => {
@@ -71,32 +77,43 @@ const EditCourses = ({ courseId, onClose }) => {
         setCourseData({ ...courseData, [name]: value });
     };
 
+    const handleDateChange = (date, dateString, name) => {
+        setCourseData((prev) => ({
+            ...prev,
+            [name]: date,
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
+        // Giả sử coachData là idCoach đã được chọn
+        const coachId = courseData.coach ? courseData.coach : null;
+
         const updatedData = {
             name: courseData.name,
             description: courseData.description,
-            price: courseData.price,
-            time: courseData.time ? [parseInt(courseData.time), 0] : [0, 0], 
-            startDate: courseData.startDate.split("-").map(Number), 
-            endDate: courseData.endDate.split("-").map(Number), 
-            slot: courseData.slot,
-            coach: { id: courseData.coachId },
-            room: { id: courseData.roomId } 
+            price: parseFloat(courseData.price),
+            time: courseData.time,
+            startDate: courseData.startDate ? courseData.startDate.format("YYYY-MM-DD") : "",
+            endDate: courseData.endDate ? courseData.endDate.format("YYYY-MM-DD") : "",
+            slot: parseInt(courseData.slot, 10),
+            idRoom: courseData.roomId,
+            idCoach: coachId,  // Truyền đúng coachId
+            thumbnail: courseData.thumbnail,
         };
-    
-        console.log("Dữ liệu cập nhật:", updatedData); 
-    
+
         try {
-            const response = await axios.put(`http://localhost:8080/api/course/${courseId}`, updatedData);
+            await wPut(`/api/course/${courseId}`, updatedData);
             alert("Cập nhật khóa học thành công");
-            onClose();
+            onClose();  // Đóng form sau khi cập nhật thành công
         } catch (error) {
-            console.error("Lỗi khi cập nhật khóa học:", error.response.data); 
+            console.error("Lỗi khi cập nhật khóa học:", error.response?.data);
             alert("Đã xảy ra lỗi khi cập nhật khóa học. Vui lòng kiểm tra dữ liệu.");
         }
     };
+
+    const disabledDate = (current) => current && current < dayjs().startOf("day");
 
     return (
         <div className="relative p-4">
@@ -125,20 +142,9 @@ const EditCourses = ({ courseId, onClose }) => {
                         />
                     </div>
                     <div>
-                        <label className="block mb-2">Số lượng học viên</label>
+                        <label className="block mb-2">Thời gian (HH:mm)</label>
                         <input
-                            type="number"
-                            name="slot"
-                            value={courseData.slot}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block mb-2">Thời lượng (giờ)</label>
-                        <input
-                            type="number"
+                            type="text"
                             name="time"
                             value={courseData.time}
                             onChange={handleChange}
@@ -146,48 +152,53 @@ const EditCourses = ({ courseId, onClose }) => {
                         />
                     </div>
                     <div>
-                        <label className="block mb-2">Thời gian bắt đầu</label>
+                        <label className="block mb-2">Số lượng học viên</label>
                         <input
-                            type="date"
+                            type="number"
+                            name="slot"
+                            value={courseData.slot}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2">Ngày bắt đầu</label>
+                        <DatePicker
                             name="startDate"
-                            value={courseData.startDate}
-                            onChange={handleChange}
+                            value={courseData.startDate || null}
+                            onChange={(date, dateString) => handleDateChange(date, dateString, "startDate")}
                             className="w-full p-2 border rounded"
+                            disabledDate={disabledDate}
+                            format="YYYY-MM-DD"
                             required
                         />
                     </div>
                     <div>
-                        <label className="block mb-2">Thời gian kết thúc</label>
-                        <input
-                            type="date"
+                        <label className="block mb-2">Ngày kết thúc</label>
+                        <DatePicker
                             name="endDate"
-                            value={courseData.endDate}
-                            onChange={handleChange}
+                            value={courseData.endDate || null}
+                            onChange={(date, dateString) => handleDateChange(date, dateString, "endDate")}
                             className="w-full p-2 border rounded"
+                            disabledDate={disabledDate}
+                            format="YYYY-MM-DD"
                             required
                         />
                     </div>
-                    <div className="col-span-2">
-                        <label className="block mb-2">Mô tả khóa học</label>
-                        <textarea
-                            name="description"
-                            value={courseData.description}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded"
-                            rows="3"
-                        />
-                    </div>
                     <div>
-                        <label className="block mb-2">Giảng viên</label>
+                        <label className="block mb-2">Huấn luyện viên</label>
                         <select
-                            name="coachId"
-                            value={courseData.coachId}
+                            name="coach"
+                            value={courseData.coach}
                             onChange={handleChange}
                             className="w-full p-2 border rounded"
+                            required
                         >
-                            <option value="">Chọn giảng viên</option>
-                            {coaches.map(coach => (
-                                <option key={coach.id} value={coach.id}>{coach.id}</option>
+                            <option value="">Chọn huấn luyện viên</option>
+                            {coach.map((coachItem) => (
+                                <option key={coachItem.id} value={coachItem.id}>
+                                    {coachItem.name}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -198,28 +209,43 @@ const EditCourses = ({ courseId, onClose }) => {
                             value={courseData.roomId}
                             onChange={handleChange}
                             className="w-full p-2 border rounded"
+                            required
                         >
                             <option value="">Chọn phòng học</option>
-                            {rooms.map(room => (
-                                <option key={room.id} value={room.id}>{room.name}</option>
+                            {rooms.map((room) => (
+                                <option key={room.id} value={room.id}>
+                                    {room.name}
+                                </option>
                             ))}
                         </select>
                     </div>
-                </div>
-                <div className="mt-4 flex justify-end space-x-2">
+
+                    <div className="col-span-2">
+                        <label className="block mb-2">Mô tả</label>
+                        <textarea
+                            name="description"
+                            value={courseData.description}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
+                        />
+                    </div>
+                    <div className="col-span-2 flex justify-end space-x-4">
                     <button
-                        type="button"
-                        className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
-                        onClick={onClose}
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                        Lưu thay đổi
-                    </button>
+                             type="button"
+                             className="bg-gray-300 text-gray-700 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 rounded-md py-2 px-4 transition duration-200 ease-in-out"
+                             onClick={onClose}
+                        >
+                            Hủy
+                        </button>
+
+                        <button
+                            type="submit"
+                            className="bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md py-2 px-4 transition duration-200 ease-in-out"
+                        >
+                            Lưu
+                        </button>
+
+                    </div>
                 </div>
             </form>
         </div>

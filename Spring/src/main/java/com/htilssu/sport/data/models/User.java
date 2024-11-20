@@ -1,7 +1,8 @@
 
 package com.htilssu.sport.data.models;
 
-import com.htilssu.sport.validations.MinAge;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.htilssu.sport.validation.MinAge;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -48,4 +49,9 @@ public class User {
 
     @Column(name = "avatar")
     private String avatar = "";
+
+    @ManyToOne(optional = false)
+    @JsonBackReference
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
 }

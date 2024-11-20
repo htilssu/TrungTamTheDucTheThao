@@ -18,10 +18,16 @@ public class JwtUtil {
     public static String generateToken(Account account) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", account.getEmail());
+        claims.put("role", account.getUser()
+                .getRole()
+                .getName()
+                .toUpperCase());
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(account.getEmail())
+                .setSubject(account.getUser()
+                        .getId()
+                        .toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
@@ -30,7 +36,10 @@ public class JwtUtil {
 
     public static Claims extractClaims(String token) {
         try {
-            return Jwts.parser().parseClaimsJws(token).getBody();
+            return Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (JwtException e) {
             throw new RuntimeException("Token không hợp lệ", e);
         }
@@ -38,11 +47,13 @@ public class JwtUtil {
 
     public static long getExpirationTimeMillis(String token) {
         Claims claims = extractClaims(token);
-        return claims.getExpiration().getTime();
+        return claims.getExpiration()
+                .getTime();
     }
 
     public static boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
+        return extractClaims(token).getExpiration()
+                .before(new Date());
     }
 
     public static String getEmailFromToken(String token) {

@@ -6,8 +6,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -16,21 +14,20 @@ import java.util.Set;
 public class Course {
 
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "course_seq", sequenceName = "course_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_id_seq")
+    @SequenceGenerator(name = "course_id_seq", sequenceName = "course_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "\"time\"", nullable = false)
+    @Column(name = "time", nullable = false)
     private LocalTime time;
 
     @Column(name = "start_date", nullable = false)
@@ -42,18 +39,14 @@ public class Course {
     @Column(name = "slot", nullable = false)
     private Short slot;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_coach", nullable = false)
-    private Coach idCoach;
+    private Coach coach; // Liên kết tới Coach
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_room", nullable = false)
-    private Room idRoom;
+    private Room room; // Liên kết tới Room
 
     @Column(name = "thumbnail")
     private String thumbnail;
-
-    @OneToMany(mappedBy = "course")
-    private Set<CourseMember> courseMembers = new LinkedHashSet<>();
-
 }
