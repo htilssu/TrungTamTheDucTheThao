@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import {wGet} from "../../../utils/request.util.js";
 
 const ViewCourses = ({ id, onClose }) => {
     const [course, setCourse] = useState(null);
@@ -12,8 +12,9 @@ const ViewCourses = ({ id, onClose }) => {
         // Hàm để lấy thông tin khóa học
         const fetchCourse = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/course/${id}`);
-                setCourse(response.data); // Lưu thông tin khóa học
+                const response = await wGet(`/api/course/${id}`);
+                const data = await response.json()
+                setCourse(data); // Lưu thông tin khóa học
             } catch (error) {
                 console.error("Error fetching course data:", error);
             }
@@ -22,8 +23,9 @@ const ViewCourses = ({ id, onClose }) => {
         // Hàm để lấy thông tin phòng học dựa trên roomId của khóa học
         const fetchRoom = async (roomId) => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/rooms/${roomId}`);
-                setRoom(response.data); // Lưu thông tin phòng học
+                const response = await wGet(`/api/rooms/${roomId}`);
+                const data = await response.json()
+                setRoom(data); // Lưu thông tin phòng học
             } catch (error) {
                 console.error("Error fetching room data:", error);
             }
@@ -32,8 +34,9 @@ const ViewCourses = ({ id, onClose }) => {
         // Hàm để lấy thông tin giảng viên dựa trên coachId của khóa học
         const fetchCoach = async (coachId) => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/coach/${coachId}`);
-                setCoach(response.data); // Lưu thông tin giảng viên
+                const response = await wGet(`/api/coach/${coachId}`);
+                const data = await response.json()
+                setCoach(data); // Lưu thông tin giảng viên
             } catch (error) {
                 console.error("Error fetching coach data:", error);
             }

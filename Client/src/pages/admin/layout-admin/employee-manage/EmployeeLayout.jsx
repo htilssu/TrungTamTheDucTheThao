@@ -7,7 +7,7 @@ import Modal from "../../library-admin/ModalDetail.jsx";
 import ModalConfirmation from "../../library-admin/ModalConfirmDelete.jsx";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import {wDelete, wGet, wPut} from "../../../../utils/request.util.js";
 
 const EmployeeLayout = () => {
     const [employees, setEmployees] = useState([]);
@@ -26,14 +26,15 @@ const EmployeeLayout = () => {
     // Cập nhật huấn luyện viên
     const updateEmployee = async (updatedEmployee) => {
         try {
-            const response = await axios.put(
-                `http://localhost:8080/api/coach/edit/${updatedEmployee.id}`,
+            const response = await wPut(
+                `/api/coach/edit/${updatedEmployee.id}`,
                 updatedEmployee
-            );
-            if (response.status === 200) {
+            )
+            const data = await response.json();
+            if (data.status === 200) {
                 setEmployees(
                     employees.map((employee) =>
-                        employee.id === updatedEmployee.id ? response.data : employee
+                        employee.id === updatedEmployee.id ? data: employee
                     )
                 );
                 setEditingEmployee(null);
@@ -49,8 +50,9 @@ const EmployeeLayout = () => {
     // Bắt đầu chỉnh sửa huấn luyện viên
     const editEmployee = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/coach/${id}`);
-            setEditingEmployee(response.data);
+            const response = await wGet(`/api/coach/${id}`);
+            const data = await response.json()
+            setEditingEmployee(data);
         } catch  {
             toast.error("Không thể lấy thông tin huấn luyện viên.");
         }
@@ -59,19 +61,19 @@ const EmployeeLayout = () => {
     // Xem chi tiết huấn luyện viên
     const viewEmployee = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/coach/${id}`);
-            setSelectedEmployee(response.data);
+            const response = await wGet(`/api/coach/${id}`);
+            const data = await response.json()
+            setSelectedEmployee(data);
         } catch  {
             toast.error("Không thể lấy thông tin huấn luyện viên.");
         }
     };
 
-    
-
     const deleteEmployee = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/coach/delete/${id}`);
-            if (response.status === 200) {
+            const response = await wDelete(`/api/coach/delete/${id}`);
+            const data = await response.json()
+            if (data.status === 200) {
                 setEmployees(employees.filter((employee) => employee.id !== id));
             } else {
                 toast.success("Xóa huấn luyện viên thành công!");
@@ -80,7 +82,6 @@ const EmployeeLayout = () => {
             toast.error("Có lỗi xảy ra khi xóa huấn luyện viên.");
         }
     };
-    
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -124,7 +125,7 @@ const EmployeeLayout = () => {
                         viewEmployee={viewEmployee}
                         deleteEmployee={deleteEmployee} // Truyền hàm xóa
 
-                        />
+                    />
                 </div>
             </div>
 

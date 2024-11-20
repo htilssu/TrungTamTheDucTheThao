@@ -3,7 +3,7 @@ import { TiTick, TiTrash, TiEye } from "react-icons/ti";
 import { Confirm } from 'react-admin';
 import ViewCourses from "./ViewCourses.jsx";
 import EditCourses from "./EditCourses.jsx";
-import axios from "axios"; 
+import {wDelete, wGet} from "../../../utils/request.util.js";
 import { toast, ToastContainer } from "react-toastify";
 
 const CoursesManage = () => {
@@ -13,12 +13,12 @@ const CoursesManage = () => {
     const [loading, setLoading] = useState(true); 
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [courseToDelete, setCourseToDelete] = useState(null);
-
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/course");
-                setCourses(response.data);
+                const response = await wGet("/api/course");
+                const data = await response.json()
+                setCourses(data);
             } catch (error) {
                 console.error("Lỗi khi lấy danh sách khóa học:", error);
             } finally {
@@ -32,10 +32,11 @@ const CoursesManage = () => {
 
     const handleDeleteCourse = async (id) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/course/${id}`, {
+            const response = await wDelete(`/api/course/${id}`, {
                 method: "DELETE",
-            });
-            if (response.ok) {
+            })
+            const data = await response.json();
+            if (data.ok) {
                 setCourses(courses.filter((course) => course.id !== id));
                 toast.success("Đã xóa khóa học thành công");
             } else {
@@ -160,7 +161,7 @@ const CoursesManage = () => {
                 actions={[
                     <button
                         key="cancel"
-                        onClick={handleCancelDelete}    
+                        onClick={handleCancelDelete}
                         className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                     >
                         Hủy

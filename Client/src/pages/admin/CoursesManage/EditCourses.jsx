@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
+import {wGet, wPut} from "../../../utils/request.util.js";
 
 
 const EditCourses = ({ courseId, onClose }) => {
@@ -24,8 +24,8 @@ const EditCourses = ({ courseId, onClose }) => {
         const fetchCourseById = async () => {
             if (!courseId) return;
             try {
-                const response = await axios.get(`http://localhost:8080/api/course/${courseId}`);
-                const data = response.data;
+                const response = await wGet(`/api/course/${courseId}`);
+                const data = await response.json()
 
                 const startDate = data.startDate ? dayjs(data.startDate) : null;
                 const endDate = data.endDate ? dayjs(data.endDate) : null;
@@ -49,8 +49,9 @@ const EditCourses = ({ courseId, onClose }) => {
 
         const fetchRooms = async () => {
             try {
-                const roomResponse = await axios.get("http://localhost:8080/api/rooms");
-                setRooms(roomResponse.data);
+                const roomResponse = await wGet("/api/rooms");
+                const data = await roomResponse.json()
+                setRooms(data);
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu phòng học:", error);
             }
@@ -58,8 +59,9 @@ const EditCourses = ({ courseId, onClose }) => {
 
         const fetchCoach = async () => {
             try {
-                const coachResponse = await axios.get("http://localhost:8080/api/coach");
-                setCoach(coachResponse.data);
+                const coachResponse = await wGet("/api/coach");
+                const data = await coachResponse.json()
+                setCoach(data);
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu huấn luyện viên:", error);
             }
@@ -102,7 +104,7 @@ const EditCourses = ({ courseId, onClose }) => {
         };
 
         try {
-            await axios.put(`http://localhost:8080/api/course/${courseId}`, updatedData);
+            await wPut(`/api/course/${courseId}`, updatedData);
             alert("Cập nhật khóa học thành công");
             onClose();  // Đóng form sau khi cập nhật thành công
         } catch (error) {
@@ -217,7 +219,7 @@ const EditCourses = ({ courseId, onClose }) => {
                             ))}
                         </select>
                     </div>
-                    
+
                     <div className="col-span-2">
                         <label className="block mb-2">Mô tả</label>
                         <textarea
@@ -228,16 +230,16 @@ const EditCourses = ({ courseId, onClose }) => {
                         />
                     </div>
                     <div className="col-span-2 flex justify-end space-x-4">
-                    <button 
-                             type="button" 
+                    <button
+                             type="button"
                              className="bg-gray-300 text-gray-700 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 rounded-md py-2 px-4 transition duration-200 ease-in-out"
                              onClick={onClose}
                         >
                             Hủy
                         </button>
-                        
-                        <button 
-                            type="submit" 
+
+                        <button
+                            type="submit"
                             className="bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md py-2 px-4 transition duration-200 ease-in-out"
                         >
                             Lưu

@@ -18,12 +18,12 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         if (!/^\d{10}$/.test(updatedEmployee.phoneNumber)) {
             toast('Số điện thoại phải đủ 10 số .');
             return;
         }
-    
+
         updateEmployee(updatedEmployee);
     };
 
@@ -34,7 +34,7 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
                 <input
                     type="text"
                     name="name"
-                    value={updatedEmployee.name || ''} 
+                    value={updatedEmployee.name || ''}
                     onChange={handleChange}
                     placeholder=" Name"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
@@ -42,7 +42,7 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
                 <input
                     type="text"
                     name="phoneNumber"
-                    value={updatedEmployee.phoneNumber || ''} 
+                    value={updatedEmployee.phoneNumber || ''}
                     onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
                     onChange={handleChange}
                     maxLength={10} // Giới hạn nhập 10 ký tự
@@ -53,7 +53,7 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
                 <input
                     type="text"
                     name="experience"
-                    value={updatedEmployee.experience || ''} 
+                    value={updatedEmployee.experience || ''}
                     onChange={handleChange}
                     placeholder="Experience"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
@@ -61,7 +61,7 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
                 <input
                     type="text"
                     name="description"
-                    value={updatedEmployee.description || ''} 
+                    value={updatedEmployee.description || ''}
                     onChange={handleChange}
                     placeholder="Description"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition duration-200"
@@ -83,7 +83,6 @@ const EditEmployeeForm = ({ employee, updateEmployee, deleteEmployee, cancelEdit
                         Cancel
                     </button>
                 </div>
-                
             </div>
         </form>
     );
