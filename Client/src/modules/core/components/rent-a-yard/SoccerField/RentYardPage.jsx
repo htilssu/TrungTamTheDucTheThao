@@ -222,7 +222,7 @@ const RentYardPage = () => {
 
             const bookingData = {
                 footballField: {id: selectedField},
-                customer: {id: 1},
+                customer: {id: user.id},
                 customerName: customerName,
                 customerPhone: customerPhone,
                 startTime: startDateTime.toISOString(),
