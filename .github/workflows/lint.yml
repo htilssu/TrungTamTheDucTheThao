@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Super-Linter
-        uses: super-linter/super-linter@v7.1.0
+        uses: super-linter/super-linter@v8.3.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISABLE_ERRORS: 'true'
